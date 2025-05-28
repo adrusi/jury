@@ -44,7 +44,7 @@
 
     ];
     casks = [
-
+      "secretive"
     ];
     masApps = {
 

@@ -17,4 +17,11 @@
     pkgs.brewCasks.bettertouchtool
     pkgs.brewCasks.betterdisplay
   ];
+
+  programs.ssh = {
+    enable = true;
+    matchBlocks."*" = {
+      identityAgent = "/Users/autumn/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh";
+    };
+  };
 }
