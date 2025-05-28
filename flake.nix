@@ -32,6 +32,11 @@
       url = "github:BatteredBunny/brew-api";
       flake = false;
     };
+
+    firefox-addons = {
+      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs = inputs@{ nixpkgs, flake-utils, darwin, home-manager, ... }: {
     darwinConfigurations.rainbow = darwin.lib.darwinSystem {
@@ -46,6 +51,7 @@
           home-manager.extraSpecialArgs = {
             inherit inputs;
           };
+          home-manager.backupFileExtension = "home-manage-backup";
           users.users.autumn.name = "autumn";
           users.users.autumn.home = "/Users/autumn";
           home-manager.users.autumn = import ./hosts/rainbow/home.nix;

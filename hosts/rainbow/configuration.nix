@@ -36,8 +36,6 @@
   programs.zsh.enable = true;
 
   environment.systemPackages = [
-    pkgs.firefox-devedition-bin
-    pkgs.brewCasks.bettertouchtool
   ];
 
   homebrew = {
