@@ -1,5 +1,5 @@
-{ lib, pkgs, inputs, ... }: {
-  programs.firefox = {
+{ config, lib, pkgs, inputs, ... }: {
+  home-manager.users.${config.system.primaryUser}.programs.firefox = {
     enable = true;
     package = pkgs.firefox-bin;
 

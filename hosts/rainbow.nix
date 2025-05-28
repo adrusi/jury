@@ -1,0 +1,85 @@
+{ config, pkgs, inputs, ... }: {
+  imports = [
+    inputs.home-manager.darwinModules.home-manager
+    inputs.nix-homebrew.darwinModules.nix-homebrew
+    inputs.brew-nix.darwinModules.default
+    inputs.mac-app-util.darwinModules.default
+    ../modules/common/nix-store.nix
+    ../modules/common/firefox.nix
+    ../modules/darwin/linux-builder.nix
+    ../modules/darwin/touchid.nix
+    ../modules/darwin/macos-settings.nix
+    ../modules/darwin/karabiner-elements.nix
+    ../modules/darwin/homebrew.nix
+  ];
+
+  system.stateVersion = 6;
+  system.configurationRevision = inputs.self.rev or inputs.self.dirtyRev or null;
+  nix.settings.experimental-features = "nix-command flakes";
+  nixpkgs.hostPlatform = "aarch64-darwin";
+
+  system.defaults = {
+    loginwindow.GuestEnabled = false;
+    SoftwareUpdate.AutomaticallyInstallMacOSUpdates = true;
+    dock.persistent-apps = [
+
+    ];
+  };
+
+  networking = {
+    computerName = "rainbow";
+    hostName = "rainbow";
+    localHostName = "rainbow";
+  };
+
+  programs.zsh.enable = true;
+
+  environment.systemPackages = [
+  ];
+
+  homebrew = {
+    enable = true;
+    brews = [
+
+    ];
+    casks = [
+      "secretive"
+    ];
+    masApps = {
+
+    };
+  };
+
+  users.users.autumn.name = "autumn";
+  users.users.autumn.home = "/Users/autumn";
+  system.primaryUser = "autumn";
+  nix.settings.allowed-users = ["@admin"];
+
+  home-manager.extraSpecialArgs = {
+    inherit inputs;
+  };
+  home-manager.useGlobalPkgs = true;
+  home-manager.backupFileExtension = "home-manager-backup";
+
+  home-manager.users.${config.system.primaryUser} = {
+    imports = [
+      inputs.mac-app-util.homeManagerModules.default
+    ];
+
+    home.stateVersion = "25.11";
+    programs.home-manager.enable = true;
+
+    home.packages = [
+      pkgs.brewCasks.bettertouchtool
+      pkgs.brewCasks.betterdisplay
+      pkgs.brewCasks.claude
+    ];
+
+    programs.ssh = {
+      enable = true;
+      matchBlocks."*" = {
+        identityAgent = "${config.users.users.${config.system.primaryUser}.home}/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh";
+      };
+    };
+  };
+}

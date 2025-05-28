@@ -45,17 +45,7 @@
         inherit inputs;
       };
       modules = [
-        ./hosts/rainbow/configuration.nix
-        home-manager.darwinModules.home-manager
-        {
-          home-manager.extraSpecialArgs = {
-            inherit inputs;
-          };
-          home-manager.backupFileExtension = "home-manage-backup";
-          users.users.autumn.name = "autumn";
-          users.users.autumn.home = "/Users/autumn";
-          home-manager.users.autumn = import ./hosts/rainbow/home.nix;
-        }
+        ./hosts/rainbow.nix
       ];
     };
   } // flake-utils.lib.eachDefaultSystem (system: let

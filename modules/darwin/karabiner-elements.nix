@@ -1,8 +1,19 @@
-{ config, lib, ... }: {
-  options = {
-    # perhaps some day.......
+{ config, lib, pkgs, ... }: {
+  services.karabiner-elements = {
+    enable = true;
+    package = pkgs.karabiner-elements.overrideAttrs (old: {
+      version = "14.13.0";
+
+      src = pkgs.fetchurl {
+        inherit (old.src) url;
+        hash = "sha256-gmJwoht/Tfm5qMecmq1N6PSAIfWOqsvuHU8VDJY8bLw=";
+      };
+
+      dontFixup = true;
+    });
   };
-  config = {
+
+  home-manager.users.${config.system.primaryUser} = {
     xdg.configFile."karabiner/karabiner.json".text = lib.generators.toJSON {} {
       global = {
         ask_for_confirmation_before_quitting = true;
