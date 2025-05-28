@@ -1,9 +1,14 @@
 { config, pkgs, inputs, ... }: {
   imports = [
+    inputs.nix-homebrew.darwinModules.nix-homebrew
+    inputs.brew-nix.darwinModules.default
+    inputs.mac-app-util.darwinModules.default
     ../../modules/system-common/nix-store.nix
     ../../modules/system-darwin/linux-builder.nix
     ../../modules/system-darwin/touchid.nix
     ../../modules/system-darwin/macos-settings.nix
+    ../../modules/system-darwin/karabiner-elements.nix
+    ../../modules/system-darwin/homebrew.nix
   ];
 
   system.stateVersion = 6;
@@ -28,11 +33,23 @@
     localHostName = "rainbow";
   };
 
-
-  services.karabiner-elements.enable = true;
-
   programs.zsh.enable = true;
 
   environment.systemPackages = [
+    pkgs.firefox-devedition-bin
+    pkgs.brewCasks.bettertouchtool
   ];
+
+  homebrew = {
+    enable = true;
+    brews = [
+
+    ];
+    casks = [
+
+    ];
+    masApps = {
+
+    };
+  };
 }

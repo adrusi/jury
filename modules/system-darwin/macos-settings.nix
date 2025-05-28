@@ -51,7 +51,7 @@
     finder.FXRemoveOldTrashItems = true; # remove items after theyve been in trash for 30 days
     finder.NewWindowTarget = "Home";
     finder.ShowPathbar = true;
-    finder.ShowStatusBar = true;
+    finder.ShowStatusBar = false;
 
     hitoolbox.AppleFnUsageType = "Do Nothing";
 
