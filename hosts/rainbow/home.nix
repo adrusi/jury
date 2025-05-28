@@ -16,6 +16,7 @@
   home.packages = [
     pkgs.brewCasks.bettertouchtool
     pkgs.brewCasks.betterdisplay
+    pkgs.brewCasks.claude
   ];
 
   programs.ssh = {
