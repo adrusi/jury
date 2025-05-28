@@ -37,6 +37,8 @@
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nixcord.url = "github:kaylorben/nixcord";
   };
   outputs = inputs@{ nixpkgs, flake-utils, darwin, home-manager, ... }: {
     darwinConfigurations.rainbow = darwin.lib.darwinSystem {

@@ -6,6 +6,8 @@
     inputs.mac-app-util.darwinModules.default
     ../modules/common/nix-store.nix
     ../modules/common/firefox.nix
+    ../modules/common/discord.nix
+    ../modules/common/zed.nix
     ../modules/darwin/linux-builder.nix
     ../modules/darwin/touchid.nix
     ../modules/darwin/macos-settings.nix
@@ -17,13 +19,11 @@
   system.configurationRevision = inputs.self.rev or inputs.self.dirtyRev or null;
   nix.settings.experimental-features = "nix-command flakes";
   nixpkgs.hostPlatform = "aarch64-darwin";
+  nixpkgs.config.allowUnfree = true;
 
   system.defaults = {
     loginwindow.GuestEnabled = false;
     SoftwareUpdate.AutomaticallyInstallMacOSUpdates = true;
-    dock.persistent-apps = [
-
-    ];
   };
 
   networking = {
@@ -33,22 +33,6 @@
   };
 
   programs.zsh.enable = true;
-
-  environment.systemPackages = [
-  ];
-
-  homebrew = {
-    enable = true;
-    brews = [
-
-    ];
-    casks = [
-      "secretive"
-    ];
-    masApps = {
-
-    };
-  };
 
   users.users.autumn.name = "autumn";
   users.users.autumn.home = "/Users/autumn";
@@ -70,16 +54,10 @@
     programs.home-manager.enable = true;
 
     home.packages = [
-      pkgs.brewCasks.bettertouchtool
       pkgs.brewCasks.betterdisplay
       pkgs.brewCasks.claude
     ];
 
-    programs.ssh = {
-      enable = true;
-      matchBlocks."*" = {
-        identityAgent = "${config.users.users.${config.system.primaryUser}.home}/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh";
-      };
-    };
+    programs.ssh.enable = true;
   };
 }
