@@ -1,5 +1,10 @@
 {
   inputs = {
+    pragmatapro = {
+      url = "git+file:./assets/pragmatapro";
+      flake = false;
+    };
+
     flake-utils.url = "github:numtide/flake-utils";
 
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -51,10 +56,14 @@
       ];
     };
   } // flake-utils.lib.eachDefaultSystem (system: let
-    pkgs = nixpkgs.legacyPackages.${system};
+    # pkgs = nixpkgs.legacyPackages.${system};
+    pkgs = import nixpkgs {
+      inherit system;
+      config.allowUnfree = true;
+    };
   in {
     devShells.default = (import ./shell.nix {
-      inherit pkgs;
+      inherit pkgs inputs;
     });
   });
 }

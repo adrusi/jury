@@ -1,0 +1,3 @@
+[submodule "assets/pragmatapro"]
+	path = assets/pragmatapro
+	url = git@github.com:adrusi/pragmatapro-files.git

@@ -1,8 +1,13 @@
 { config, pkgs, ... }: {
+  imports = [
+    ./pragmatapro.nix
+  ];
+
   home-manager.users.${config.system.primaryUser} = {
     home.packages = [
       pkgs.nil
       pkgs.nixd
+      pkgs.basedpyright
     ];
 
     programs.zed-editor = {
@@ -48,6 +53,7 @@
         restore_on_startup = "none";
         auto_update = false;
         base_keymap = "VSCode";
+        buffer_font_family = "PragmataPro";
         buffer_font_size = 10;
         buffer_line_height = "standard";
         scrollbar = {
@@ -86,11 +92,11 @@
         ensure_final_newline_on_save = true;
         format_on_save = "on";
         indent_guides.enabled = false;
-        # ui_font_family = "SF Pro";
         ui_font_size = 12;
         theme = "Catppuccin Latte";
         icon_theme = "Catppuccin Latte";
         terminal = {
+          font_family = "PragmataPro";
           blinking = "off";
           font_size = 10;
           line_height = "standard";

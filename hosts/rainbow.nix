@@ -6,6 +6,7 @@
     inputs.mac-app-util.darwinModules.default
     ../modules/common/nix-store.nix
     ../modules/common/firefox.nix
+    ../modules/common/bitwarden.nix
     ../modules/common/discord.nix
     ../modules/common/zed.nix
     ../modules/darwin/linux-builder.nix
@@ -33,6 +34,9 @@
   };
 
   programs.zsh.enable = true;
+  homebrew.casks = [
+    "betterdisplay"
+  ];
 
   users.users.autumn.name = "autumn";
   users.users.autumn.home = "/Users/autumn";
@@ -54,7 +58,6 @@
     programs.home-manager.enable = true;
 
     home.packages = [
-      pkgs.brewCasks.betterdisplay
       pkgs.brewCasks.claude
     ];
 

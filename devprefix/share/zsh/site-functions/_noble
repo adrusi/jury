@@ -1,0 +1,7 @@
+#compdef noble
+
+_noble_completion() {
+  eval $(env _TYPER_COMPLETE_ARGS="${words[1,$CURRENT]}" _NOBLE_COMPLETE=complete_zsh noble)
+}
+
+compdef _noble_completion noble

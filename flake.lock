@@ -330,11 +330,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1748190013,
-        "narHash": "sha256-R5HJFflOfsP5FBtk+zE8FpL8uqE7n62jqOsADvVshhE=",
+        "lastModified": 1748370509,
+        "narHash": "sha256-QlL8slIgc16W5UaI3w7xHQEP+Qmv/6vSNTpoZrrSlbk=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "62b852f6c6742134ade1abdd2a21685fd617a291",
+        "rev": "4faa5f5321320e49a78ae7848582f684d64783e9",
         "type": "github"
       },
       "original": {
@@ -342,6 +342,22 @@
         "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
+      }
+    },
+    "pragmatapro": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1748494722,
+        "narHash": "sha256-c2YdBsxJJyKp5FLcs7Z7hWqB3d33m0nF62LMN4F0pHg=",
+        "ref": "refs/heads/main",
+        "rev": "574c7ecc468cd02482c0f3344fa7ecc5f7629102",
+        "revCount": 1,
+        "type": "git",
+        "url": "file:./assets/pragmatapro"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:./assets/pragmatapro"
       }
     },
     "root": {
@@ -357,7 +373,8 @@
         "mac-app-util": "mac-app-util",
         "nix-homebrew": "nix-homebrew",
         "nixcord": "nixcord",
-        "nixpkgs": "nixpkgs_3"
+        "nixpkgs": "nixpkgs_3",
+        "pragmatapro": "pragmatapro"
       }
     },
     "systems": {

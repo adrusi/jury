@@ -1,0 +1,58 @@
+[project]
+name = "noble"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = ["typer~=0.15.4"]
+
+[dependency-groups]
+dev = ["pre-commit"]
+
+[tool.ty.src]
+root = "."
+
+[tool.ty.rules]
+byte-string-type-annotation = "error" # just as an example
+
+[tool.ty.environment]
+python = "./.venv"
+python-platform = "linux"
+python-version = "3.12"
+
+[tool.ruff]
+include = ["noble/*.py"]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+ignore = []
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 80
+line-ending = "lf"
+
+[tool.ruff.lint.isort]
+section-order = [
+    "future",
+    "typing",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "local-folder",
+]
+
+[tool.ruff.lint.isort.sections]
+typing = ["typing"]
+
+[tool.pyright]
+include = ["noble"]
+strict = ["noble"]
+
+reportImportCycles = "error"
+reportImplicitOverride = "error"
+
+pythonVersion = "3.12"
+pythonPlatform = "All"
+
+venvPath = "."
+venv = ".venv"
