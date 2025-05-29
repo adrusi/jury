@@ -12,6 +12,7 @@
     ../modules/common/ghostty.nix
     ../modules/common/pragmatapro.nix
     ../modules/common/zsh.nix
+    ../modules/common/direnv.nix
     ../modules/common/kak/module.nix
     ../modules/darwin/linux-builder.nix
     ../modules/darwin/touchid.nix

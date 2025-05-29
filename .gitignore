@@ -1,0 +1,5 @@
+# normally most of these should go in a global ignorefile, but since this repo is often checked out on fresh machines, it's convenient to have them here
+/.direnv/
+/.venv/
+/.ropeproject/
+/.DS_Store

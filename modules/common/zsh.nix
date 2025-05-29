@@ -18,16 +18,9 @@
       '';
 
       initContent = ''
-        zstyle :compinstall filename '$HOME/.zshrc'
-        zstyle ':completion:*:descriptions' format '%U%B%d%b%u'
-        zstyle ':completion:*:warnings' format '%BSorry, no matches for: %d%b'
-        zstyle ':completion:*:pacman:*' force-list always
-        zstyle ':completion:*:*:pacman:*' menu yes select
-        zstyle ':completion:*:default' list-colors ''${(s.:.)LS_COLORS}
-        zstyle ':completion:*:*:kill:*' menu yes select
-        zstyle ':completion:*:kill:*'   force-list always
-        zstyle ':completion:*:*:killall:*' menu yes select
-        zstyle ':completion:*:killall:*'   force-list always
+        export LS_COLORS="$(${lib.getBin pkgs.vivid}/bin/vivid generate catppuccin-latte)"
+        alias ls="ls --color=auto"
+
         zstyle ':completion:*' completer _extensions _expand _complete _ignored _correct _approximate _prefix
         zstyle ':completion:*' menu select interactive search
         zstyle ':completion:*' group-name ""

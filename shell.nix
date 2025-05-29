@@ -4,10 +4,6 @@ pkgs.mkShell {
     pkgs.git
     pkgs.zed-editor # we often need to run on unconfigured machines, so we provide an editor
 
-    pkgs.age
-    pkgs.sops
-    pkgs.bitwarden
-
     pkgs.pyright
     pkgs.python312
     pkgs.ruff
