@@ -1,8 +1,11 @@
-{ ... }: {
+{ pkgs, ... }: {
+  environment.systemPackages = [pkgs.coreutils];
+
   system.keyboard = {
     enableKeyMapping = true;
     remapCapsLockToControl = true;
   };
+
   system.defaults = {
     NSGlobalDomain.NSDocumentSaveNewDocumentsToCloud = false;
 

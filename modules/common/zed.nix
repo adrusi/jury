@@ -97,6 +97,7 @@
           option_as_meta = true;
           button = false;
           toolbar.breadcrumbs = false;
+          working_directory = "first_project_directory";
         };
       };
     };
