@@ -9,6 +9,8 @@
     ../modules/common/bitwarden.nix
     ../modules/common/discord.nix
     ../modules/common/zed.nix
+    ../modules/common/ghostty.nix
+    ../modules/common/pragmatapro.nix
     ../modules/darwin/linux-builder.nix
     ../modules/darwin/touchid.nix
     ../modules/darwin/macos-settings.nix

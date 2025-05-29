@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }: {
+{ config, pkgs, inputs, ... }: {
   fonts.packages = [
     (pkgs.stdenvNoCC.mkDerivation {
       pname = "pragmatapro-font";
@@ -18,4 +18,12 @@
       '';
     })
   ];
+
+  home-manager.users.${config.system.primaryUser} = {
+    programs.ghostty.settings.font-family = "PragmataPro";
+    programs.zed-editor.userSettings = {
+      buffer_font_family = "PragmataPro";
+      terminal.font_family = "PragmataPro";
+    };
+  };
 }
