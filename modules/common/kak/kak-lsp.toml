@@ -1,0 +1,76 @@
+[language.c_cpp]
+filetypes = ["c", "cpp"]
+roots = ["compile_commands.json", ".clangd", ".git", ".hg"]
+command = "clangd"
+
+[language.haskell]
+filetypes = ["haskell"]
+roots = ["Setup.hs", "stack.yaml", "*.cabal"]
+command = "haskell-language-server-wrapper"
+args = ["--lsp"]
+
+[language.clojure]
+filetypes = ["clojure"]
+roots = ["shadow-cljs.edn", "deps.edn", "project.clj", ".git", ".hg"]
+command = "clojure-lsp"
+settings_section = "_"
+[language_server.clojure_lsp.settings._]
+
+[language.rust]
+filetypes = ["rust"]
+roots = ["Cargo.toml"]
+command = "sh"
+args = ["-c", """
+        if path=$(rustup which rust-analyzer 2>/dev/null); then
+            "$path"
+        else
+            RA_LOG=rust_analyzer=info rust-analyzer | tee /tmp/ra.log
+        fi
+    """]
+settings_section = "rust-analyzer"
+[language.rust.settings.rust-analyzer]
+# See https://rust-analyzer.github.io/manual.html#configuration
+hoverActions.enable = false       # kak-lsp doesn't support this at the moment
+hover.linksInHover = true
+cargo.loadOutDirsFromCheck = true
+procMacro.enable = true
+# cargo.features = []
+#
+[language.python]
+filetypes = ["python"]
+roots = ["requirements.txt", "setup.py", ".git", ".hg"]
+command = "pylsp"
+offset_encoding = "utf-8"
+[language.python.settings._]
+pylsp.plugins.pycodestyle.enabled = false
+pylsp.plugins.mccabe.enabled = false
+pylsp.plugins.pyflakes.enabled = false
+pylsp.plugins.flake8.enabled = true
+pylsp.configurationSources = ["flake8"]
+
+[language.typescript]
+filetypes = ["typescript"]
+roots = ["package.json", "tsconfig.json"]
+command = "typescript-language-server"
+args = ["--stdio"]
+
+[language.jsx]
+filetypes = ["javascript"]
+roots = ["package.json", "tsconfig.json"]
+command = "typescript-language-server"
+args = ["--stdio"]
+
+[language.nim]
+filetypes = ["nim"]
+roots = ["*.nimble", ".git", ".hg"]
+command = "nimlangserver"
+
+[language.zig]
+filetypes = ["zig"]
+roots = ["build.zig"]
+command = "zls"
+
+[language.nix]
+filetypes = ["nix"]
+command = "nil"
+roots = ["flake.nix", "shell.nix", ".git", ".hg"]
