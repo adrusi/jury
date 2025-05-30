@@ -1,4 +1,4 @@
-{ config, pkgs, ... }: {
+{ config, pkgs, lib, ... }: {
   home-manager.users.${config.system.primaryUser} = {
     programs.direnv = {
       enable = true;
@@ -6,10 +6,10 @@
     };
 
     # direnv hook modified to reload shell completions
-    programs.zsh.initExtra = ''
+    programs.zsh.initContent = ''
       _direnv_hook() {
         trap -- "" SIGINT
-        eval "$("/nix/store/g8hmdwd25ddyrbni7whd255cq7i6kk48-direnv-2.36.0/bin/direnv" export zsh)"
+        eval "$("${lib.getBin pkgs.direnv}/bin/direnv" export zsh)"
         compinit
         trap - SIGINT
       }

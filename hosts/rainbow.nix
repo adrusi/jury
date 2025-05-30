@@ -63,6 +63,7 @@
 
     home.packages = [
       pkgs.brewCasks.claude
+      pkgs.signal-desktop-bin
     ];
 
     programs.ssh.enable = true;
