@@ -40,6 +40,7 @@
 
   homebrew.casks = [
     "betterdisplay"
+    "mullvad-vpn"
   ];
 
   users.users.autumn.name = "autumn";
