@@ -1,4 +1,10 @@
-{ config, pkgs, inputs, ... }: {
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
+{
   imports = [
     inputs.home-manager.darwinModules.home-manager
     inputs.nix-homebrew.darwinModules.nix-homebrew
@@ -13,12 +19,14 @@
     ../modules/common/pragmatapro.nix
     ../modules/common/zsh.nix
     ../modules/common/direnv.nix
+    ../modules/common/mpv.nix
     ../modules/common/kak/module.nix
     ../modules/darwin/linux-builder.nix
     ../modules/darwin/touchid.nix
     ../modules/darwin/macos-settings.nix
     ../modules/darwin/karabiner-elements.nix
     ../modules/darwin/homebrew.nix
+    ../modules/darwin/bartender.nix
   ];
 
   system.stateVersion = 6;
@@ -41,12 +49,15 @@
   homebrew.casks = [
     "betterdisplay"
     "mullvad-vpn"
+    "crossover"
+    "steam"
+    "transmission"
   ];
 
   users.users.autumn.name = "autumn";
   users.users.autumn.home = "/Users/autumn";
   system.primaryUser = "autumn";
-  nix.settings.allowed-users = ["@admin"];
+  nix.settings.allowed-users = [ "@admin" ];
 
   home-manager.extraSpecialArgs = {
     inherit inputs;
