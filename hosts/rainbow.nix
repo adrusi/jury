@@ -46,6 +46,7 @@
     localHostName = "rainbow";
   };
 
+  environment.systemPackages = [ pkgs.libation ];
   homebrew.casks = [
     "betterdisplay"
     "mullvad-vpn"
