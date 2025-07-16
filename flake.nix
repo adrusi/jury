@@ -7,7 +7,7 @@
 
     flake-utils.url = "github:numtide/flake-utils";
 
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs";
     darwin = {
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -38,6 +38,11 @@
       flake = false;
     };
 
+    brewtap-cxpatcher = {
+      url = "github:italomandara/homebrew-CXPatcher";
+      flake = false;
+    };
+
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -45,25 +50,40 @@
 
     nixcord.url = "github:kaylorben/nixcord";
   };
-  outputs = inputs@{ nixpkgs, flake-utils, darwin, home-manager, ... }: {
-    darwinConfigurations.rainbow = darwin.lib.darwinSystem {
-      system = "aarch64-darwin";
-      specialArgs = {
-        inherit inputs;
+  outputs =
+    inputs@{
+      nixpkgs,
+      flake-utils,
+      darwin,
+      home-manager,
+      ...
+    }:
+    {
+      darwinConfigurations.rainbow = darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        specialArgs = {
+          inherit inputs;
+        };
+        modules = [
+          ./hosts/rainbow.nix
+        ];
       };
-      modules = [
-        ./hosts/rainbow.nix
-      ];
-    };
-  } // flake-utils.lib.eachDefaultSystem (system: let
-    # pkgs = nixpkgs.legacyPackages.${system};
-    pkgs = import nixpkgs {
-      inherit system;
-      config.allowUnfree = true;
-    };
-  in {
-    devShells.default = (import ./shell.nix {
-      inherit pkgs inputs;
-    });
-  });
+    }
+    // flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+        # pkgs = nixpkgs.legacyPackages.${system};
+        pkgs = import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        };
+      in
+      {
+        devShells.default = (
+          import ./shell.nix {
+            inherit pkgs inputs;
+          }
+        );
+      }
+    );
 }

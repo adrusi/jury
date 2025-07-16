@@ -46,13 +46,25 @@
     localHostName = "rainbow";
   };
 
-  environment.systemPackages = [ pkgs.libation ];
+  environment.systemPackages = [
+    pkgs.libation
+    pkgs.yt-dlp
+    pkgs.racket
+  ];
+
+  nix-homebrew.taps = {
+    "italomandara/homebrew-cxpatcher" = inputs.brewtap-cxpatcher;
+  };
+
   homebrew.casks = [
     "betterdisplay"
     "mullvad-vpn"
     "crossover"
     "steam"
     "transmission"
+    "gimp"
+    "inkscape"
+    "italomandara/CXPatcher/cxpatcher"
   ];
 
   users.users.autumn.name = "autumn";

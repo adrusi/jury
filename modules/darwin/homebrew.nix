@@ -1,4 +1,5 @@
-{ inputs, ... }: {
+{ inputs, ... }:
+{
   brew-nix.enable = true;
 
   nix-homebrew = {

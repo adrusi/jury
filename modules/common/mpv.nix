@@ -30,7 +30,9 @@ lib.mkMerge [
   })
 
   {
-    environment.systemPackages = [ pkgs.mpv ];
+    environment.systemPackages = [
+      pkgs.mpv
+    ];
 
     home-manager.users.${config.system.primaryUser} = {
       programs.firefox = {
@@ -77,6 +79,10 @@ lib.mkMerge [
         ];
 
         scriptOpts = {
+          ytdl_hook = {
+            ytdl_path = "${lib.getBin pkgs.yt-dlp}/bin/yt-dlp";
+          };
+
           thumbfast = {
             socket = "";
             thumbnail = "";
