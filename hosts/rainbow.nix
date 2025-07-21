@@ -13,13 +13,14 @@
     ../modules/common/nix-store.nix
     ../modules/common/firefox.nix
     ../modules/common/bitwarden.nix
-    ../modules/common/discord.nix
+    # ../modules/common/discord.nix
     ../modules/common/zed.nix
     ../modules/common/ghostty.nix
     ../modules/common/pragmatapro.nix
     ../modules/common/zsh.nix
     ../modules/common/direnv.nix
     ../modules/common/mpv.nix
+    ../modules/common/obsidian.nix
     ../modules/common/kak/module.nix
     ../modules/darwin/linux-builder.nix
     ../modules/darwin/touchid.nix
@@ -49,7 +50,6 @@
   environment.systemPackages = [
     pkgs.libation
     pkgs.yt-dlp
-    pkgs.racket
   ];
 
   nix-homebrew.taps = {
@@ -64,6 +64,7 @@
     "transmission"
     "gimp"
     "inkscape"
+    "racket"
     "italomandara/CXPatcher/cxpatcher"
   ];
 

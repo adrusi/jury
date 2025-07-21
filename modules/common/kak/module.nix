@@ -1,4 +1,5 @@
-{ config, pkgs, ... }: {
+{ config, pkgs, ... }:
+{
   home-manager.users.${config.system.primaryUser} = {
     home.file = {
       ".config/kak-lsp/kak-lsp.toml".source = ./kak-lsp.toml;
@@ -12,7 +13,7 @@
         pkgs.kakounePlugins.kak-ansi
         pkgs.kakounePlugins.kakoune-lsp
         pkgs.kakounePlugins.parinfer-rust
-        pkgs.kakounePlugins.rep
+        # pkgs.kakounePlugins.rep
         (pkgs.kakouneUtils.buildKakounePluginFrom2Nix {
           pname = "osc52-kak";
           version = "1.0.0";
