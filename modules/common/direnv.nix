@@ -1,4 +1,10 @@
-{ config, pkgs, lib, ... }: {
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+{
   home-manager.users.${config.system.primaryUser} = {
     programs.direnv = {
       enable = true;
@@ -22,5 +28,10 @@
         chpwd_functions=(_direnv_hook $chpwd_functions)
       fi
     '';
+
+    programs.git.ignores = [
+      ".envrc"
+      ".direnv/"
+    ];
   };
 }

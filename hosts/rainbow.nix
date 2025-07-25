@@ -20,6 +20,7 @@
     ../modules/common/zsh.nix
     ../modules/common/direnv.nix
     ../modules/common/mpv.nix
+    ../modules/common/git.nix
     ../modules/common/obsidian.nix
     ../modules/common/kak/module.nix
     ../modules/darwin/linux-builder.nix
@@ -50,6 +51,7 @@
   environment.systemPackages = [
     pkgs.libation
     pkgs.yt-dlp
+    pkgs.git
   ];
 
   nix-homebrew.taps = {

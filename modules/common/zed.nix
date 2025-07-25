@@ -1,9 +1,14 @@
-{ config, pkgs, ... }: {
+{ config, pkgs, ... }:
+{
   home-manager.users.${config.system.primaryUser} = {
     home.packages = [
       pkgs.nil
       pkgs.nixd
       pkgs.basedpyright
+    ];
+
+    programs.git.ignores = [
+      ".zed/"
     ];
 
     programs.zed-editor = {
@@ -52,7 +57,7 @@
         buffer_font_size = 10;
         buffer_line_height = "standard";
         scrollbar = {
-          selected_text =  false;
+          selected_text = false;
           selected_symbol = false;
           cursors = false;
 
@@ -84,6 +89,10 @@
           code_actions = false;
         };
         enable_language_server = true;
+        diagnostics.inline = {
+          enabled = true;
+          max_severity = null;
+        };
         ensure_final_newline_on_save = true;
         format_on_save = "on";
         indent_guides.enabled = false;
@@ -99,6 +108,7 @@
           toolbar.breadcrumbs = false;
           working_directory = "first_project_directory";
         };
+        edit_predictions.mode = "subtle";
       };
     };
   };
