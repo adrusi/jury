@@ -1,5 +1,10 @@
-{ pkgs, ... }: {
-  environment.systemPackages = [pkgs.coreutils];
+{ pkgs, config, ... }:
+{
+  environment.systemPackages = [ pkgs.coreutils ];
+
+  home-manager.users.${config.system.primaryUser} = {
+    programs.git.ignores = [ ".DS_Store" ];
+  };
 
   system.keyboard = {
     enableKeyMapping = true;

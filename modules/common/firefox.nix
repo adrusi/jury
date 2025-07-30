@@ -40,8 +40,8 @@
           "browser.urlbar.suggest.pocket" = false;
 
           # some of the milder privacy enhancements
-          "privacy.resistFingerprinting" = true;
-          "privacy.trackingprotection.enabled" = true;
+          "privacy.resistFingerprinting" = false; # set to false to see if this is whats breaking image uploads
+          "privacy.trackingprotection.enabled" = false; # set to false to see if this is whats breaking image uploads
 
           # rendering performance
           "layout.frame_rate.precise" = true;
