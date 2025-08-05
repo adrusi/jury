@@ -13,6 +13,7 @@
 
     programs.zed-editor = {
       enable = true;
+      package = (if pkgs.stdenv.isDarwin then pkgs.brewCasks.zed else pkgs.zed-editor);
       installRemoteServer = true;
 
       extensions = [
@@ -50,10 +51,11 @@
       ];
 
       userSettings = {
+        vim_mode = true;
         bottom_dock_layout = "left_aligned";
         autosave = "off";
         restore_on_startup = "none";
-        auto_update = false;
+        auto_update = pkgs.stdenv.isDarwin;
         base_keymap = "VSCode";
         buffer_font_size = 10;
         buffer_line_height = "standard";
