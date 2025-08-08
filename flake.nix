@@ -48,7 +48,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    zen-browser.url = "github:adrusi/zen-browser-nix?ref=2168e59b929ef14643bfc875a3dcac92ddede1d4";
+    zen-browser.url = "github:adrusi/zen-browser-nix";
 
     nixcord.url = "github:kaylorben/nixcord";
   };
