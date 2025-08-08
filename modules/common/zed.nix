@@ -51,10 +51,10 @@
       ];
 
       userSettings = {
-        vim_mode = true;
+        vim_mode = false;
         bottom_dock_layout = "left_aligned";
         autosave = "off";
-        restore_on_startup = "none";
+        restore_on_startup = "last_session";
         auto_update = pkgs.stdenv.isDarwin;
         base_keymap = "VSCode";
         buffer_font_size = 10;

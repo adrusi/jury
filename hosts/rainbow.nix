@@ -13,8 +13,9 @@
     ../modules/common/nix-store.nix
     ../modules/common/firefox.nix
     ../modules/common/bitwarden.nix
-    # ../modules/common/discord.nix
+    ../modules/common/discord.nix
     ../modules/common/zed.nix
+    ../modules/common/zen.nix
     ../modules/common/ghostty.nix
     ../modules/common/pragmatapro.nix
     ../modules/common/zsh.nix
@@ -52,6 +53,7 @@
     pkgs.libation
     pkgs.yt-dlp
     pkgs.git
+    pkgs.claude-code
   ];
 
   nix-homebrew.taps = {

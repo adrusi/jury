@@ -67,6 +67,7 @@
               addons.sponsorblock
               addons.ublock-origin
               addons.zotero-connector
+              addons.shinigami-eyes
 
               (inputs.firefox-addons.lib.${pkgs.system}.buildFirefoxXpiAddon {
                 addonId = "magnolia@12.34";
