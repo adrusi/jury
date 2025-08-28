@@ -15,7 +15,7 @@
     ../modules/common/bitwarden.nix
     ../modules/common/discord.nix
     ../modules/common/zed.nix
-    ../modules/common/zen.nix
+    # ../modules/common/zen.nix
     ../modules/common/ghostty.nix
     ../modules/common/pragmatapro.nix
     ../modules/common/zsh.nix
@@ -24,7 +24,7 @@
     ../modules/common/git.nix
     ../modules/common/obsidian.nix
     ../modules/common/kak/module.nix
-    ../modules/darwin/linux-builder.nix
+    # ../modules/darwin/linux-builder.nix
     ../modules/darwin/touchid.nix
     ../modules/darwin/macos-settings.nix
     ../modules/darwin/karabiner-elements.nix
@@ -50,7 +50,7 @@
   };
 
   environment.systemPackages = [
-    pkgs.libation
+    # pkgs.libation
     pkgs.yt-dlp
     pkgs.git
     pkgs.claude-code

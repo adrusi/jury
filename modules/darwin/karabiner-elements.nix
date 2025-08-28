@@ -1,4 +1,10 @@
-{ config, lib, pkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
   services.karabiner-elements = {
     enable = true;
     package = pkgs.karabiner-elements.overrideAttrs (old: {
@@ -14,7 +20,7 @@
   };
 
   home-manager.users.${config.system.primaryUser} = {
-    xdg.configFile."karabiner/karabiner.json".text = lib.generators.toJSON {} {
+    xdg.configFile."karabiner/karabiner.json".text = lib.generators.toJSON { } {
       global = {
         ask_for_confirmation_before_quitting = true;
         check_for_updates_on_startup = false;
@@ -33,20 +39,28 @@
           };
           simple_modifications = [
             {
-              from = { apple_vendor_op_case_key_code = "keyboard_fn"; };
-              to = [{ key_code = "left_control"; }];
+              from = {
+                apple_vendor_op_case_key_code = "keyboard_fn";
+              };
+              to = [ { key_code = "left_control"; } ];
             }
             {
-              from = { key_code = "caps_lock"; };
-              to = [{ key_code = "caps_lock"; }];
+              from = {
+                key_code = "caps_lock";
+              };
+              to = [ { key_code = "caps_lock"; } ];
             }
             {
-              from = { key_code = "left_control"; };
-              to = [{ apple_vendor_top_case_key_code = "keyboard_fn"; }];
+              from = {
+                key_code = "left_control";
+              };
+              to = [ { apple_vendor_top_case_key_code = "keyboard_fn"; } ];
             }
             {
-              from = { key_code = "right_option"; };
-              to = [{ key_code = "non_us_backslash"; }];
+              from = {
+                key_code = "right_option";
+              };
+              to = [ { key_code = "non_us_backslash"; } ];
             }
           ];
           complex_modifications = {
@@ -58,12 +72,18 @@
                     type = "basic";
                     from = {
                       key_code = "right_command";
-                      modifiers = { optional = ["caps_lock"]; };
+                      modifiers = {
+                        optional = [ "caps_lock" ];
+                      };
                     };
                     to = [
                       {
                         key_code = "left_shift";
-                        modifiers = ["left_command" "left_control" "left_option"];
+                        modifiers = [
+                          "left_command"
+                          "left_control"
+                          "left_option"
+                        ];
                       }
                     ];
                   }
@@ -77,24 +97,24 @@
                     from = {
                       key_code = "left_shift";
                       modifiers = {
-                        mandatory = ["right_shift"];
-                        optional = ["caps_lock"];
+                        mandatory = [ "right_shift" ];
+                        optional = [ "caps_lock" ];
                       };
                     };
-                    to = [{ key_code = "caps_lock"; }];
-                    to_if_alone = [{ key_code = "left_shift"; }];
+                    to = [ { key_code = "caps_lock"; } ];
+                    to_if_alone = [ { key_code = "left_shift"; } ];
                   }
                   {
                     type = "basic";
                     from = {
                       key_code = "right_shift";
                       modifiers = {
-                        mandatory = ["left_shift"];
-                        optional = ["caps_lock"];
+                        mandatory = [ "left_shift" ];
+                        optional = [ "caps_lock" ];
                       };
                     };
-                    to = [{ key_code = "caps_lock"; }];
-                    to_if_alone = [{ key_code = "right_shift"; }];
+                    to = [ { key_code = "caps_lock"; } ];
+                    to_if_alone = [ { key_code = "right_shift"; } ];
                   }
                 ];
               }
@@ -105,10 +125,12 @@
                     type = "basic";
                     from = {
                       key_code = "caps_lock";
-                      modifiers = { optional = ["any"]; };
+                      modifiers = {
+                        optional = [ "any" ];
+                      };
                     };
-                    to = [{ key_code = "left_control"; }];
-                    to_if_alone = [{ key_code = "escape"; }];
+                    to = [ { key_code = "left_control"; } ];
+                    to_if_alone = [ { key_code = "escape"; } ];
                   }
                 ];
               }
