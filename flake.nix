@@ -13,7 +13,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
-      url = "github:nix-community/home-manager?ref=951f0b30c535a46817aa5ef4c66ddc4445f3e324";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -48,7 +48,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    zen-browser.url = "github:adrusi/zen-browser-nix";
+    # zen-browser.url = "github:adrusi/zen-browser-nix";
 
     nixcord.url = "github:kaylorben/nixcord";
   };
