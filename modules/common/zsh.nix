@@ -1,4 +1,10 @@
-{ config, lib, pkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
   programs.zsh.enable = true;
 
   home-manager.users.${config.system.primaryUser} = {
@@ -14,8 +20,7 @@
         share = false;
       };
 
-      initExtraBeforeCompInit = ''
-      '';
+      initExtraBeforeCompInit = '''';
 
       initContent = ''
         export LS_COLORS="$(${lib.getBin pkgs.vivid}/bin/vivid generate catppuccin-latte)"
@@ -54,13 +59,15 @@
 
           if [ -n "$ZED_TERM" ]; then
            	printf %s\\n "$reset\''${vcs_info_msg_0_}$reset$italic$magenta/\$(realpath --relative-to=\"\$ZED_WORKSPACE_ROOT\" \"\$PWD\" | sed 's/^\.\$//') $reset"
+          elif [ -n "$VSCODE_INTEFRATED_TERMINAL" ]; then
+         	  printf %s\\n "$reset\''${vcs_info_msg_0_}$reset$italic$magenta/\$(realpath --relative-to=\"\$VSCODE_WORKSPACE_ROOT\" \"\$PWD\" | sed 's/^\.\$//') $reset"
           else
            	printf %s\\n "$reset$cyan%D{%d}$reset$italic%D{%h}$reset$cyan%D{%-H:%M}$reset $([ "$IN_KAKOUNE_CONNECT" ] && printf '[kak %s] ' "$KAKOUNE_SESSION")$italic$cyan%n$reset@$italic''${magenta}%m$reset:$italic$cyan%1~\''${vcs_info_msg_0_} $reset%(#.#.\$) "
           fi
 
           printf %s\\n ""
 
-          if [ -n "$ZED_TERM" ]; then
+          if [ -n "$ZED_TERM" ] || [ -n "$VSCODE_INTEGRATED_TERMINAL" ]; then
            	printf %s\\n "$reset$italic$magenta%r$reset$italic$branch_sep$cyan%b$reset"
 
            	printf %s\\n "$reset$italic$magenta%r$reset$italic$branch_sep$cyan%b$reset $italic$bold%a$reset"

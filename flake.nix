@@ -51,13 +51,15 @@
     # zen-browser.url = "github:adrusi/zen-browser-nix";
 
     nixcord.url = "github:kaylorben/nixcord";
+
+    vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
   };
   outputs =
     inputs@{
       nixpkgs,
       flake-utils,
       darwin,
-      home-manager,
+      vscode-extensions,
       ...
     }:
     {
@@ -67,6 +69,11 @@
           inherit inputs;
         };
         modules = [
+          {
+            nixpkgs.overlays = [
+              vscode-extensions.overlays.default
+            ];
+          }
           ./hosts/rainbow.nix
         ];
       };

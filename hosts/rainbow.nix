@@ -15,6 +15,8 @@
     ../modules/common/bitwarden.nix
     ../modules/common/discord.nix
     ../modules/common/zed.nix
+    ../modules/common/vscode.nix
+    ../modules/common/haskell.nix
     # ../modules/common/zen.nix
     ../modules/common/ghostty.nix
     ../modules/common/pragmatapro.nix
@@ -70,6 +72,9 @@
     "inkscape"
     "racket"
     "italomandara/CXPatcher/cxpatcher"
+    "zoom"
+    "calibre"
+    "spotify"
   ];
 
   users.users.autumn.name = "autumn";
@@ -93,7 +98,8 @@
 
     home.packages = [
       pkgs.brewCasks.claude
-      pkgs.signal-desktop-bin
+      pkgs.brewCasks.signal
+      pkgs.brewCasks.supercollider
     ];
 
     programs.ssh.enable = true;

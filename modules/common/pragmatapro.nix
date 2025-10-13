@@ -1,4 +1,10 @@
-{ config, pkgs, inputs, ... }: {
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
+{
   fonts.packages = [
     (pkgs.stdenvNoCC.mkDerivation {
       pname = "pragmatapro-font";
@@ -24,6 +30,11 @@
     programs.zed-editor.userSettings = {
       buffer_font_family = "PragmataPro";
       terminal.font_family = "PragmataPro";
+    };
+    programs.vscode.profiles.default.userSettings = {
+      "editor.fontFamily" = "PragmataPro Liga";
+      "debug.console.fontFamily" = "PragmataPro Liga";
+      "terminal.integrated.fontFamily" = "PragmataPro Liga";
     };
   };
 }
