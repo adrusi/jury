@@ -26,15 +26,29 @@
   ];
 
   home-manager.users.${config.system.primaryUser} = {
-    programs.ghostty.settings.font-family = "PragmataPro";
+    programs.ghostty.settings = {
+      font-family = "PragmataPro Mono Liga";
+      font-feature = [
+        "ss13"
+      ];
+    };
     programs.zed-editor.userSettings = {
-      buffer_font_family = "PragmataPro";
-      terminal.font_family = "PragmataPro";
+      buffer_font_family = "PragmataPro Mono Liga";
+      terminal.font_family = "PragmataPro Mono Liga";
+      languages.haskell.buffer_font_features.calt = true;
+      terminal.font_features = {
+        ss13 = true;
+      };
     };
     programs.vscode.profiles.default.userSettings = {
-      "editor.fontFamily" = "PragmataPro Liga";
-      "debug.console.fontFamily" = "PragmataPro Liga";
-      "terminal.integrated.fontFamily" = "PragmataPro Liga";
+      "editor.fontFamily" = "PragmataPro Mono Liga";
+      "debug.console.fontFamily" = "PragmataPro Mono Liga";
+      "terminal.integrated.fontFamily" = "PragmataPro Mono Liga";
+      "terminal.integrated.fontLigatures.enabled" = true;
+      "terminal.integrated.fontLigatures.featureSettings" = "'ss13'";
+      "[haskell][literate haskell]" = {
+        "editor.fontLigatures" = "'calt'";
+      };
     };
   };
 }

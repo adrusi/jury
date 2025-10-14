@@ -1,17 +1,22 @@
 {
   config,
   pkgs,
-  lib,
   ...
 }:
 {
   home-manager.users.${config.system.primaryUser} = {
+    home.packages = [
+      # needed for jupyter extension?
+      pkgs.zeromq
+    ];
+
     programs.git.ignores = [
       ".vscode/"
     ];
     programs.vscode = {
       enable = true;
       mutableExtensionsDir = false;
+      # mutableExtensionsDir = true;
       profiles.default = {
         keybindings = [
 
@@ -97,6 +102,13 @@
           "update.mode" = "manual";
           "jupyter.askForKernelRestart" = false;
 
+          # "extensions.experimental.affinity" = {
+          #   "ms-toolsai.jupyter" = 1;
+          #   "ms-toolsai.jupyter-renderers" = 1;
+          #   "ms-python.python" = 1;
+          #   "ms-python.vscode-pylance" = 1;
+          # };
+
           # languages
           "julia.symbolCacheDownload" = true;
           "julia.enableTelemetry" = false;
@@ -105,11 +117,8 @@
           # }/bin/julia";
           "julia.execution.codeInREPL" = true;
 
-          "[haskell]" = {
-            "editor.fontLigatures" =
-              "'cv01', 'cv01', 'cv05', 'ss01', 'zero', 'ss04', 'cv18', 'cv16', 'ss08', 'cv24', 'ss09', 'cv25', 'cv26', 'cv32', 'cv28', 'ss10'";
-            "editor.formatOnSave" = false;
-            "editor.wordWrapColumn" = 100;
+          "haskell.manageHLS" = "PATH";
+          "[haskell][literate haskell]" = {
             "editor.tabSize" = 2;
           };
         };
@@ -125,6 +134,13 @@
           pkgs.vscode-extensions.julialang.language-julia
 
           pkgs.vscode-extensions.haskell.haskell
+          pkgs.vscode-extensions.justusadam.language-haskell
+          # pkgs.vscode-extensions.hoovercj.haskell-linter
+
+          pkgs.vscode-extensions.ms-python.python
+          pkgs.vscode-extensions.ms-python.vscode-pylance
+          pkgs.vscode-extensions.ms-python.debugpy
+          # pkgs.vscode-extensions.ms-python.vscode-python-envs
         ];
       };
     };
