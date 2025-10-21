@@ -56,6 +56,8 @@
     pkgs.yt-dlp
     pkgs.git
     pkgs.claude-code
+    pkgs.zulu24
+    pkgs.zulu17
   ];
 
   nix-homebrew.taps = {
@@ -75,6 +77,7 @@
     "zoom"
     "calibre"
     "spotify"
+    "multimc"
   ];
 
   users.users.autumn.name = "autumn";
