@@ -17,6 +17,7 @@
       installRemoteServer = true;
 
       extensions = [
+        "agda"
         "assembly"
         "basedpyright"
         "basher"

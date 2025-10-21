@@ -121,6 +121,14 @@
           "[haskell][literate haskell]" = {
             "editor.tabSize" = 2;
           };
+
+          "[agda][lagda-forester][lagda-markdown][lagda-org][lagda-rst][lagda-tex][lagda-typst]" = {
+            "editor.unicodeHighlight.ambiguousCharacters" = false;
+          };
+
+          "[agda]" = {
+            "editor.tabSize" = 2;
+          };
         };
         extensions = [
           pkgs.vscode-extensions.mkhl.direnv
@@ -141,6 +149,8 @@
           pkgs.vscode-extensions.ms-python.vscode-pylance
           pkgs.vscode-extensions.ms-python.debugpy
           # pkgs.vscode-extensions.ms-python.vscode-python-envs
+
+          pkgs.vscode-extensions.banacorn.agda-mode
         ];
       };
     };
