@@ -79,6 +79,7 @@
     "calibre"
     "spotify"
     "multimc"
+    "dotnet@8"
   ];
 
   users.users.autumn.name = "autumn";
@@ -104,6 +105,7 @@
       pkgs.brewCasks.claude
       pkgs.brewCasks.signal
       pkgs.brewCasks.supercollider
+      pkgs.prismlauncher
     ];
 
     programs.ssh.enable = true;
