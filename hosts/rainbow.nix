@@ -79,7 +79,6 @@
     "calibre"
     "spotify"
     "multimc"
-    "dotnet@8"
   ];
 
   users.users.autumn.name = "autumn";
