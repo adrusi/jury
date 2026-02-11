@@ -2,6 +2,7 @@
   config,
   pkgs,
   inputs,
+  lib,
   ...
 }:
 {
@@ -35,6 +36,8 @@
     ../modules/darwin/bartender.nix
   ];
 
+  # system.activationScripts.applications.text = lib.mkForce "";
+
   system.stateVersion = 6;
   system.configurationRevision = inputs.self.rev or inputs.self.dirtyRev or null;
   nix.settings.experimental-features = "nix-command flakes";
@@ -57,7 +60,7 @@
     pkgs.yt-dlp
     pkgs.git
     pkgs.claude-code
-    pkgs.zulu24
+    pkgs.zulu25
     pkgs.zulu17
   ];
 
@@ -97,7 +100,9 @@
       inputs.mac-app-util.homeManagerModules.default
     ];
 
-    home.stateVersion = "25.11";
+    # NOTE: massive hack. see https://github.com/nix-community/home-manager/issues/8336
+    home.stateVersion = "23.11";
+    # home.stateVersion = "25.11";
     programs.home-manager.enable = true;
 
     home.packages = [
