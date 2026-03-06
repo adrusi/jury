@@ -7,11 +7,11 @@ pkgs.mkShell {
     pkgs.git
     # pkgs.zed-editor # we often need to run on unconfigured machines, so we provide an editor
 
-    pkgs.pyright
-    pkgs.python312
-    pkgs.ruff
-    pkgs.ty # inshallah
-    pkgs.uv
+    # pkgs.pyright
+    # pkgs.python312
+    # pkgs.ruff
+    # pkgs.ty # inshallah
+    # pkgs.uv
   ];
 
   shellHook = ''
