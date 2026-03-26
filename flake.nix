@@ -74,6 +74,15 @@
       vscode-extensions,
       ...
     }:
+    let
+      localPackagesOverlay = final: _prev: {
+        pragmatapro-font = import ./packages/pragmatapro.nix { pkgs = final; inherit inputs; };
+        uosc-fonts = import ./packages/uosc-fonts.nix { pkgs = final; };
+        obsidian-git = import ./packages/obsidian-git.nix { pkgs = final; };
+        obsidian-lesswrong-theme = import ./packages/obsidian-lesswrong-theme.nix { pkgs = final; };
+        obsidian-catppuccin-theme = import ./packages/obsidian-catppuccin-theme.nix { pkgs = final; };
+      };
+    in
     {
       darwinConfigurations.rainbow = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
@@ -83,6 +92,7 @@
         modules = [
           {
             nixpkgs.overlays = [
+              localPackagesOverlay
               vscode-extensions.overlays.default
             ];
           }

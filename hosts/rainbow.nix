@@ -11,29 +11,33 @@
     inputs.nix-homebrew.darwinModules.nix-homebrew
     inputs.brew-nix.darwinModules.default
     inputs.mac-app-util.darwinModules.default
-    ../modules/common/nix-store.nix
-    ../modules/common/firefox.nix
-    ../modules/common/bitwarden.nix
-    ../modules/common/discord.nix
-    ../modules/common/zed.nix
-    ../modules/common/vscode.nix
-    ../modules/common/haskell.nix
-    # ../modules/common/zen.nix
-    ../modules/common/ghostty.nix
-    ../modules/common/pragmatapro.nix
-    ../modules/common/zsh.nix
-    ../modules/common/direnv.nix
-    ../modules/common/mpv.nix
-    ../modules/common/git.nix
-    ../modules/common/ssh.nix
-    ../modules/common/obsidian.nix
-    ../modules/common/kak/module.nix
-    # ../modules/darwin/linux-builder.nix
-    ../modules/darwin/touchid.nix
-    ../modules/darwin/macos-settings.nix
-    ../modules/darwin/karabiner-elements.nix
-    ../modules/darwin/homebrew.nix
-    ../modules/darwin/bartender.nix
+
+    # system-only modules
+    ../modules/system/nix-store.nix
+    ../modules/system/haskell.nix
+    ../modules/system/homebrew.nix
+    ../modules/system/bartender.nix
+    # ../modules/system/linux-builder.nix
+
+    # home modules for autumn
+    (import ../modules/home/firefox.nix "autumn")
+    (import ../modules/home/bitwarden.nix "autumn")
+    (import ../modules/home/discord.nix "autumn")
+    (import ../modules/home/zed.nix "autumn")
+    (import ../modules/home/vscode.nix "autumn")
+    # (import ../modules/home/zen.nix "autumn")
+    (import ../modules/home/ghostty.nix "autumn")
+    (import ../modules/home/pragmatapro.nix "autumn")
+    (import ../modules/home/zsh.nix "autumn")
+    (import ../modules/home/direnv.nix "autumn")
+    (import ../modules/home/mpv.nix "autumn")
+    (import ../modules/home/git.nix "autumn")
+    (import ../modules/home/ssh.nix "autumn")
+    (import ../modules/home/obsidian.nix "autumn")
+    (import ../modules/home/kak/module.nix "autumn")
+    (import ../modules/home/macos-settings.nix "autumn")
+    (import ../modules/home/karabiner-elements.nix "autumn")
+    (import ../modules/home/touchid.nix "autumn")
   ];
 
   # system.activationScripts.applications.text = lib.mkForce "";
@@ -56,7 +60,6 @@
   };
 
   environment.systemPackages = [
-    # pkgs.libation
     pkgs.yt-dlp
     pkgs.git
     pkgs.claude-code
@@ -95,14 +98,13 @@
   home-manager.useGlobalPkgs = true;
   home-manager.backupFileExtension = "home-manager-backup";
 
-  home-manager.users.${config.system.primaryUser} = {
+  home-manager.users.autumn = {
     imports = [
       inputs.mac-app-util.homeManagerModules.default
     ];
 
     # NOTE: massive hack. see https://github.com/nix-community/home-manager/issues/8336
     home.stateVersion = "23.11";
-    # home.stateVersion = "25.11";
     programs.home-manager.enable = true;
 
     home.packages = [
@@ -111,7 +113,5 @@
       pkgs.brewCasks.supercollider
       pkgs.prismlauncher
     ];
-
-    programs.ssh.enable = true;
   };
 }
