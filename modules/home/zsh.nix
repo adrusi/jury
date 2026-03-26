@@ -34,8 +34,8 @@ username:
         autoload -Uz vcs_info
         zstyle ':vcs_info:*' enable git hg
         zstyle ':vcs_info:*' check-for-changes true
-        zstyle ':vcs_info:*' stagedstr '''' #
-        zstyle ':vcs_info:*' unstagedstr ''''
+        zstyle ':vcs_info:*' stagedstr "" #
+        zstyle ':vcs_info:*' unstagedstr ""
 
         [ -n "$ZED_TERM" ] && ZED_WORKSPACE_ROOT="$PWD"
         autoload -U colors

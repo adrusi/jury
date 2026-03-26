@@ -112,10 +112,12 @@ nixos-rebuild switch --flake /root/jury#kerapace
 
 # 3. activate the vm specialisation to finish the job
 #    (this spoofs the bootloader step and applies vm-appropriate config)
-/run/current-system/specialisation/vm/bin/switch-to-configuration switch
+/nix/var/nix/profiles/system/specialisation/vm/bin/switch-to-configuration switch
 ```
 
 step 3 is necessary because the base `kerapace` config still has grub configured (for bare-metal compatibility). the vm specialisation swaps in virtiofs/qemu-guest settings and replaces the bootloader install step with a no-op.
+
+**why `/nix/var/nix/profiles/system` and not `/run/current-system`**: `nixos-rebuild switch` always updates the profile before running `switch-to-configuration`. if the activation (step 2) fails partway through, `/run/current-system` might not be updated, but the profile always is. using the profile path is reliable.
 
 ### after a reboot
 
@@ -124,7 +126,3 @@ on reboot the system activates the base kerapace config (not the vm specialisati
 ### commit before building
 
 nix flake evaluation reads from the **git index** (staged files), not from the working tree. a file must be at least `git add`-ed before `nixos-rebuild` will see it. committing is tidier but `git add` is the minimum.
-
-### known quirk
-
-`/run/current-system` doesn't update when you activate a specialisation — it keeps pointing to the base system path. this is normal; it doesn't affect which config is actually running.

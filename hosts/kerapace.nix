@@ -134,6 +134,7 @@
 
   environment.systemPackages = with pkgs; [
     wget
+    kitty
   ];
   environment.variables.EDITOR = "kak";
 
