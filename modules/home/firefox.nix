@@ -63,7 +63,13 @@ username:
               addons.reddit-enhancement-suite
               addons.sponsorblock
               addons.ublock-origin
-              addons.zotero-connector
+              # workaround: zotero-connector is missing meta.mozPermissions in the
+              # current firefox-addons rev, but home-manager unconditionally accesses
+              # it in assertion messages (even for passing assertions), causing eval
+              # errors when the full config is forced (e.g. nix eval specialisations).
+              (addons.zotero-connector.overrideAttrs (old: {
+                meta = old.meta // { mozPermissions = old.meta.mozPermissions or []; };
+              }))
               addons.shinigami-eyes
             ];
 
