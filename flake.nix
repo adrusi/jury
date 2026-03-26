@@ -84,6 +84,15 @@
       };
     in
     {
+      nixosConfigurations.kerapace = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
+        modules = [
+          { nixpkgs.overlays = [ localPackagesOverlay ]; }
+          ./hosts/kerapace.nix
+        ];
+      };
+
       darwinConfigurations.rainbow = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         specialArgs = {

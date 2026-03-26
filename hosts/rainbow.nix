@@ -72,6 +72,7 @@
   };
 
   homebrew.casks = [
+    "bitwarden"
     "betterdisplay"
     "mullvad-vpn"
     "crossover"

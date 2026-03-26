@@ -1,13 +1,10 @@
 username:
 { pkgs, lib, inputs, ... }:
 {
-  imports = [
-    ../system/bitwarden.nix
-  ];
 
   home-manager.users.${username} = lib.mkMerge [
     (lib.mkIf pkgs.stdenv.isLinux {
-      home.packages = [ pkgs.bitwarden ];
+      home.packages = [ pkgs.bitwarden-desktop ];
     })
     {
       programs.firefox.profiles.default = {
