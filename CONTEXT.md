@@ -13,10 +13,10 @@ This file exists so that future me (or future AI) can get oriented quickly witho
 ### kerapace (work laptop)
 - **arch**: x86_64-linux (AMD)
 - **framework**: NixOS + home-manager
-- **status**: currently configured via `/etc/nixos`, migration to this repo in progress
-- **target config**: login-as-root (see below)
-- **runtime**: currently booting as a **QEMU guest on a Fedora 43 host** via virtiofs, so the config can be iterated without interrupting work
-  - `hardware-configuration.nix` has a `specialisation.vm` for this (virtiofs root, no LUKS, no grub, spice/mesa/virtio drivers)
+- **status**: configured via this repo (`hosts/kerapace.nix`)
+- **config**: login-as-root (see below)
+- **runtime**: booting as a **QEMU guest on a Fedora 43 host** via virtiofs
+  - `hosts/kerapace.nix` has a `specialisation.vm` for this (virtiofs root, no LUKS, no grub, spice/mesa/virtio drivers)
   - bare-metal boot path uses LUKS + btrfs subvolumes + GRUB
 
 ## login-as-root
@@ -95,16 +95,36 @@ modules with no home-manager component (e.g. `nix-store.nix`) stay as plain NixO
 
 ### packages
 
-package derivations should not be defined inline in host or module files. they live in `packages/` at the repo root, are exposed as `packages.*` outputs in `flake.nix`, and are passed into the module system via `specialArgs`. currently defined inline (to be extracted):
+package derivations live in `packages/` at the repo root and are exposed via a nixpkgs overlay in `flake.nix` (so modules can reference them as `pkgs.pragmatapro-font`, etc.). current packages: `pragmatapro-font`, `uosc-fonts`, `obsidian-git`, `obsidian-lesswrong-theme`, `obsidian-catppuccin-theme`.
 
-- **pragmatapro font** — `modules/common/pragmatapro.nix`
-- **uosc fonts** — `modules/common/mpv.nix`
+## applying config changes on kerapace
 
-## plan
+kerapace runs as a QEMU VM. `nixos-rebuild switch` works but fails at the grub bootloader step (grub can't see the EFI partition through virtiofs), so it needs a little help.
 
-roughly ordered; the refactor is the big one:
+### the procedure
 
-1. **extract packages** — move inline derivations to `packages/`, wire up in `flake.nix`, pass via `specialArgs`
-2. **restructure modules** — migrate from `modules/common/` + `modules/darwin/` to `modules/system/` + `modules/home/`; this subsumes the common/darwin merge since darwin-specific modules are all system-level and go into `modules/system/`
-3. **update rainbow** — update `hosts/rainbow.nix` imports to use the new structure; instantiate home modules for `autumn`
-4. **add kerapace** — add `hosts/kerapace.nix` to the flake; instantiate home modules for `root`, `firefox`, and any other users
+```sh
+# 1. stage changes (nix flakes read from git index, not working tree)
+git add -A
+
+# 2. build and partially activate (will fail at grub — that's expected)
+nixos-rebuild switch --flake /root/jury#kerapace
+
+# 3. activate the vm specialisation to finish the job
+#    (this spoofs the bootloader step and applies vm-appropriate config)
+/run/current-system/specialisation/vm/bin/switch-to-configuration switch
+```
+
+step 3 is necessary because the base `kerapace` config still has grub configured (for bare-metal compatibility). the vm specialisation swaps in virtiofs/qemu-guest settings and replaces the bootloader install step with a no-op.
+
+### after a reboot
+
+on reboot the system activates the base kerapace config (not the vm specialisation). re-run step 3 to get the vm-appropriate config live again. the system will be mostly usable without it but you'll be missing qemu guest agent, spice integration, and virtio gpu.
+
+### commit before building
+
+nix flake evaluation reads from the **git index** (staged files), not from the working tree. a file must be at least `git add`-ed before `nixos-rebuild` will see it. committing is tidier but `git add` is the minimum.
+
+### known quirk
+
+`/run/current-system` doesn't update when you activate a specialisation — it keeps pointing to the base system path. this is normal; it doesn't affect which config is actually running.
