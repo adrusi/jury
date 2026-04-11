@@ -30,6 +30,18 @@
     # home modules for firefox isolation user
     (import ../modules/home/firefox.nix "firefox")
     (import ../modules/home/bitwarden.nix "firefox")
+
+    (import ../modules/home/bitwarden.nix "autumn")
+    (import ../modules/home/direnv.nix "autumn")
+    (import ../modules/home/discord.nix "autumn")
+    (import ../modules/home/firefox.nix "autumn")
+    (import ../modules/home/git.nix "autumn")
+    (import ../modules/home/kak/module.nix "autumn")
+    (import ../modules/home/mpv.nix "autumn")
+    (import ../modules/home/pragmatapro.nix "autumn")
+    (import ../modules/home/ssh.nix "autumn")
+    (import ../modules/home/zed.nix "autumn")
+    (import ../modules/home/zsh.nix "autumn")
   ];
 
   # --- hardware ---
@@ -63,27 +75,27 @@
   boot.initrd.luks.devices."pool".device = "/dev/disk/by-uuid/7aa28a7b-2dde-4078-ab1e-5c9b35fb7730";
 
   # boot as qemu guest via virtiofs instead of bare metal
-  specialisation.vm.configuration = {
-    fileSystems = lib.mkForce {
-      "/" = {
-        fsType = "virtiofs";
-        device = "nixos";
-      };
-    };
-    boot.initrd.luks.devices = lib.mkForce { };
-    swapDevices = [ ];
-    boot.loader.grub.enable = lib.mkForce false;
-    boot.initrd.availableKernelModules = [ "virtio_pci" "virtiofs" ];
-    boot.initrd.kernelModules = [ "virtio_pci" "virtiofs" ];
-    services.qemuGuest.enable = true;
-    services.spice-vdagentd.enable = true;
-    hardware.graphics = {
-      enable = true;
-      extraPackages = [ pkgs.mesa ];
-    };
-    environment.variables.MESA_LOADER_DRIVER_OVERRIDE = "virtio";
-    system.build.installBootLoader = lib.mkForce "${pkgs.coreutils}/bin/true";
-  };
+  # specialisation.vm.configuration = {
+  #   fileSystems = lib.mkForce {
+  #     "/" = {
+  #       fsType = "virtiofs";
+  #       device = "nixos";
+  #     };
+  #   };
+  #   boot.initrd.luks.devices = lib.mkForce { };
+  #   swapDevices = [ ];
+  #   boot.loader.grub.enable = lib.mkForce false;
+  #   boot.initrd.availableKernelModules = [ "virtio_pci" "virtiofs" ];
+  #   boot.initrd.kernelModules = [ "virtio_pci" "virtiofs" ];
+  #   services.qemuGuest.enable = true;
+  #   services.spice-vdagentd.enable = true;
+  #   hardware.graphics = {
+  #     enable = true;
+  #     extraPackages = [ pkgs.mesa ];
+  #   };
+  #   environment.variables.MESA_LOADER_DRIVER_OVERRIDE = "virtio";
+  #   system.build.installBootLoader = lib.mkForce "${pkgs.coreutils}/bin/true";
+  # };
 
   swapDevices = [ ];
   zramSwap.enable = true;
@@ -160,6 +172,13 @@
     shell = pkgs.bash;
   };
 
+  users.users.autumn = {
+    isNormalUser = true;
+    shell = pkgs.zsh;
+    description = "Autumn Russell";
+    extraGroups = [ "wheel" "networkmanager" ];
+  };
+
   # --- home-manager ---
 
   nixpkgs.config.allowUnfree = true;
@@ -174,6 +193,11 @@
   };
 
   home-manager.users.firefox = {
+    home.stateVersion = "25.11";
+    programs.home-manager.enable = true;
+  };
+
+  home-manager.users.autumn = {
     home.stateVersion = "25.11";
     programs.home-manager.enable = true;
   };
