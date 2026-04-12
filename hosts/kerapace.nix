@@ -18,6 +18,7 @@
     ../modules/system/git.nix
     ../modules/system/firefox.nix
     ../modules/system/mpv.nix
+    ../modules/system/keyd.nix
 
     # home modules for root
     (import ../modules/home/zsh.nix "root")
@@ -35,6 +36,7 @@
     (import ../modules/home/direnv.nix "autumn")
     (import ../modules/home/discord.nix "autumn")
     (import ../modules/home/firefox.nix "autumn")
+    (import ../modules/home/ghostty.nix "autumn")
     (import ../modules/home/git.nix "autumn")
     (import ../modules/home/kak/module.nix "autumn")
     (import ../modules/home/mpv.nix "autumn")
@@ -46,7 +48,13 @@
 
   # --- hardware ---
 
-  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "thunderbolt" "usb_storage" "sd_mod" ];
+  boot.initrd.availableKernelModules = [
+    "nvme"
+    "xhci_pci"
+    "thunderbolt"
+    "usb_storage"
+    "sd_mod"
+  ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
@@ -69,7 +77,10 @@
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/93B5-EF62";
     fsType = "vfat";
-    options = [ "fmask=0022" "dmask=0022" ];
+    options = [
+      "fmask=0022"
+      "dmask=0022"
+    ];
   };
 
   boot.initrd.luks.devices."pool".device = "/dev/disk/by-uuid/7aa28a7b-2dde-4078-ab1e-5c9b35fb7730";
@@ -176,7 +187,10 @@
     isNormalUser = true;
     shell = pkgs.zsh;
     description = "Autumn Russell";
-    extraGroups = [ "wheel" "networkmanager" ];
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+    ];
   };
 
   # --- home-manager ---
@@ -200,6 +214,13 @@
   home-manager.users.autumn = {
     home.stateVersion = "25.11";
     programs.home-manager.enable = true;
+
+    # TODO find a better way to manage differences in font size rendering across platforms and hosts
+    programs.zed-editor.userSettings = {
+      buffer_font_size = lib.mkForce 14;
+      terminal.font_size = lib.mkForce 14;
+      ui_font_size = lib.mkForce 16;
+    };
   };
 
   system.stateVersion = "25.11";

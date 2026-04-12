@@ -7,10 +7,7 @@ username:
 
   home-manager.users.${username} = {
     programs.ghostty.settings = {
-      font-family = "PragmataPro Mono Liga";
-      font-feature = [
-        "ss13"
-      ];
+      font-family = "PragmataPro";
     };
     programs.zed-editor.userSettings = {
       buffer_font_family = "PragmataPro Mono Liga";
