@@ -9,6 +9,9 @@ username:
     programs.ghostty.settings = {
       font-family = "PragmataPro";
     };
+    programs.kitty.settings = {
+      font_family = "PragmataPro Mono";
+    };
     programs.zed-editor.userSettings = {
       buffer_font_family = "PragmataPro Mono Liga";
       terminal.font_family = "PragmataPro Mono Liga";

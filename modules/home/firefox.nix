@@ -71,6 +71,7 @@ username:
                 meta = old.meta // { mozPermissions = old.meta.mozPermissions or []; };
               }))
               addons.shinigami-eyes
+              addons.darkreader
             ];
 
           settings = {

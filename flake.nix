@@ -65,6 +65,16 @@
       url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    swayfx = {
+      url = "github:adrusi/swayfx";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    dmodel-issue = {
+      url = "git+file:./vendor/dmodel-issue";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     inputs@{
@@ -72,23 +82,32 @@
       flake-utils,
       darwin,
       vscode-extensions,
+      dmodel-issue,
       ...
     }:
     let
       localPackagesOverlay = final: _prev: {
-        pragmatapro-font = import ./packages/pragmatapro.nix { pkgs = final; inherit inputs; };
+        pragmatapro-font = import ./packages/pragmatapro.nix {
+          pkgs = final;
+          inherit inputs;
+        };
         uosc-fonts = import ./packages/uosc-fonts.nix { pkgs = final; };
         obsidian-git = import ./packages/obsidian-git.nix { pkgs = final; };
         obsidian-lesswrong-theme = import ./packages/obsidian-lesswrong-theme.nix { pkgs = final; };
         obsidian-catppuccin-theme = import ./packages/obsidian-catppuccin-theme.nix { pkgs = final; };
+        notable-firefox-addon = import ./packages/notable.nix { pkgs = final; inherit inputs; };
       };
+      remotePackagesOverlay = final: prev: {
+        dmodel-issue-tracker = dmodel-issue.packages.${prev.stdenv.system}.default;
+      };
+      overlays = [ localPackagesOverlay remotePackagesOverlay ];
     in
     {
       nixosConfigurations.kerapace = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = { inherit inputs; };
         modules = [
-          { nixpkgs.overlays = [ localPackagesOverlay ]; }
+          { nixpkgs.overlays = overlays; }
           ./hosts/kerapace.nix
         ];
       };
@@ -99,12 +118,7 @@
           inherit inputs;
         };
         modules = [
-          {
-            nixpkgs.overlays = [
-              localPackagesOverlay
-              vscode-extensions.overlays.default
-            ];
-          }
+          { nixpkgs.overlays = overlays; }
           ./hosts/rainbow.nix
         ];
       };

@@ -33,14 +33,17 @@
     (import ../modules/home/bitwarden.nix "firefox")
 
     (import ../modules/home/bitwarden.nix "autumn")
+    (import ../modules/home/claude.nix "autumn")
     (import ../modules/home/direnv.nix "autumn")
     (import ../modules/home/discord.nix "autumn")
     (import ../modules/home/firefox.nix "autumn")
     (import ../modules/home/ghostty.nix "autumn")
     (import ../modules/home/git.nix "autumn")
+    (import ../modules/home/kitty.nix "autumn")
     (import ../modules/home/kak/module.nix "autumn")
     (import ../modules/home/mpv.nix "autumn")
     (import ../modules/home/pragmatapro.nix "autumn")
+    (import ../modules/home/sway.nix "autumn")
     (import ../modules/home/ssh.nix "autumn")
     (import ../modules/home/zed.nix "autumn")
     (import ../modules/home/zsh.nix "autumn")
@@ -158,6 +161,7 @@
   environment.systemPackages = with pkgs; [
     wget
     kitty
+    dmodel-issue-tracker
   ];
   environment.variables.EDITOR = "kak";
 
@@ -172,6 +176,12 @@
     };
   };
   networking.firewall.allowedTCPPorts = [ 22 ];
+
+  # --- docker ---
+  virtualisation.docker = {
+    enable = true;
+    storageDriver = "btrfs";
+  };
 
   # --- users ---
 
@@ -190,6 +200,7 @@
     extraGroups = [
       "wheel"
       "networkmanager"
+      "docker"
     ];
   };
 
@@ -221,6 +232,8 @@
       terminal.font_size = lib.mkForce 14;
       ui_font_size = lib.mkForce 16;
     };
+
+    programs.git.settings.user.email = lib.mkForce "autumn@dmodel.ai";
   };
 
   system.stateVersion = "25.11";
