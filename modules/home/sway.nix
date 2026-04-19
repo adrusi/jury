@@ -260,6 +260,7 @@ in
       package = inputs.swayfx.packages.${pkgs.stdenv.system}.default;
       wrapperFeatures.gtk = true;
       checkConfig = false;
+      systemd.enable = true;
 
       config = {
         modifier = mod;
@@ -455,17 +456,24 @@ in
             --ring-clear-color ${fmt base} \
             --ring-ver-color ${fmt lavender} \
             --ring-wrong-color ${fmt peach}'';
-      events.before-sleep = "loginctl lock-session";
-      timeouts = [
-        {
-          timeout = 300;
-          command = "${pkgs.chayang}/bin/chayang && swaymsg 'output * dpms off' && loginctl lock-session";
-        }
-        {
-          timeout = 600;
-          command = "systemctl suspend";
-        }
-      ];
+      events.before-sleep = "${pkgs.systemd}/bin/loginctl lock-session";
+      timeouts =
+        let
+          swaymsg = "${inputs.swayfx.packages.${pkgs.stdenv.system}.default}/bin/swaymsg";
+          loginctl = "${pkgs.systemd}/bin/loginctl";
+          systemctl = "${pkgs.systemd}/bin/systemctl";
+        in
+        [
+          {
+            timeout = 300;
+            command = "${pkgs.chayang}/bin/chayang && ${swaymsg} 'output * power off' && ${loginctl} lock-session";
+            resumeCommand = "${swaymsg} 'output * power on'";
+          }
+          {
+            timeout = 600;
+            command = "${systemctl} suspend";
+          }
+        ];
     };
   };
 }
