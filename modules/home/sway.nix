@@ -55,6 +55,7 @@ in
       pkgs.wl-clipboard
       pkgs.mako
       pkgs.nerd-fonts.fantasque-sans-mono
+      inputs.firefox-sway-favicon.packages.${pkgs.stdenv.system}.native-host
     ];
     
     programs.wofi = {
@@ -91,17 +92,23 @@ in
       };
     };
 
-    programs.firefox.profiles.default = {
-      extensions.packages = [ pkgs.notable-firefox-addon ];
-      settings."sidebar.verticalTabs" = lib.mkForce false;
-      userChrome = ''
-        #TabsToolbar {
-          visibility: collapse;
-        }
-        #sidebar-main {
-          visibility: collapse;
-        }
-      '';
+    programs.firefox = {
+      nativeMessagingHosts = [ inputs.firefox-sway-favicon.packages.${pkgs.stdenv.system}.native-host ];
+      profiles.default = {
+        extensions.packages = [
+          pkgs.notable-firefox-addon
+          inputs.firefox-sway-favicon.packages.${pkgs.stdenv.system}.extension
+        ];
+        settings."sidebar.verticalTabs" = lib.mkForce false;
+        userChrome = ''
+          #TabsToolbar {
+            visibility: collapse;
+          }
+          #sidebar-main {
+            visibility: collapse;
+          }
+        '';
+      };
     };
 
     programs.waybar = {
@@ -347,6 +354,8 @@ in
         };
       };
       extraConfig = ''
+        for_window [app_id="firefox"] title_replace_regex "s/^\[fx:[0-9]+\] (.*)— Mozilla Firefox$/$1/"
+      
         vtab_width 180
         vtab_position left
         vtab_padding 11

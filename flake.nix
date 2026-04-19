@@ -71,6 +71,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    firefox-sway-favicon = {
+      url = "github:adrusi/firefox-sway-favicon";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     dmodel-issue = {
       url = "git+file:./vendor/dmodel-issue";
       inputs.nixpkgs.follows = "nixpkgs";

@@ -3,11 +3,11 @@
     "brew-api": {
       "flake": false,
       "locked": {
-        "lastModified": 1776562472,
-        "narHash": "sha256-3n6lEkHvl8/P8FI4yNJFzB+ufKj7K2CSgYejnlhLDbg=",
+        "lastModified": 1776567864,
+        "narHash": "sha256-KfP0WRHtJ+LeO4epUNWZYLCODbGmc3Mw5Ul0Pd9qZbo=",
         "owner": "BatteredBunny",
         "repo": "brew-api",
-        "rev": "94fa8022fafcb7d6ee68331c2685cc7a0111b381",
+        "rev": "a0aede3a3f882c0b4c6182668f1dad24c8b7595b",
         "type": "github"
       },
       "original": {
@@ -161,6 +161,50 @@
         "type": "gitlab"
       }
     },
+    "firefox-addons_2": {
+      "inputs": {
+        "nixpkgs": [
+          "firefox-sway-favicon",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "dir": "pkgs/firefox-addons",
+        "lastModified": 1776484970,
+        "narHash": "sha256-nx7CgawAdPzBHjve8pFv1K4nmlVpEF2wAe8ApkDcJwU=",
+        "owner": "rycee",
+        "repo": "nur-expressions",
+        "rev": "d02b22b3511f25943c6e938b673626764b74b5b2",
+        "type": "gitlab"
+      },
+      "original": {
+        "dir": "pkgs/firefox-addons",
+        "owner": "rycee",
+        "repo": "nur-expressions",
+        "type": "gitlab"
+      }
+    },
+    "firefox-sway-favicon": {
+      "inputs": {
+        "firefox-addons": "firefox-addons_2",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1776570248,
+        "narHash": "sha256-r2oJq1C8d6W96bBeZv9K7eVguF7eueyRoNrSgAy+Gok=",
+        "owner": "adrusi",
+        "repo": "firefox-sway-favicon",
+        "rev": "1d7be1bfbae1355d81ccbf648ee06e75a604a3c0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "adrusi",
+        "repo": "firefox-sway-favicon",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -310,11 +354,11 @@
     "homebrew-cask": {
       "flake": false,
       "locked": {
-        "lastModified": 1776559491,
-        "narHash": "sha256-Au908aBmK2W8oOMLByl7F6Fv1Cb0pPAFKt5Mg0eSe5A=",
+        "lastModified": 1776567853,
+        "narHash": "sha256-WZ/JK4IbIr25sd+PsUKlzaoCvsR0bVpC4pEsQlHZmdc=",
         "owner": "homebrew",
         "repo": "homebrew-cask",
-        "rev": "95fbb6467e9ea755b0fb6c9dd2ca046caa14ac82",
+        "rev": "e6e645e69fa5ab7d6ab33c56b6876888afccbcbe",
         "type": "github"
       },
       "original": {
@@ -326,11 +370,11 @@
     "homebrew-core": {
       "flake": false,
       "locked": {
-        "lastModified": 1776562525,
-        "narHash": "sha256-w79QzaEZLeTnNbP83rc/dH/L9iO1Y7PUBe36KAYD9y8=",
+        "lastModified": 1776567991,
+        "narHash": "sha256-yXrJRfIGfWEPPizWBHiVHkfN3e7ugBQ2yGEJDBDo27k=",
         "owner": "homebrew",
         "repo": "homebrew-core",
-        "rev": "1467fb62cc59689642f308afd41e9bfec136f109",
+        "rev": "19a00bda41b53e6aec7ba0818860166929a3504d",
         "type": "github"
       },
       "original": {
@@ -602,6 +646,7 @@
         "darwin": "darwin",
         "dmodel-issue": "dmodel-issue",
         "firefox-addons": "firefox-addons",
+        "firefox-sway-favicon": "firefox-sway-favicon",
         "flake-utils": "flake-utils",
         "home-manager": "home-manager",
         "homebrew-cask": "homebrew-cask",
