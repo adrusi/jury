@@ -14,6 +14,15 @@ hook global WinSetOption filetype=(python|clojure|haskell|rust|typescript|javasc
     lsp-enable-window
 }
 
+# peneira settings
+require-module peneira
+map global normal <c-p> ": peneira-files<ret>"
+set-option global peneira_files_command 'fd --follow'
+set-face global PeneiraSelected bright-white,rgb:7287fd+f
+set-face global PeneiraFlag magenta,default+b
+set-face global PeneiraMatches default,default,magenta+u
+set-face global PeneiraFileName +b
+
 # wrap
 declare-option int wrapcol 80
 declare-option -hidden bool wrapcol_displayed false
@@ -92,8 +101,6 @@ hook global WinCreate .* %{
     alias window adrusi-toggle-linenumber adrusi-number-lines
 }
 map global user n ": adrusi-toggle-linenumber<ret>" -docstring 'toggle line numbers'
-
-hook global WinCreate .* no-highlight-wrapcol
 
 # copypasta
 map global user y ': osc52-copy %val{register}<ret>' -docstring 'copy to system clipboard'
@@ -252,76 +259,75 @@ hook global WinSetOption filetype=nix %{
 
 # kakoune scripting helpers
 
-define-command -hidden define-command-force-override -params 2.. %{
-    unalias global define-command define-command-force-override
-    evaluate-commands %sh{
-        . kak.inc.sh
-        has_override=
-        for arg in "$@"; do
-            [ "-override" = "$arg" ] && has_override=1;
-        done
-        printf 'define-command '
-        [ "$has_override" ] || printf %s '-override '
-        kakcork "$@"
-    }
-    alias global define-command define-command-force-override
-}
+# define-command -hidden define-command-force-override -params 2.. %{
+#     unalias global define-command define-command-force-override
+#     evaluate-commands %sh{
+#         . kak.inc.sh
+#         has_override=
+#         for arg in "$@"; do
+#             [ "-override" = "$arg" ] && has_override=1;
+#         done
+#         printf 'define-command '
+#         [ "$has_override" ] || printf %s '-override '
+#         kakcork "$@"
+#     }
+#     alias global define-command define-command-force-override
+# }
 
-define-command -override evaluate-commands-from-selection %{
-    unalias global def define-command
-    alias global def define-command-force-override
-    alias global define-command define-command-force-override
+# define-command -override evaluate-commands-from-selection %{
+#     unalias global def define-command
+#     alias global def define-command-force-override
+#     alias global define-command define-command-force-override
 
-    evaluate-commands -itersel %{ evaluate-commands %val{selection} }
+#     evaluate-commands -itersel %{ evaluate-commands %val{selection} }
 
-    unalias global define-command define-command-force-override
-    unalias global def define-command-force-override
-    alias global def define-command
-}
+#     unalias global define-command define-command-force-override
+#     unalias global def define-command-force-override
+#     alias global def define-command
+# }
 
-define-command load-colorscheme-from-buffer %{
-    evaluate-commands -draft %{
-        execute-keys '%'
-        try %sh{
-            printf %s\\n "$kak_selection" | grep '^set-face\|^face'
-        }
-    }
-}
+# define-command load-colorscheme-from-buffer %{
+#     evaluate-commands -draft %{
+#         execute-keys '%'
+#         try %sh{
+#             printf %s\\n "$kak_selection" | grep '^set-face\|^face'
+#         }
+#     }
+# }
 
-hook global WinSetOption filetype=kak %{
-    try %{
-        evaluate-commands %sh{
-            case "$(readlink -f "$kak_buffile")" in
-            "$(readlink -f "$kak_config/colors")"*) : ;;
-            *) printf 'fail "not a colorscheme"\n';;
-            esac
-        }
+# hook global WinSetOption filetype=kak %{
+#     try %{
+#         evaluate-commands %sh{
+#             case "$(readlink -f "$kak_buffile")" in
+#             "$(readlink -f "$kak_config/colors")"*) : ;;
+#             *) printf 'fail "not a colorscheme"\n';;
+#             esac
+#         }
 
-        palette-gutter
-        hook -group colorscheme window NormalIdle .* %{
-            load-colorscheme-from-buffer
-            if-buf-changed %{
-                nop %sh{ (
-                    printf 'evaluate-commands -draft -client "%s" %%{
-                        palette-gutter
-                    }\n' "$kak_client" | kak -p "$kak_session"
-                ) >/dev/null 2>&1 </dev/null & }
-            }
-        }
+#         palette-gutter
+#         hook -group colorscheme window NormalIdle .* %{
+#             load-colorscheme-from-buffer
+#             if-buf-changed %{
+#                 nop %sh{ (
+#                     printf 'evaluate-commands -draft -client "%s" %%{
+#                         palette-gutter
+#                     }\n' "$kak_client" | kak -p "$kak_session"
+#                 ) >/dev/null 2>&1 </dev/null & }
+#             }
+#         }
 
-        hook -group colorscheme window WinSetOption filetype=.* %{
-            remove-hooks window colorscheme
-        }
-    } catch %{
-        evaluate-commands %sh{
-            . kak.inc.sh
-            if [ "$kak_error" != "not a colorscheme" ]; then
-                printf "fail %s\n" "$(kakquote "$kak_error")"
-            fi
-        }
-    }
-    map window user <ret> ': evaluate-commands-from-selection<ret>' -docstring 'eval selection as kak commands'
-}
+#         hook -group colorscheme window WinSetOption filetype=.* %{
+#             remove-hooks window colorscheme
+#         }
+#     } catch %{
+#         evaluate-commands %sh{
+#             if [ "$kak_error" != "not a colorscheme" ]; then
+#                 printf "fail %s\n" "$(kakquote "$kak_error")"
+#             fi
+#         }
+#     }
+#     map window user <ret> ': evaluate-commands-from-selection<ret>' -docstring 'eval selection as kak commands'
+# }
 
 # override all of rep's config lol
 
@@ -456,10 +462,12 @@ map -docstring 'evaluate the selection in the REPL' global my-rep s ': rep-evalu
 map -docstring 'evaluate this file in the REPL'     global my-rep f ': rep-evaluate-file<ret>'
 
 # kitty
-define-command -params 1.. -shell-completion -override kitty-os-terminal %{
-    nop %sh{ {
-        kitty @ launch --type=os-window -- "$@"
-    } >/dev/null 2>/dev/null </dev/null & }
-}
-alias global terminal kitty-os-terminal
-map global normal <c-n> ": kitty-os-terminal kak -c %val{session}<ret>"
+# define-command -params 1.. -shell-completion -override kitty-os-terminal %{
+#     evaluate-commands %sh{
+#         kitty @ launch --type=os-window --env DIRENV_DISABLE=1 --cwd="$PWD" -- "$@" >/dev/null || echo 'fail %{kitty-os-terminal: failure running `kitty @`, see `:buffer *debug*`}'
+#     }
+# }
+require-module kitty
+set-option global kitty_window_type os-window
+alias global terminal kitty-terminal-window
+map global normal <c-n> ": terminal kak -c %val{session}<ret>"

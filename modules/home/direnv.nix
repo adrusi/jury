@@ -11,7 +11,7 @@ username:
     programs.zsh.initContent = ''
       _direnv_hook() {
         trap -- "" SIGINT
-        eval "$("${lib.getBin pkgs.direnv}/bin/direnv" export zsh)"
+        [[ -z "$DIRENV_DISABLE" ]] && eval "$("${lib.getBin pkgs.direnv}/bin/direnv" export zsh)"
         compinit
         trap - SIGINT
       }
