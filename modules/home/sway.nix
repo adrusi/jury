@@ -362,6 +362,7 @@ in
         corner_radius 6
         default_border normal 3
         titlebar_padding 6 4
+        workspace_layout vtabbed
 
         for_window [floating] shadows enable
 
