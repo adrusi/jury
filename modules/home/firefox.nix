@@ -72,6 +72,7 @@ username:
               }))
               addons.shinigami-eyes
               addons.darkreader
+              addons.stylus
             ];
 
           settings = {

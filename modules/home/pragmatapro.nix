@@ -20,6 +20,7 @@ username:
         ss13 = true;
       };
     };
+    programs.zathura.options.font = "PragmataPro normal 10";
     programs.vscode.profiles.default.userSettings = {
       "editor.fontFamily" = "PragmataPro Mono Liga";
       "debug.console.fontFamily" = "PragmataPro Mono Liga";

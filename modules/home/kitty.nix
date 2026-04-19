@@ -10,6 +10,7 @@ username:
         visual_bell_duration = 0.05;
         allow_remote_control = true;
         font_size = 12.0;
+        window_padding_width = 6;
 
         # The basic colors
         foreground = "#4c4f69";
@@ -84,7 +85,7 @@ username:
 
         # white
         color7 = "#acb0be";
-        color15 = "#bcc0cc";
+        color15 = "#eff1f5";
       };
     };
   };

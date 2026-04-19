@@ -7,6 +7,33 @@ username:
 }:
 let
   mod = "Mod4";
+  gaps = "8";
+  rosewater = "#dc8a78";
+  flamingo = "#dd7878";
+  pink = "#ea76cb";
+  mauve = "#8839ef";
+  red = "#d20f39";
+  maroon = "#e64553";
+  peach = "#fe640b";
+  yellow = "#df8e1d";
+  green = "#40a02b";
+  teal = "#179299";
+  sky = "#04a5e5";
+  sapphire = "#209fb5";
+  blue = "#1e66f5";
+  lavender = "#7287fd";
+  text = "#4c4f69";
+  subtext1 = "#5c5f77";
+  subtext0 = "#6c6f85";
+  overlay2 = "#7c7f93";
+  overlay1 = "#8c8fa1";
+  overlay0 = "#9ca0b0";
+  surface2 = "#acb0be";
+  surface1 = "#bcc0cc";
+  surface0 = "#ccd0da";
+  base = "#eff1f5";
+  mantle = "#e6e9ef";
+  crust = "#dce0e8";
 in
 {
   imports = [
@@ -27,6 +54,7 @@ in
       pkgs.slurp
       pkgs.wl-clipboard
       pkgs.mako
+      pkgs.nerd-fonts.fantasque-sans-mono
     ];
     
     programs.wofi = {
@@ -37,11 +65,185 @@ in
       };
     };
 
+    services.mako = {
+      enable = true;
+      settings = {
+        anchor = "top-right";
+        background-color = base;
+        text-color = text;
+        border-color = lavender;
+        border-radius = 6;
+        border-size = 3;
+        font = "PragmataPro 9";
+        icons = true;
+        layer = "top";
+        markup = true;
+        outer-margin = 8;
+        margin = 8;
+        padding = 9;
+        width = 300;
+
+        actions = true;
+        max-visible = 5;
+        default-timeout = 30000;
+        ignore-timeout = true;
+        history = true;
+      };
+    };
+
     programs.firefox.profiles.default = {
       extensions.packages = [ pkgs.notable-firefox-addon ];
+      settings."sidebar.verticalTabs" = lib.mkForce false;
       userChrome = ''
         #TabsToolbar {
           visibility: collapse;
+        }
+        #sidebar-main {
+          visibility: collapse;
+        }
+      '';
+    };
+
+    programs.waybar = {
+      enable = true;
+      systemd.enable = true;
+      settings = {
+        mainBar = {
+          layer = "top";
+          position = "top";
+          modules-left = [ "sway/workspaces" "sway/mode" ];
+          modules-center = [ "clock" ];
+          modules-right = ["network" "backlight" "pulseaudio" "battery" ];
+          "sway/workspaces" = {
+            disable-scroll = true;
+            sort-by-name = true;
+            numeric-first = true;
+            format = "{name}";
+          };
+          "sway/mode" = {
+            
+          };
+          "custom/music" = {
+            format = "  {}";
+            escape = true;
+            interval = 5;
+            tooltip = false;
+            exec = "${pkgs.playerctl}/bin/playerctl metadata --format='{{ title }}'";
+            on-click = "${pkgs.playerctl}/bin/playerctl play-pause";
+            max-length = 50;
+          };
+          clock = {
+            tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
+            format = "{:%Y-%m-%d %H:%M}";
+          };
+          network = {
+            format-wifi = " {signalStrength}%";
+            tooltip-format-wifi = "{essid} {ipaddr}";
+            format-ethernet = "";
+            tooltip-format-ethernet = "{ipaddr}";
+            format-disconnected = "";
+          };
+          backlight = {
+            device = "intel_backlight";
+            format = "{icon} {percent}%";
+            format-icons = ["" "" "" "" "" "" "" "" ""];
+          };
+          battery = {
+            states = {
+              critical = 15;
+            };
+            format = "{icon} {capacity}%";
+            format-icons = {
+              default = ["󰂎" "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹"];
+              charging = ["󰢟" "󰢜" "󰂆" "󰂇" "󰂈" "󰢝" "󰂉" "󰢞" "󰂊" "󰂋" "󰂅"];
+            };
+          };
+          pulseaudio = {
+            format = "{icon} {volume}%";
+            format-muted = "";
+            format-icons = {
+              default = ["" "" ""];
+            };
+            on-click = "pavucontrol";
+          };
+        };
+      };
+      style = ''
+        * {
+          font-family: PragmataPro;
+          font-size: 13px;
+          min-height: 0;
+        }
+
+        #waybar {
+          background: transparent;
+          color: ${text};
+          margin: 0;
+        }
+
+        #workspaces {
+          margin-left: ${gaps}px;
+        }
+        #workspaces button {
+          transition: 0s;
+          border-radius: 0;
+          color: ${text};
+          border: 0;
+          background: transparent;
+          padding-top: 8px;
+          padding-left: 4px;
+          padding-right: 4px;
+          padding-bottom: 0;
+          margin-right: ${gaps}px;
+        }
+        #workspaces button:hover {
+          background: transparent;
+          border: 0;
+        }
+        #workspaces button.focused {
+          padding-top: 4px;
+          border-top: 4px solid ${lavender};
+        }
+        #workspaces button.urgent {
+          color: ${peach};
+        }
+
+        #mode {
+          margin-top: 4px;
+          margin-left: 8px;
+          background: ${lavender};
+          font-size: 16px;
+          color: ${base};
+          padding-left: 4px;
+          padding-right: 4px;
+        }
+
+        #clock {
+          color: ${text};
+          padding-top: 8px;
+        }
+
+        #network {
+          padding-top: 8px;
+          margin-right: ${gaps}px;
+        }
+
+        #backlight {
+          padding-top: 8px;
+          margin-right: ${gaps}px;
+        }
+
+        #pulseaudio {
+          padding-top: 8px;
+          margin-right: ${gaps}px;
+        }
+
+        #battery {
+          padding-top: 8px;
+          margin-right: ${gaps}px;
+        }
+        #battery.critical {
+          color: ${peach};
         }
       '';
     };
@@ -55,7 +257,9 @@ in
       config = {
         modifier = mod;
         terminal = pkgs.kitty;
-        fonts = [ "PragmataPro 10" ];
+        fonts = [ "PragmataPro 9" ];
+
+        bars = [];
 
         keybindings = {
           "${mod}+1" = "workspace number 1";
@@ -100,8 +304,11 @@ in
           "${mod}+Shift+Up" = "move up";
           "${mod}+Shift+Right" = "move right";
 
+          "${mod}+Space" = "focus mode_toggle";
+          "${mod}+Shift+Space" = "floating toggle";
+
           "${mod}+Return" = "exec --no-startup-id ${pkgs.kitty}/bin/kitty --single-instance --instance-group=sway";
-          "${mod}+space" = "exec --no-startup-id wofi --show drun,run";
+          "${mod}+Tab" = "exec --no-startup-id wofi --show drun,run";
           "${mod}+t" = "exec --no-startup-id ${pkgs.firefox}/bin/firefox --new-window";
 
           "${mod}+w" = "kill";
@@ -114,7 +321,7 @@ in
 
           "${mod}+Shift+r" = "exec swaymsg reload";
           "--release Print" = "exec --no-startup-id ${pkgs.sway-contrib.grimshot}/bin/grimshot copy area";
-          "${mod}+Escape" = "exec ${pkgs.swaylock-fancy}/bin/swaylock-fancy";
+          "${mod}+Escape" = "exec loginctl lock-session";
           "${mod}+Ctrl+Shift+e" = "exit";
 
           "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl s 8.333%-";
@@ -123,12 +330,14 @@ in
           "XF86AudioRaiseVolume" = "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +1%";
           "XF86AudioLowerVolume" = "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -1%";
           "XF86AudioMute" = "exec ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle";
+
+          "${mod}+n" = "exec makoctl dismiss";
+          "${mod}+Shift+n" = "exec makoctl restore";
         };
         focus.followMouse = false;
-        startup = [
-          # { command = "firefox"; }
-        ];
-        workspaceAutoBackAndForth = true;
+        workspaceAutoBackAndForth = false;
+        defaultWorkspace = "workspace number 1";
+        gaps.inner = builtins.fromJSON gaps;
         input = {
           "type:touchpad" = {
             tap = "enabled";
@@ -142,9 +351,10 @@ in
         vtab_position left
         vtab_padding 11
         corner_radius 6
-        default_border normal 2
+        default_border normal 3
         titlebar_padding 6 4
-        gaps inner 8
+
+        for_window [floating] shadows enable
 
         output * scale 1
 
@@ -164,6 +374,8 @@ in
             bindsym Right vtab_position right
             bindsym minus        vtab_width -20
             bindsym equal        vtab_width +20
+            bindsym Alt+minus        vtab_width -1
+            bindsym Alt+equal        vtab_width +1
 
             bindsym Escape mode "default"
             bindsym Return mode "default"
@@ -171,59 +383,79 @@ in
         }
         bindsym ${mod}+g mode "vtab"
 
-        set $rosewater #dc8a78
-        set $flamingo #dd7878
-        set $pink #ea76cb
-        set $mauve #8839ef
-        set $red #d20f39
-        set $maroon #e64553
-        set $peach #fe640b
-        set $yellow #df8e1d
-        set $green #40a02b
-        set $teal #179299
-        set $sky #04a5e5
-        set $sapphire #209fb5
-        set $blue #1e66f5
-        set $lavender #7287fd
-        set $text #4c4f69
-        set $subtext1 #5c5f77
-        set $subtext0 #6c6f85
-        set $overlay2 #7c7f93
-        set $overlay1 #8c8fa1
-        set $overlay0 #9ca0b0
-        set $surface2 #acb0be
-        set $surface1 #bcc0cc
-        set $surface0 #ccd0da
-        set $base #eff1f5
-        set $mantle #e6e9ef
-        set $crust #dce0e8
+        mode "resize" {
+          bindsym minus resize shrink width 20 px
+          bindsym equal resize grow width 20 px
+          bindsym bracketleft resize shrink height 20 px
+          bindsym bracketright resize grow height 20 px
 
-        output * bg $base solid_color
+          bindsym Alt+minus resize shrink width 1 px
+          bindsym Alt+equal resize grow width 1 px
+          bindsym Alt+bracketleft resize shrink height 1 px
+          bindsym Alt+bracketright resize grow height 1 px
 
-        # target                 title     bg    text   indicator  border
-        client.focused           $lavender $base $text  $rosewater $lavender
-        client.focused_inactive  $overlay0 $base $text  $rosewater $overlay0
-        client.unfocused         $overlay0 $base $text  $rosewater $overlay0
-        client.urgent            $peach    $base $peach $overlay0  $peach
-        client.placeholder       $overlay0 $base $text  $overlay0  $overlay0
-        client.background        $base
-
-        # bar
-        bar {
-          colors {
-            background         $base
-            statusline         $text
-            focused_statusline $text
-            focused_separator  $base
-
-            # target           border bg        text
-            focused_workspace  $base  $mauve    $crust
-            active_workspace   $base  $surface2 $text
-            inactive_workspace $base  $base     $text
-            urgent_workspace   $base  $red      $crust
-          }
+          # bindsym Escape mode "default"
+          # bindsym Return mode "default"
+          # bindsym r      mode "default"
         }
+        bindsym ${mod}+r mode "resize"
+
+        output * bg ${base} solid_color
+
+        # target                 title       bg      text     indicator    border
+        client.focused           ${lavender} ${lavender} ${base}  ${lavender} ${lavender}
+        client.focused_inactive  ${overlay0} ${lavender} ${base}  ${overlay0} ${overlay0}
+        client.unfocused         ${overlay0} ${base} ${text}  ${overlay0} ${overlay0}
+        client.urgent            ${peach}    ${peach} ${base} ${peach}  ${peach}
+        client.placeholder       ${overlay0} ${base} ${text}  ${overlay0}  ${overlay0}
+        client.background        ${base}
       '';
+    };
+
+    services.swayidle = {
+      enable = true;
+
+      events.lock =
+        let
+          fmt = lib.strings.removePrefix "#";
+        in
+          ''${pkgs.swaylock-effects}/bin/swaylock \
+            --daemonize \
+            --screenshots \
+            --effect-pixelate 10 \
+            --font PragmataPro \
+            --indicator \
+            --clock \
+            --inside-color ${fmt base} \
+            --text-color ${fmt text} \
+            --inside-clear-color ${fmt base} \
+            --text-clear-color ${fmt text} \
+            --inside-ver-color ${fmt lavender} \
+            --text-ver-color ${fmt base} \
+            --inside-wrong-color ${fmt peach} \
+            --text-wrong-color ${fmt base} \
+            --key-hl-color ${fmt base} \
+            --line-uses-inside \
+            --line-color ${fmt base} \
+            --line-clear-color ${fmt base} \
+            --line-ver-color ${fmt base} \
+            --line-wrong-color ${fmt base} \
+            --separator-color ${fmt base} \
+            --ring-color ${fmt lavender} \
+            --ring-clear-color ${fmt base} \
+            --ring-ver-color ${fmt lavender} \
+            --ring-wrong-color ${fmt peach}'';
+      events.before-sleep = "loginctl lock-session";
+      timeouts = [
+        {
+          timeout = 300;
+          command = "${pkgs.chayang}/bin/chayang && swaymsg 'output * dpms off' && loginctl lock-session";
+        }
+        {
+          timeout = 600;
+          command = "systemctl suspend";
+        }
+      ];
     };
   };
 }

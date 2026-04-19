@@ -75,7 +75,7 @@ define-command wrap %{
 map global user w :wrap<ret> -docstring 'hard wrap selection'
 
 # appearance settings
-colorscheme adrusi
+colorscheme latte
 set-option -add global ui_options terminal_assistant=none "terminal_padding_char= "
 
 define-command -hidden adrusi-number-lines %{

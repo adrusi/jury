@@ -5,6 +5,7 @@ username:
     home.file = {
       ".config/kak-lsp/kak-lsp.toml".source = ./kak-lsp.toml;
       ".config/kak/colors/adrusi.kak".source = ./adrusi.kak;
+      ".config/kak/colors/latte.kak".source = ./latte.kak;
     };
 
     programs.kakoune = {

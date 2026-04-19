@@ -45,6 +45,7 @@
     (import ../modules/home/pragmatapro.nix "autumn")
     (import ../modules/home/sway.nix "autumn")
     (import ../modules/home/ssh.nix "autumn")
+    (import ../modules/home/zathura.nix "autumn")
     (import ../modules/home/zed.nix "autumn")
     (import ../modules/home/zsh.nix "autumn")
   ];
@@ -162,6 +163,7 @@
     wget
     kitty
     dmodel-issue-tracker
+    google-cloud-sdk # this is needed so docker can authenticate to registries!
   ];
   environment.variables.EDITOR = "kak";
 
