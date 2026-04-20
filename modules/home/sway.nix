@@ -59,6 +59,17 @@ in
       inputs.firefox-sway-favicon.packages.${pkgs.stdenv.system}.native-host
     ];
 
+    home.pointerCursor = {
+      name = "Adwaita";
+      package = pkgs.adwaita-icon-theme;
+      size = 24;
+      x11 = {
+        enable = true;
+        defaultCursor = "Adwaita";
+      };
+      gtk.enable = true;
+    };
+
     services.udiskie = {
       enable = true;
       settings = {
