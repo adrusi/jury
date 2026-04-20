@@ -32,6 +32,7 @@
     (import ../modules/home/firefox.nix "firefox")
     (import ../modules/home/bitwarden.nix "firefox")
 
+    # (import ../modules/home/astroid.nix "autumn")
     (import ../modules/home/bitwarden.nix "autumn")
     (import ../modules/home/claude.nix "autumn")
     (import ../modules/home/direnv.nix "autumn")
