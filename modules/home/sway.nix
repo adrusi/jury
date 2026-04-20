@@ -54,9 +54,17 @@ in
       pkgs.slurp
       pkgs.wl-clipboard
       pkgs.mako
+      pkgs.pcmanfm
       pkgs.nerd-fonts.fantasque-sans-mono
       inputs.firefox-sway-favicon.packages.${pkgs.stdenv.system}.native-host
     ];
+
+    services.udiskie = {
+      enable = true;
+      settings = {
+        program_options.file_manager = "${pkgs.pcmanfm}/bin/pcmanfm";
+      };
+    };
     
     programs.wofi = {
       enable = true;
