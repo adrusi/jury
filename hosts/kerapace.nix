@@ -37,6 +37,7 @@
     (import ../modules/home/claude.nix "autumn")
     (import ../modules/home/direnv.nix "autumn")
     (import ../modules/home/discord.nix "autumn")
+    (import ../modules/home/dmodel/module.nix "autumn")
     (import ../modules/home/firefox.nix "autumn")
     (import ../modules/home/ghostty.nix "autumn")
     (import ../modules/home/git.nix "autumn")
