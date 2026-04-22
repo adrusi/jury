@@ -237,6 +237,31 @@
     };
 
     programs.git.settings.user.email = lib.mkForce "autumn@dmodel.ai";
+
+    services.kanshi.profiles = {
+      undocked.outputs = [
+        {
+          criteria = "eDP-1";
+          scale = 1.0;
+          status = "enable";
+          mode = "2256x1504@59.999Hz";
+        }
+      ];
+      office.outputs = [
+        {
+          criteria = "BNQ BenQ GW2786TC ETR4S02935SL0";
+          scale = 1.0;
+          position = "168,0";
+          mode = "1920x1080@60Hz";
+        }
+        {
+          criteria = "eDP-1";
+          scale = 1.0;
+          position = "0,1080";
+          mode = "2256x1504@59.999Hz";
+        }
+      ];
+    };
   };
 
   system.stateVersion = "25.11";

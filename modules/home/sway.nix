@@ -56,6 +56,7 @@ in
       pkgs.mako
       pkgs.pcmanfm
       pkgs.nerd-fonts.fantasque-sans-mono
+      pkgs.kanshi
       inputs.firefox-sway-favicon.packages.${pkgs.stdenv.system}.native-host
     ];
 
@@ -75,6 +76,11 @@ in
       settings = {
         program_options.file_manager = "${pkgs.pcmanfm}/bin/pcmanfm";
       };
+    };
+
+    services.kanshi = {
+      enable = true;
+      systemdTarget = "sway-session.target";
     };
     
     programs.wofi = {
