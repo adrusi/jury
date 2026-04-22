@@ -104,6 +104,8 @@ username:
         alias rm="printf 'use \`del'\\''' or %s if you really need rm\\n' $(printf '%q' "$real_rm"); :"
         unset real_rm
         alias del=${lib.getBin pkgs.trash-cli}/bin/trash-put
+
+        [[ -r "$HOME/.local/share/secrets/anthropic.sh" ]] && source "$HOME/.local/share/secrets/anthropic.sh"
       '';
     };
   };
