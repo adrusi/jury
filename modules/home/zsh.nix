@@ -6,6 +6,7 @@ username:
   ];
 
   home-manager.users.${username} = {
+    home.packages = [ pkgs.ripgrep pkgs.fzf ];
     programs.zsh = {
       enable = true;
       autosuggestion.enable = true;
