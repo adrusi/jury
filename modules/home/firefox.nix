@@ -1,5 +1,5 @@
 username:
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, config, ... }:
 {
   imports = [
     ../system/firefox.nix
@@ -9,6 +9,8 @@ username:
     programs.firefox = {
       enable = true;
       package = pkgs.firefox;
+      # configPath = "${config.home-manager.users.${username}.xdg.configHome}/mozilla/firefox";
+      configPath = ".mozilla/firefox";
 
       profiles.default = {
         id = 0;
