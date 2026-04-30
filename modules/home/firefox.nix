@@ -57,7 +57,7 @@ username:
 
           packages =
             let
-              addons = inputs.firefox-addons.packages.${pkgs.system};
+              addons = pkgs.firefox-addons;
             in
             [
               addons.auto-tab-discard

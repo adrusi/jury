@@ -210,8 +210,6 @@
 
   # --- home-manager ---
 
-  nixpkgs.config.allowUnfree = true;
-
   home-manager.extraSpecialArgs = { inherit inputs; };
   home-manager.useGlobalPkgs = true;
   home-manager.backupFileExtension = "home-manager-backup";
@@ -230,6 +228,11 @@
     home.stateVersion = "25.11";
     programs.home-manager.enable = true;
 
+    home.packages = [
+      pkgs._1password-gui
+      pkgs._1password-cli
+    ];
+
     # TODO find a better way to manage differences in font size rendering across platforms and hosts
     programs.zed-editor.userSettings = {
       buffer_font_size = lib.mkForce 14;
@@ -238,6 +241,10 @@
     };
 
     programs.git.settings.user.email = lib.mkForce "autumn@dmodel.ai";
+
+    programs.firefox.profiles.default.extensions.packages = [
+      pkgs.firefox-addons.onepassword-password-manager
+    ];
 
     services.kanshi.settings = [
       {

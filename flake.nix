@@ -105,14 +105,17 @@
       remotePackagesOverlay = final: prev: {
         dmodel-issue-tracker = dmodel-issue.packages.${prev.stdenv.system}.default;
       };
-      overlays = [ localPackagesOverlay remotePackagesOverlay ];
+      overlays = [ localPackagesOverlay remotePackagesOverlay inputs.firefox-addons.overlays.default ];
     in
     {
       nixosConfigurations.kerapace = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = { inherit inputs; };
         modules = [
-          { nixpkgs.overlays = overlays; }
+          {
+            nixpkgs.overlays = overlays;
+            nixpkgs.config.allowUnfree = true;
+          }
           ./hosts/kerapace.nix
         ];
       };
