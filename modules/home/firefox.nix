@@ -1,5 +1,5 @@
 username:
-{ pkgs, inputs, config, ... }:
+{ pkgs, lib, inputs, config, ... }:
 {
   imports = [
     ../system/firefox.nix
@@ -8,7 +8,23 @@ username:
   home-manager.users.${username} = {
     programs.firefox = {
       enable = true;
-      package = pkgs.firefox;
+      # home-manager's Firefox module calls package.override(...) to inject
+      # extraPolicies/pkcs11Modules. lib.makeOverridable re-exposes that hook while
+      # forwarding the args to pkgs.firefox.override so wrapFirefox still receives them.
+      # The symlinkJoin layer adds the GDK_BACKEND guard without touching the Firefox
+      # derivation itself, so firefox-unwrapped stays a full binary-cache hit.
+      package = lib.makeOverridable (args: pkgs.symlinkJoin {
+        name = "firefox-wayland";
+        paths = [ (pkgs.firefox.override args) ];
+        buildInputs = [ pkgs.makeWrapper ];
+        # Electron apps (e.g. Discord) running under XWayland set GDK_BACKEND=x11 in
+        # child processes, which propagates through xdg-open to Firefox and forces it
+        # into XWayland mode. Strip it here when the Wayland socket is present.
+        postBuild = ''
+          wrapProgram $out/bin/firefox \
+            --run 'if [ -n "$WAYLAND_DISPLAY" ] && [ "$GDK_BACKEND" = x11 ]; then unset GDK_BACKEND; fi'
+        '';
+      }) { };
       # configPath = "${config.home-manager.users.${username}.xdg.configHome}/mozilla/firefox";
       configPath = ".mozilla/firefox";
 

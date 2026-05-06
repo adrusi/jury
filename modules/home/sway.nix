@@ -125,6 +125,7 @@ in
           inputs.firefox-sway-favicon.packages.${pkgs.stdenv.system}.extension
         ];
         settings."sidebar.verticalTabs" = lib.mkForce false;
+        settings."sidebar.backupState" = "";
         userChrome = ''
           #TabsToolbar {
             visibility: collapse;

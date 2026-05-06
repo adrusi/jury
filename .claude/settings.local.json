@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:loginasroot.net)"
+      "WebFetch(domain:loginasroot.net)",
+      "Bash(grep *)",
+      "Read(//home/autumn/.config/**)",
+      "Read(//home/autumn/.local/share/applications/**)",
+      "Read(//home/autumn/.config/applications/**)"
     ]
   }
 }
