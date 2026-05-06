@@ -156,6 +156,11 @@
   services.pipewire = {
     enable = true;
     pulse.enable = true;
+    wireplumber.extraConfig."50-disable-ucm" = {
+      "monitor.alsa.properties" = {
+        "alsa.use-ucm" = false;
+      };
+    };
   };
   services.libinput.enable = true;
 
