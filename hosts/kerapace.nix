@@ -229,8 +229,8 @@
     programs.home-manager.enable = true;
 
     home.packages = [
-      pkgs._1password-gui
-      pkgs._1password-cli
+      pkgs.bitwarden-desktop
+      pkgs.bitwarden-cli
     ];
 
     # TODO find a better way to manage differences in font size rendering across platforms and hosts
@@ -243,7 +243,19 @@
     programs.git.settings.user.email = lib.mkForce "autumn@dmodel.ai";
 
     programs.firefox.profiles.default.extensions.packages = [
-      pkgs.firefox-addons.onepassword-password-manager
+      (pkgs.firefox-addons.buildFirefoxXpiAddon {
+        pname = "golinks";
+        version = "2.7.27";
+        addonId = "teamgolinks@gmail.com";
+        url = "https://addons.mozilla.org/firefox/downloads/file/4471234/golinks-2.7.27.xpi";
+        sha256 = "sha256-s6Rw+Je936bd+tJQs4bm86y9ohKW4ndYZuAw+/BpaTM=";
+        meta = with lib; {
+          homepage = "https://www.golinks.io/";
+          description = "Go links extension for Firefox.";
+          license = licenses.unfree;
+          platforms = platforms.all;
+        };
+      })
     ];
 
     services.kanshi.settings = [
