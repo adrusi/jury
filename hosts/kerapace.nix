@@ -34,6 +34,7 @@
 
     # (import ../modules/home/astroid.nix "autumn")
     (import ../modules/home/bitwarden.nix "autumn")
+    (import ../modules/home/chromium.nix "autumn")
     (import ../modules/home/claude.nix "autumn")
     (import ../modules/home/direnv.nix "autumn")
     (import ../modules/home/discord.nix "autumn")
