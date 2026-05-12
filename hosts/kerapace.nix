@@ -237,6 +237,14 @@
     home.packages = [
       pkgs.bitwarden-desktop
       pkgs.bitwarden-cli
+      (pkgs.writeShellApplication {
+        name = "rl";
+        runtimeInputs = [ pkgs.libsecret pkgs.bws ];
+        text = ''
+          BWS_ACCESS_TOKEN="$(secret-tool lookup service research-push-token account "$USER")" \
+            exec bws run --project-id "207134e6-bd27-48cd-a405-b4420162470b" -- "$@"
+        '';
+      })
     ];
 
     # TODO find a better way to manage differences in font size rendering across platforms and hosts
