@@ -1,7 +1,9 @@
 {
   inputs = {
+    self.submodules = true;
+
     pragmatapro = {
-      url = "git+file:./assets/pragmatapro";
+      url = ./assets/pragmatapro;
       flake = false;
     };
 
@@ -23,7 +25,6 @@
     };
     nix-homebrew = {
       url = "github:zhaofengli/nix-homebrew";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
     brew-nix = {
       url = "github:BatteredBunny/brew-nix";
@@ -77,7 +78,7 @@
     };
 
     dmodel-issue = {
-      url = "git+file:./vendor/dmodel-issue";
+      url = ./vendor/dmodel-issue;
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
