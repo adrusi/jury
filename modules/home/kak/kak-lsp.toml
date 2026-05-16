@@ -1,24 +1,24 @@
-[language.c_cpp]
+[language_server.clangd]
 filetypes = ["c", "cpp"]
-roots = ["compile_commands.json", ".clangd", ".git", ".hg"]
+root_globs = ["compile_commands.json", ".clangd", ".git", ".hg"]
 command = "clangd"
 
-[language.haskell]
+[language_server.haskell-language-server]
 filetypes = ["haskell"]
-roots = ["Setup.hs", "stack.yaml", "*.cabal"]
+root_globs = ["Setup.hs", "stack.yaml", "*.cabal"]
 command = "haskell-language-server-wrapper"
 args = ["--lsp"]
 
-[language.clojure]
+[language_server.clojure-lsp]
 filetypes = ["clojure"]
-roots = ["shadow-cljs.edn", "deps.edn", "project.clj", ".git", ".hg"]
+root_globs = ["shadow-cljs.edn", "deps.edn", "project.clj", ".git", ".hg"]
 command = "clojure-lsp"
 settings_section = "_"
-[language_server.clojure_lsp.settings._]
+[language_server.clojure-lsp.settings._]
 
-[language.rust]
+[language_server.rust-analyzer]
 filetypes = ["rust"]
-roots = ["Cargo.toml"]
+root_globs = ["Cargo.toml"]
 command = "sh"
 args = ["-c", """
         if path=$(rustup which rust-analyzer 2>/dev/null); then
@@ -28,49 +28,42 @@ args = ["-c", """
         fi
     """]
 settings_section = "rust-analyzer"
-[language.rust.settings.rust-analyzer]
-# See https://rust-analyzer.github.io/manual.html#configuration
-hoverActions.enable = false       # kak-lsp doesn't support this at the moment
+[language_server.rust-analyzer.settings.rust-analyzer]
+hoverActions.enable = false
 hover.linksInHover = true
 cargo.loadOutDirsFromCheck = true
 procMacro.enable = true
-# cargo.features = []
-#
-[language.python]
+
+[language_server.pylsp]
 filetypes = ["python"]
-roots = ["requirements.txt", "setup.py", ".git", ".hg"]
+root_globs = ["requirements.txt", "setup.py", ".git", ".hg"]
 command = "pylsp"
 offset_encoding = "utf-8"
-[language.python.settings._]
+settings_section = "_"
+[language_server.pylsp.settings._]
 pylsp.plugins.pycodestyle.enabled = false
 pylsp.plugins.mccabe.enabled = false
 pylsp.plugins.pyflakes.enabled = false
 pylsp.plugins.flake8.enabled = true
 pylsp.configurationSources = ["flake8"]
 
-[language.typescript]
-filetypes = ["typescript"]
-roots = ["package.json", "tsconfig.json"]
+[language_server.typescript-language-server]
+filetypes = ["typescript", "javascript"]
+root_globs = ["package.json", "tsconfig.json"]
 command = "typescript-language-server"
 args = ["--stdio"]
 
-[language.jsx]
-filetypes = ["javascript"]
-roots = ["package.json", "tsconfig.json"]
-command = "typescript-language-server"
-args = ["--stdio"]
-
-[language.nim]
+[language_server.nimlangserver]
 filetypes = ["nim"]
-roots = ["*.nimble", ".git", ".hg"]
+root_globs = ["*.nimble", ".git", ".hg"]
 command = "nimlangserver"
 
-[language.zig]
+[language_server.zls]
 filetypes = ["zig"]
-roots = ["build.zig"]
+root_globs = ["build.zig"]
 command = "zls"
 
-[language.nix]
+[language_server.nil]
 filetypes = ["nix"]
+root_globs = ["flake.nix", "shell.nix", ".git", ".hg"]
 command = "nil"
-roots = ["flake.nix", "shell.nix", ".git", ".hg"]
