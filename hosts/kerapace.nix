@@ -139,6 +139,24 @@
   networking.hostName = "kerapace";
   networking.networkmanager.enable = true;
 
+  # --- bluetooth ---
+
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    settings = {
+      General = {
+        Experimental = true;
+        FastConnectable = true;
+      };
+      Policy = {
+        AutoEnable = true;
+      };
+    };
+  };
+
+  services.blueman.enable = true;
+
   # --- locale ---
 
   time.timeZone = "America/Los_Angeles";
@@ -245,6 +263,10 @@
             exec bws run --project-id "207134e6-bd27-48cd-a405-b4420162470b" -- "$@"
         '';
       })
+      pkgs.pavucontrol
+      pkgs.python312Packages.subliminal
+      pkgs.yubikey-manager
+      pkgs.yubikey-personalization
     ];
 
     # TODO find a better way to manage differences in font size rendering across platforms and hosts
