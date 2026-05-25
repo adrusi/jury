@@ -66,6 +66,33 @@
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
+  boot.plymouth = {
+    enable = true;
+    theme = "nixos-bgrt";
+    themePackages = [ pkgs.nixos-bgrt-plymouth ];
+    extraConfig = ''
+      DeviceScale=1
+    '';
+  };
+
+  # Enable "Silent boot"
+  boot.consoleLogLevel = 3;
+  boot.initrd.verbose = false;
+  boot.kernelParams = [
+    "quiet"
+    "udev.log_level=3"
+    "systemd.show_status=auto"
+  ];
+  # Hide the OS choice for bootloaders.
+  # It's still possible to open the bootloader list by pressing any key
+  # It will just not appear on screen unless a key is pressed
+  boot.loader.timeout = 0;
+
+  services.displayManager.autoLogin = {
+    enable = true;
+    user = "autumn";
+  };
+
   fileSystems."/" = {
     device = "/dev/mapper/pool";
     fsType = "btrfs";
@@ -127,10 +154,14 @@
   boot.loader = {
     efi.canTouchEfiVariables = true;
     efi.efiSysMountPoint = "/boot";
-    grub = {
+    # grub = {
+    #   enable = true;
+    #   efiSupport = true;
+    #   device = "nodev";
+    # };
+    systemd-boot = {
       enable = true;
-      efiSupport = true;
-      device = "nodev";
+      editor = false;
     };
   };
 
