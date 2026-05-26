@@ -87,8 +87,155 @@ in
       enable = true;
       settings = {
         allow_markup = true;
-        width = 250;
+        width = 640;
+        height = 480;
+        always_parse_args = true;
+        show_all = false;
+        term = "kitty";
+        hide_scroll = true;
+        print_command = true;
+        insensitive = true;
+        prompt = "";
+        columns = 2;
       };
+      style = ''
+        @define-color	rosewater  #dc8a78;
+        @define-color	rosewater-rgb  rgb(220, 138, 120);
+        @define-color	flamingo  #dd7878;
+        @define-color	flamingo-rgb  rgb(221, 120, 120);
+        @define-color	pink  #ea76cb;
+        @define-color	pink-rgb  rgb(234, 118, 203);
+        @define-color	mauve  #8839ef;
+        @define-color	mauve-rgb  rgb(136, 57, 239);
+        @define-color	red  #d20f39;
+        @define-color	red-rgb  rgb(210, 15, 57);
+        @define-color	maroon  #e64553;
+        @define-color	maroon-rgb  rgb(230, 69, 83);
+        @define-color	peach  #fe640b;
+        @define-color	peach-rgb  rgb(254, 100, 11);
+        @define-color	yellow  #df8e1d;
+        @define-color	yellow-rgb  rgb(223, 142, 29);
+        @define-color	green  #40a02b;
+        @define-color	green-rgb  rgb(64, 160, 43);
+        @define-color	teal  #179299;
+        @define-color	teal-rgb  rgb(23, 146, 153);
+        @define-color	sky  #04a5e5;
+        @define-color	sky-rgb  rgb(4, 165, 229);
+        @define-color	sapphire  #209fb5;
+        @define-color	sapphire-rgb  rgb(32, 159, 181);
+        @define-color	blue  #1e66f5;
+        @define-color	blue-rgb  rgb(30, 102, 245);
+        @define-color	lavender  #7287fd;
+        @define-color	lavender-rgb  rgb(114, 135, 253);
+        @define-color	text  #4c4f69;
+        @define-color	text-rgb  rgb(76, 79, 105);
+        @define-color	subtext1  #5c5f77;
+        @define-color	subtext1-rgb  rgb(92, 95, 119);
+        @define-color	subtext0  #6c6f85;
+        @define-color	subtext0-rgb  rgb(108, 111, 133);
+        @define-color	overlay2  #7c7f93;
+        @define-color	overlay2-rgb  rgb(124, 127, 147);
+        @define-color	overlay1  #8c8fa1;
+        @define-color	overlay1-rgb  rgb(140, 143, 161);
+        @define-color	overlay0  #9ca0b0;
+        @define-color	overlay0-rgb  rgb(156, 160, 176);
+        @define-color	surface2  #acb0be;
+        @define-color	surface2-rgb  rgb(172, 176, 190);
+        @define-color	surface1  #bcc0cc;
+        @define-color	surface1-rgb  rgb(188, 192, 204);
+        @define-color	surface0  #ccd0da;
+        @define-color	surface0-rgb  rgb(204, 208, 218);
+        @define-color	base  #eff1f5;
+        @define-color	base-rgb  rgb(239, 241, 245);
+        @define-color	mantle  #e6e9ef;
+        @define-color	mantle-rgb  rgb(230, 233, 239);
+        @define-color	crust  #dce0e8;
+        @define-color	crust-rgb  rgb(220, 224, 232);
+
+        * {
+          font-family: 'PragmataPro', monospace;
+          font-size: 14px;
+        }
+
+        /* Window */
+        window {
+          margin: 0px;
+          padding: 10px;
+          border: 3px solid @lavender;
+          /* 8px instead of 6 like everywhere else because wofi has some weird scaling? */
+          border-radius: 8px;
+          /* @base at 99% opacity; forces wofi to enable alpha blending so border-radius works */
+          background-color: rgba(239, 241, 245, 0.99);
+        }
+
+        /* Inner Box */
+        #inner-box {
+          margin: 0;
+          padding: 0;
+          border: none;
+          background-color: @base;
+        }
+
+        /* Outer Box */
+        #outer-box {
+          margin: 5px;
+          padding: 10px;
+          border: none;
+          background-color: @base;
+        }
+
+        /* Scroll */
+        #scroll {
+          margin: 0;
+          padding: 0;
+          border: none;
+          background-color: @base;
+        }
+
+        /* Input */
+        #input {
+          margin: 0 0 10px 0;
+          padding: 10px;
+          border: none;
+          border-radius: 8px;
+          color: @text;
+          background-color: @base;
+        }
+
+        #input image {
+          border: none;
+          color: @lavender;
+        }
+
+        #input * {
+          outline: 4px solid @lavender!important;
+        }
+
+        /* Text */
+        #text {
+          margin: 5px;
+          border: none;
+          color: @text;
+        }
+
+        #entry {
+          background-color: @base;
+        }
+
+        #entry arrow {
+          border: none;
+          color: @lavender;
+        }
+
+        /* Selected Entry */
+        #entry:selected {
+          outline: 1px solid @lavender;
+        }
+
+        #entry:drop(active) {
+          background-color: @lavender!important;
+        }
+      '';
     };
 
     services.mako = {
