@@ -34,18 +34,19 @@ hover.linksInHover = true
 cargo.loadOutDirsFromCheck = true
 procMacro.enable = true
 
-[language_server.pylsp]
+[language_server.ruff]
 filetypes = ["python"]
-root_globs = ["requirements.txt", "setup.py", ".git", ".hg"]
-command = "pylsp"
+root_globs = ["pyproject.toml", "ruff.toml", ".ruff.toml", ".git", ".hg"]
+command = "ruff"
+args = ["server"]
 offset_encoding = "utf-8"
-settings_section = "_"
-[language_server.pylsp.settings._]
-pylsp.plugins.pycodestyle.enabled = false
-pylsp.plugins.mccabe.enabled = false
-pylsp.plugins.pyflakes.enabled = false
-pylsp.plugins.flake8.enabled = true
-pylsp.configurationSources = ["flake8"]
+
+[language_server.basedpyright]
+filetypes = ["python"]
+root_globs = ["pyproject.toml", "pyrightconfig.json", ".git", ".hg"]
+command = "basedpyright-langserver"
+args = ["--stdio"]
+offset_encoding = "utf-8"
 
 [language_server.typescript-language-server]
 filetypes = ["typescript", "javascript"]

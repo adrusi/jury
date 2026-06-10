@@ -19,18 +19,29 @@ username:
         share = false;
       };
 
-      initExtraBeforeCompInit = '''';
+      initExtraBeforeCompInit = "";
 
       initContent = ''
         export LS_COLORS="$(${lib.getBin pkgs.vivid}/bin/vivid generate catppuccin-latte)"
         alias ls="ls --color=auto"
 
-        zstyle ':completion:*' completer _extensions _expand _complete _ignored _correct _approximate _prefix
+        zstyle ':completion:*' completer _extensions _expand _complete _ignored
         zstyle ':completion:*' menu select interactive search
         zstyle ':completion:*' group-name ""
         zstyle ':completion:*:*:-command-:*:*' group-order alias builtins functions commands
         zstyle ':completion:*' file-list all
-        zstyle ':completion:*:default' list-colors ''${(s.:.)LS_COLORS}
+        zstyle ':completion:*:default' list-colors '$${(s.:.)LS_COLORS}'
+        # Descriptions/messages/errors visible & color-coded.
+        zstyle ':completion:*:descriptions' format '%F{cyan}%d%f'
+        zstyle ':completion:*:warnings'     format '%F{red}no matches: %d%f'
+        zstyle ':completion:*:messages'     format '%F{yellow}%d%f'
+        # Verbose: show descriptions alongside candidates (what our `dm` completion uses).
+        zstyle ':completion:*' verbose yes
+        # Case-insensitive matching + treat partial words as completable.
+        zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' '+l:|=* r:|=*'
+        # Cache slow completions (git branches, package lists, kubectl, etc.).
+        zstyle ':completion:*' use-cache yes
+        zstyle ':completion:*' cache-path "''${XDG_CACHE_HOME:-$HOME/.cache}/zsh/completion"
 
         autoload -Uz vcs_info
         zstyle ':vcs_info:*' enable git hg

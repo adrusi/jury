@@ -8,7 +8,17 @@ username:
       ".config/kak/colors/latte.kak".source = ./latte.kak;
     };
 
-    home.packages = [ pkgs.fzf pkgs.bat pkgs.lua pkgs.fd pkgs.ripgrep ];
+    home.packages = [
+      pkgs.fzf
+      pkgs.bat
+      pkgs.lua
+      pkgs.fd
+      pkgs.ripgrep
+      pkgs.basedpyright
+      pkgs.python314Packages.ruff
+    ];
+
+    programs.git.ignores = [ "project.kak" ];
 
     programs.kakoune = {
       enable = true;

@@ -11,5 +11,9 @@ username:
         theme = "light";
       };
     };
+
+    programs.git.ignores = [
+      "CLAUDE.local.md"
+    ];
   };
 }

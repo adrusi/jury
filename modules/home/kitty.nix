@@ -1,10 +1,39 @@
 username:
-{ pkgs, ... }:
-{
+{ pkgs, config, ... }:
+let
+  filter_shellint_osc = ''${pkgs.perl}/bin/perl -pe 's/\x1b\]133;[ACD].*?\x1b\\//g' '';
+  kak = config.home-manager.users.${username}.programs.kakoune.finalPackage;
+  scrollback_viewer = pkgs.writeShellScriptBin "kakoune-kitty-scrollback-viewer" ''
+    exec ${filter_shellint_osc} | ${kak}/bin/kak "$@"
+  '';
+in {
   home-manager.users.${username} = {
     programs.kitty = {
       enable = true;
+
+      shellIntegration.enableZshIntegration = true;
+      enableGitIntegration = true;
+
+      keybindings = {
+        "kitty_mod+c" = "copy_to_clipboard";
+        "kitty_mod+v" = "paste_from_clipboard";
+        "kitty_mod+equal" = "change_font_size all +1.0";
+        "kitty_mod+plus" = "change_font_size all +1.0";
+        "kitty_mod+minus" = "change_font_size all -1.0";
+        "kitty_mod+0" = "change_font_size all 0";
+        "kitty_mod+page_up" = "scroll_page_up";
+        "kitty_mod+page_down" = "scroll_page_down";
+        "kitty_mod+n" = "launch --cwd=current --type=os-window";
+        "kitty_mod+/" = "launch --stdin-source=@screen_scrollback --stdin-add-formatting ${scrollback_viewer}/bin/kakoune-kitty-scrollback-viewer";
+      };
+
       settings = {
+        scrollback_lines = 100000;
+        enabled_layouts = "stack";
+        clear_all_shortcuts = true;
+        kitty_mod = "ctrl+shift";
+        
+        # ------ theming ------
         confirm_os_window_close = 0;
         enable_audio_bell = false;
         visual_bell_duration = 0.05;

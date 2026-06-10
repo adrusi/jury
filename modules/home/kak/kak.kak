@@ -471,3 +471,18 @@ require-module kitty
 set-option global kitty_window_type os-window
 alias global terminal kitty-terminal-window
 map global normal <c-n> ": terminal kak -c %val{session}<ret>"
+
+# project-specific config loading
+hook -group project-kak global KakBegin .* %{
+    evaluate-commands %sh{
+        dir=$PWD
+        while true; do
+            if [ -f "$dir/project.kak" ]; then
+                printf 'source %%{%s}\n' "$dir/project.kak"
+                break
+            fi
+            [ "$dir" = "/" ] && break
+            dir=$(dirname "$dir")
+        done
+    }
+}
