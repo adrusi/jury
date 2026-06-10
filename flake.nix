@@ -107,9 +107,8 @@
         dmodel-issue-tracker = dmodel-issue.packages.${prev.stdenv.system}.default;
       };
       overlays = [ localPackagesOverlay remotePackagesOverlay inputs.firefox-addons.overlays.default ];
-    in
-    {
-      nixosConfigurations.kerapace = nixpkgs.lib.nixosSystem {
+
+      mkNixos = hostModule: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = { inherit inputs; };
         modules = [
@@ -117,9 +116,15 @@
             nixpkgs.overlays = overlays;
             nixpkgs.config.allowUnfree = true;
           }
-          ./hosts/kerapace.nix
+          hostModule
         ];
       };
+    in
+    {
+      # bare-metal fallback
+      nixosConfigurations.kerapace = mkNixos ./hosts/kerapace.nix;
+      # systemd-nspawn container guest under Fedora
+      nixosConfigurations.chaos = mkNixos ./hosts/chaos.nix;
 
       darwinConfigurations.rainbow = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
