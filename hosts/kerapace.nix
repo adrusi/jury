@@ -53,6 +53,11 @@
     (import ../modules/home/zsh.nix "autumn")
   ];
 
+  # --- REMOVE THIS ---
+  nixpkgs.config.permittedInsecurePackages = [
+    "electron-39.8.10"
+  ];
+
   # --- hardware ---
 
   boot.initrd.availableKernelModules = [
@@ -284,7 +289,7 @@
     programs.home-manager.enable = true;
 
     home.packages = [
-      pkgs.bitwarden-desktop
+      # pkgs.bitwarden-desktop
       pkgs.bitwarden-cli
       (pkgs.writeShellApplication {
         name = "rl";

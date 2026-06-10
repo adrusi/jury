@@ -3,9 +3,9 @@ username:
 {
 
   home-manager.users.${username} = lib.mkMerge [
-    (lib.mkIf pkgs.stdenv.isLinux {
-      home.packages = [ pkgs.bitwarden-desktop ];
-    })
+    # (lib.mkIf pkgs.stdenv.isLinux {
+    #   home.packages = [ pkgs.bitwarden-desktop ];
+    # })
     {
       programs.firefox.profiles.default = {
         extensions.packages = [
