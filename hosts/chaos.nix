@@ -23,6 +23,9 @@
   # disable it — lets `nixos-rebuild` run from inside the container.
   nix.settings.sandbox = false;
 
+  # Passwordless sudo for wheel (autumn), matching the Fedora host.
+  security.sudo.wheelNeedsPassword = false;
+
   networking.hostName = "chaos";
   # Networking is owned by the Fedora host (shared netns, host NetworkManager
   # drives WiFi). The guest runs no NM, no firewall, no sshd of its own.
