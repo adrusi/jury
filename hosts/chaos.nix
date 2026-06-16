@@ -77,21 +77,13 @@
 
   # --- docker ---
   #
-  # dockerd runs in the guest (Fedora's docker daemon is disabled). This needs
+  # dockerd runs in the guest (Fedora's docker daemon is disabled). It needs
   # extra privilege granted host-side in the nspawn unit (CAP_SYS_ADMIN, CAP_BPF
   # for runc's cgroup device-BPF; CAP_NET_ADMIN for iptables) AND a writable
-  # /proc/sys: libnetwork writes net sysctls (e.g. disable_ipv6 on container
-  # veths) that nspawn otherwise mounts read-only. Remount it rw before docker.
-  systemd.services.proc-sys-rw = {
-    description = "Remount /proc/sys rw (docker-in-nspawn needs writable net sysctls)";
-    wantedBy = [ "multi-user.target" ];
-    before = [ "docker.service" "docker.socket" ];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = "${pkgs.util-linux}/bin/mount -o remount,rw /proc/sys";
-    };
-  };
+  # /proc/sys for libnetwork's sysctls (ip_forward, per-veth disable_ipv6),
+  # which nspawn mounts read-only. The /proc/sys remount is done host-side from
+  # chaos.service ExecStartPost (a guest service can't be ordered before
+  # docker.socket without an ordering cycle through basic.target).
 
   # --- host shell ---
   #
