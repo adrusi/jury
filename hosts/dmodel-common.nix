@@ -108,11 +108,9 @@
 
   # --- system packages ---
 
-  environment.systemPackages = with pkgs; [
-    wget
-    kitty
-    dmodel-issue-tracker
-    google-cloud-sdk # this is needed so docker can authenticate to registries!
+  environment.systemPackages = [
+    pkgs.wget
+    pkgs.kitty
   ];
   environment.variables.EDITOR = "kak";
 
@@ -164,7 +162,8 @@
     programs.home-manager.enable = true;
 
     home.packages = [
-      # pkgs.bitwarden-desktop
+      pkgs.dmodel-issue-tracker
+      pkgs.google-cloud-sdk # this is needed so docker can authenticate to registries!
       pkgs.bitwarden-cli
       (pkgs.writeShellApplication {
         name = "rl";
@@ -178,6 +177,10 @@
       pkgs.python312Packages.subliminal
       pkgs.yubikey-manager
       pkgs.yubikey-personalization
+      pkgs.slack
+      pkgs.ripcord
+      pkgs.inotify-tools
+      pkgs.texliveFull
     ];
 
     # TODO find a better way to manage differences in font size rendering across platforms and hosts
