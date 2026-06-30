@@ -174,7 +174,7 @@
         '';
       })
       pkgs.pavucontrol
-      pkgs.python312Packages.subliminal
+      pkgs.python314Packages.subliminal
       pkgs.yubikey-manager
       pkgs.yubikey-personalization
       pkgs.slack
