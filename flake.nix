@@ -102,6 +102,7 @@
         obsidian-lesswrong-theme = import ./packages/obsidian-lesswrong-theme.nix { pkgs = final; };
         obsidian-catppuccin-theme = import ./packages/obsidian-catppuccin-theme.nix { pkgs = final; };
         notable-firefox-addon = import ./packages/notable.nix { pkgs = final; inherit inputs; };
+        claude-desktop = import ./packages/claude-desktop.nix { pkgs = final; };
       };
       remotePackagesOverlay = final: prev: {
         dmodel-issue-tracker = dmodel-issue.packages.${prev.stdenv.system}.default;

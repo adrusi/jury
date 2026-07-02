@@ -165,6 +165,7 @@
       pkgs.dmodel-issue-tracker
       pkgs.google-cloud-sdk # this is needed so docker can authenticate to registries!
       pkgs.bitwarden-cli
+      pkgs.claude-desktop
       (pkgs.writeShellApplication {
         name = "rl";
         runtimeInputs = [ pkgs.libsecret pkgs.bws ];
