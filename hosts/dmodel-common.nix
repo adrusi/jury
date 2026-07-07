@@ -106,6 +106,13 @@
   };
   services.libinput.enable = true;
 
+  # Secret Service (org.freedesktop.secrets) provider, used by `rl` to fetch
+  # the bws access token via secret-tool. Both hosts autologin, so PAM can't
+  # unlock the keyring with a login password; the default collection must be
+  # created with an empty password to auto-unlock.
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.greetd.enableGnomeKeyring = true;
+
   # --- system packages ---
 
   environment.systemPackages = [
@@ -161,7 +168,10 @@
     home.stateVersion = "25.11";
     programs.home-manager.enable = true;
 
+    # --- misc (move to module when it's clear what the module should be) ---
+
     home.packages = [
+      pkgs.libsecret # secret-tool, for managing the keyring used by `rl`
       pkgs.dmodel-issue-tracker
       pkgs.google-cloud-sdk # this is needed so docker can authenticate to registries!
       pkgs.bitwarden-cli
