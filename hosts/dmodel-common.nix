@@ -193,6 +193,7 @@
       pkgs.ripcord
       pkgs.inotify-tools
       pkgs.texliveFull
+      pkgs.awscli2
     ];
 
     # TODO find a better way to manage differences in font size rendering across platforms and hosts
