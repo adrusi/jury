@@ -174,6 +174,7 @@
             exec bws run --project-id "207134e6-bd27-48cd-a405-b4420162470b" -- "$@"
         '';
       })
+      pkgs.bws
       pkgs.pavucontrol
       pkgs.python314Packages.subliminal
       pkgs.yubikey-manager
