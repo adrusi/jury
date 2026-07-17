@@ -148,6 +148,12 @@
     ];
   };
 
+  # --- misc (move to module) ---
+
+  services.tailscale = {
+    enable = true;
+  };
+
   # --- home-manager ---
 
   home-manager.extraSpecialArgs = { inherit inputs; };
