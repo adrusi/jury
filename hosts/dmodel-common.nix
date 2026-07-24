@@ -154,6 +154,11 @@
     enable = true;
   };
 
+  fonts.fontconfig.hinting = {
+    enable = true;
+    style = "full";
+  };
+
   # --- home-manager ---
 
   home-manager.extraSpecialArgs = { inherit inputs; };

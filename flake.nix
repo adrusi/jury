@@ -19,6 +19,20 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # cloud devbox provisioning (see infra/)
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    terranix = {
+      url = "github:terranix/terranix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixos-anywhere = {
+      url = "github:nix-community/nixos-anywhere";
+      flake = false;
+    };
+
     mac-app-util = {
       url = "github:hraban/mac-app-util";
       # inputs.nixpkgs.follows = "nixpkgs";
@@ -126,6 +140,8 @@
       nixosConfigurations.kerapace = mkNixos ./hosts/kerapace.nix;
       # systemd-nspawn container guest under Fedora
       nixosConfigurations.chaos = mkNixos ./hosts/chaos.nix;
+      # GCE devbox, provisioned via `nix run .#infra` (see infra/east.nix)
+      nixosConfigurations.east = mkNixos ./hosts/east.nix;
 
       darwinConfigurations.rainbow = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
@@ -153,6 +169,37 @@
             inherit pkgs inputs;
           }
         );
+
+        # `nix run .#infra -- <tofu args>` — renders infra/east.nix to
+        # infra/config.tf.json and runs OpenTofu in infra/. State
+        # (terraform.tfstate, .terraform.lock.hcl) lives in infra/ and is
+        # committed.
+        apps.infra =
+          let
+            tfConfig = inputs.terranix.lib.terranixConfiguration {
+              inherit system;
+              extraArgs = { inherit inputs; };
+              modules = [ ./infra/east.nix ];
+            };
+            infra = pkgs.writeShellApplication {
+              name = "infra";
+              runtimeInputs = [
+                pkgs.opentofu
+                pkgs.git
+                # used by the nixos-anywhere terraform module's scripts
+                pkgs.jq
+              ];
+              text = ''
+                cd "$(git rev-parse --show-toplevel)/infra"
+                install -m 644 ${tfConfig} config.tf.json
+                exec tofu "$@"
+              '';
+            };
+          in
+          {
+            type = "app";
+            program = "${infra}/bin/infra";
+          };
       }
     );
 }

@@ -528,6 +528,8 @@ in
         };
       };
       extraConfig = ''
+        exec ${pkgs.dbus}/bin/dbus-update-activation-environment DISPLAY XAUTHORITY WAYLAND_DISPLAY
+
         for_window [app_id="firefox"] title_replace_regex "s/^\[fx:[0-9]+\] (.*)— Mozilla Firefox$/$1/"
       
         vtab_width 180
