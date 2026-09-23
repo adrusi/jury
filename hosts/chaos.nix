@@ -32,6 +32,18 @@
   # nspawn binds the host's /etc/resolv.conf (read-only), so don't let NixOS's
   # resolvconf try to rewrite it (DNS comes from the host).
   networking.resolvconf.enable = lib.mkForce false;
+  # The host binds its whole /run/systemd/resolve dir at /run/host-resolve
+  # (nspawn --resolv-conf=off). resolved replaces stub-resolv.conf by rename,
+  # so a single-file bind goes stale (loses e.g. the tailscale search domain);
+  # a symlink through a directory bind always sees the current file.
+  environment.etc."resolv.conf".source = "/run/host-resolve/stub-resolv.conf";
+  # Anything that touches interfaces here touches the HOST's interfaces.
+  # dhcpcd would race host NM for the wifi lease, and the guest tailscaled
+  # (no /dev/net/tun) crash-loops, running `tailscaled --cleanup` on each exit,
+  # which wipes the host tailscaled's routes/rules. Tailscale is host-owned.
+  networking.useDHCP = lib.mkForce false;
+  networking.dhcpcd.enable = lib.mkForce false;
+  services.tailscale.enable = lib.mkForce false;
 
   # --- desktop / seat ---
   #
