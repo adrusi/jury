@@ -1,6 +1,6 @@
 # jury
 
-personal nix configuration (NixOS + nix-darwin + home-manager). public repo
+personal nix configuration (NixOS + home-manager). public repo
 
 ## private submodules
 
@@ -54,10 +54,7 @@ this repo needs the bootstrap step below to apply it.
 3. rebuild:
 
    ```sh
-   # NixOS
    nixos-rebuild switch --flake .#kerapace
-   # darwin
-   darwin-rebuild switch --flake .#rainbow
    ```
 
 ## updating the private submodules

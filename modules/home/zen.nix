@@ -12,7 +12,7 @@ username:
 
     programs.zen-browser = {
       enable = true;
-      package = (if pkgs.stdenv.isDarwin then pkgs.brewCasks.zen else pkgs.zen-browser);
+      package = pkgs.zen-browser;
 
       profiles.default = {
         id = 0;

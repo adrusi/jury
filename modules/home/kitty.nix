@@ -65,7 +65,6 @@ in {
 
         # OS Window titlebar colors
         wayland_titlebar_color = "system";
-        macos_titlebar_color = "system";
 
         # Tab bar colors
         active_tab_foreground = "#eff1f5";

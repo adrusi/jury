@@ -41,9 +41,6 @@ username:
           "sidebar.verticalTabs" = true;
           "browser.toolbars.bookmarks.visibility" = "never";
 
-          # prevent fullscreen youtube videos creating a new workspace on macos
-          "full-screen-api.macos-native-full-screen" = false;
-
           # use bitwarden instead of built-in password manager
           "signon.rememberSignons" = false;
 

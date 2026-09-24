@@ -1,14 +1,10 @@
 username:
 { pkgs, ... }:
 {
-  imports = [
-    ../system/ghostty.nix
-  ];
-
   home-manager.users.${username} = {
     programs.ghostty = {
       enable = true;
-      package = if pkgs.stdenv.isDarwin then pkgs.ghostty-bin else pkgs.ghostty;
+      package = pkgs.ghostty;
       enableZshIntegration = true;
       enableBashIntegration = true;
 

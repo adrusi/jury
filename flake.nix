@@ -10,10 +10,6 @@
     flake-utils.url = "github:numtide/flake-utils";
 
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    darwin = {
-      url = "github:lnl7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -30,37 +26,6 @@
     };
     nixos-anywhere = {
       url = "github:nix-community/nixos-anywhere";
-      flake = false;
-    };
-
-    mac-app-util = {
-      url = "github:hraban/mac-app-util";
-      # inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nix-homebrew = {
-      url = "github:zhaofengli/nix-homebrew";
-    };
-    brew-nix = {
-      url = "github:BatteredBunny/brew-nix";
-      inputs.nix-darwin.follows = "darwin";
-      inputs.brew-api.follows = "brew-api";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    homebrew-core = {
-      url = "github:homebrew/homebrew-core";
-      flake = false;
-    };
-    homebrew-cask = {
-      url = "github:homebrew/homebrew-cask";
-      flake = false;
-    };
-    brew-api = {
-      url = "github:BatteredBunny/brew-api";
-      flake = false;
-    };
-
-    brewtap-cxpatcher = {
-      url = "github:italomandara/homebrew-CXPatcher";
       flake = false;
     };
 
@@ -100,7 +65,6 @@
     inputs@{
       nixpkgs,
       flake-utils,
-      darwin,
       vscode-extensions,
       dmodel-issue,
       ...
@@ -111,7 +75,6 @@
           pkgs = final;
           inherit inputs;
         };
-        uosc-fonts = import ./packages/uosc-fonts.nix { pkgs = final; };
         obsidian-git = import ./packages/obsidian-git.nix { pkgs = final; };
         obsidian-lesswrong-theme = import ./packages/obsidian-lesswrong-theme.nix { pkgs = final; };
         obsidian-catppuccin-theme = import ./packages/obsidian-catppuccin-theme.nix { pkgs = final; };
@@ -145,16 +108,6 @@
       # GCE devbox, provisioned via `nix run .#infra` (see infra/east.nix)
       nixosConfigurations.east = mkNixos ./hosts/east.nix;
 
-      darwinConfigurations.rainbow = darwin.lib.darwinSystem {
-        system = "aarch64-darwin";
-        specialArgs = {
-          inherit inputs;
-        };
-        modules = [
-          { nixpkgs.overlays = overlays; }
-          ./hosts/rainbow.nix
-        ];
-      };
     }
     // flake-utils.lib.eachDefaultSystem (
       system:
