@@ -136,6 +136,8 @@
       };
     in
     {
+      # personal laptop
+      nixosConfigurations.roarke = mkNixos ./hosts/roarke.nix;
       # bare-metal fallback
       nixosConfigurations.kerapace = mkNixos ./hosts/kerapace.nix;
       # systemd-nspawn container guest under Fedora
