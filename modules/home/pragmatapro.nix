@@ -2,8 +2,18 @@ username:
 { ... }:
 {
   imports = [
+    ../theme/options.nix
     ../system/pragmatapro.nix
   ];
+
+  theme.fonts.ui = "PragmataPro";
+
+  # PragmataPro is designed around full hinting; a different font module may
+  # well want this off.
+  fonts.fontconfig.hinting = {
+    enable = true;
+    style = "full";
+  };
 
   home-manager.users.${username} = {
     programs.ghostty.settings = {

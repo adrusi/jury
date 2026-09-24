@@ -1,7 +1,13 @@
 username:
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 {
   imports = [
+    ../theme/options.nix
     ../system/zsh.nix
   ];
 
@@ -22,7 +28,7 @@ username:
       initExtraBeforeCompInit = "";
 
       initContent = ''
-        export LS_COLORS="$(${lib.getBin pkgs.vivid}/bin/vivid generate catppuccin-latte)"
+        export LS_COLORS="$(${lib.getBin pkgs.vivid}/bin/vivid generate ${config.theme.vivid})"
         alias ls="ls --color=auto"
 
         zstyle ':completion:*' completer _extensions _expand _complete _ignored

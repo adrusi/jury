@@ -14,6 +14,10 @@
   imports = [
     ./common.nix
 
+    # theme (swappable per host)
+    ../modules/theme/latte.nix
+    (import ../modules/home/pragmatapro.nix "autumn")
+
     (import ../modules/home/dmodel/module.nix "autumn")
   ];
 

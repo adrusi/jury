@@ -1,12 +1,22 @@
 username:
-{ pkgs, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
   filter_shellint_osc = ''${pkgs.perl}/bin/perl -pe 's/\x1b\]133;[ACD].*?\x1b\\//g' '';
   kak = config.home-manager.users.${username}.programs.kakoune.finalPackage;
   scrollback_viewer = pkgs.writeShellScriptBin "kakoune-kitty-scrollback-viewer" ''
     exec ${filter_shellint_osc} | ${kak}/bin/kak "$@"
   '';
+  p = config.theme.palette;
 in {
+  imports = [
+    ../theme/options.nix
+  ];
+
   home-manager.users.${username} = {
     programs.kitty = {
       enable = true;
@@ -38,83 +48,56 @@ in {
         enable_audio_bell = false;
         visual_bell_duration = 0.05;
         allow_remote_control = true;
-        font_size = 12.0;
+        font_size = config.theme.sizes.kitty;
         window_padding_width = 6;
 
         # The basic colors
-        foreground = "#4c4f69";
-        background = "#eff1f5";
-        selection_foreground = "#eff1f5";
-        selection_background = "#dc8a78";
+        foreground = p.text;
+        background = p.base;
+        selection_foreground = p.base;
+        selection_background = p.rosewater;
 
         # Cursor colors
-        cursor = "#dc8a78";
-        cursor_text_color = "#eff1f5";
+        cursor = p.rosewater;
+        cursor_text_color = p.base;
 
         # Scrollbar colors
-        scrollbar_handle_color = "#7c7f93";
-        scrollbar_track_color = "#bcc0cc";
+        scrollbar_handle_color = p.overlay2;
+        scrollbar_track_color = p.surface1;
 
         # URL color when hovering with mouse
-        url_color = "#dc8a78";
+        url_color = p.rosewater;
 
         # Kitty window border colors
-        active_border_color = "#7287fd";
-        inactive_border_color = "#9ca0b0";
-        bell_border_color = "#df8e1d";
+        active_border_color = p.lavender;
+        inactive_border_color = p.overlay0;
+        bell_border_color = p.yellow;
 
         # OS Window titlebar colors
         wayland_titlebar_color = "system";
 
         # Tab bar colors
-        active_tab_foreground = "#eff1f5";
-        active_tab_background = "#8839ef";
-        inactive_tab_foreground = "#4c4f69";
-        inactive_tab_background = "#9ca0b0";
-        tab_bar_background = "#bcc0cc";
+        active_tab_foreground = p.base;
+        active_tab_background = p.mauve;
+        inactive_tab_foreground = p.text;
+        inactive_tab_background = p.overlay0;
+        tab_bar_background = p.surface1;
 
         # Colors for marks (marked text in the terminal)
-        mark1_foreground = "#eff1f5";
-        mark1_background = "#7287fd";
-        mark2_foreground = "#eff1f5";
-        mark2_background = "#8839ef";
-        mark3_foreground = "#eff1f5";
-        mark3_background = "#209fb5";
-
-        # The 16 terminal colors
-
-        # black
-        color0 = "#5c5f77";
-        color8 = "#6c6f85";
-
-        # red
-        color1 = "#d20f39";
-        color9 = "#d20f39";
-
-        # green
-        color2 = "#40a02b";
-        color10 = "#40a02b";
-
-        # yellow
-        color3 = "#df8e1d";
-        color11 = "#df8e1d";
-
-        # blue
-        color4 = "#1e66f5";
-        color12 = "#1e66f5";
-
-        # magenta
-        color5 = "#ea76cb";
-        color13 = "#ea76cb";
-
-        # cyan
-        color6 = "#179299";
-        color14 = "#179299";
-
-        # white
-        color7 = "#acb0be";
-        color15 = "#eff1f5";
-      };
+        mark1_foreground = p.base;
+        mark1_background = p.lavender;
+        mark2_foreground = p.base;
+        mark2_background = p.mauve;
+        mark3_foreground = p.base;
+        mark3_background = p.sapphire;
+      }
+      # The 16 terminal colors
+      // lib.listToAttrs (
+        lib.imap0 (i: c: {
+          name = "color${toString i}";
+          value = c;
+        }) config.theme.ansi
+      );
     };
   };
 }

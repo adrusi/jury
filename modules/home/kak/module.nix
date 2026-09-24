@@ -1,6 +1,15 @@
 username:
-{ pkgs, lib, ... }:
 {
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+{
+  imports = [
+    ../../theme/options.nix
+  ];
+
   home-manager.users.${username} = {
     home.file = {
       ".config/kak-lsp/kak-lsp.toml".source = ./kak-lsp.toml;
@@ -62,7 +71,10 @@ username:
           };
         })
       ];
-      extraConfig = builtins.readFile ./kak.kak;
+      extraConfig = ''
+        colorscheme ${config.theme.kak.colorscheme}
+      ''
+      + builtins.readFile ./kak.kak;
     };
   };
 }

@@ -1,6 +1,19 @@
 username:
-{ pkgs, ... }:
 {
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+let
+  p = config.theme.palette;
+  bare = lib.removePrefix "#";
+in
+{
+  imports = [
+    ../theme/options.nix
+  ];
+
   home-manager.users.${username} = {
     programs.ghostty = {
       enable = true;
@@ -9,36 +22,21 @@ username:
       enableBashIntegration = true;
 
       settings = {
-        font-size = 11;
-        theme = "catppuccin-latte";
+        font-size = config.theme.sizes.ghostty;
+        theme = "jury";
       };
 
+      # ghostty wants a named theme; "jury" is just the palette from
+      # config.theme rendered in ghostty's format
       themes = {
-        "catppuccin-latte" = {
-          palette = [
-           "0=#5c5f77"
-           "1=#d20f39"
-           "2=#40a02b"
-           "3=#df8e1d"
-           "4=#1e66f5"
-           "5=#ea76cb"
-           "6=#179299"
-           "7=#acb0be"
-           "8=#6c6f85"
-           "9=#d20f39"
-           "10=#40a02b"
-           "11=#df8e1d"
-           "12=#1e66f5"
-           "13=#ea76cb"
-           "14=#179299"
-           "15=#bcc0cc"
-          ];
-          background = "eff1f5";
-          foreground = "4c4f69";
-          cursor-color = "dc8a78";
-          cursor-text = "eff1f5";
-          selection-background = "d8dae1";
-          selection-foreground = "4c4f69";
+        jury = {
+          palette = lib.imap0 (i: c: "${toString i}=${c}") config.theme.ansi;
+          background = bare p.base;
+          foreground = bare p.text;
+          cursor-color = bare p.rosewater;
+          cursor-text = bare p.base;
+          selection-background = bare p.selectionBg;
+          selection-foreground = bare p.text;
         };
       };
     };

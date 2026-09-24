@@ -1,6 +1,10 @@
 username:
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 {
+  imports = [
+    ../theme/options.nix
+  ];
+
   home-manager.users.${username} = {
     home.packages = [
       pkgs.nil
@@ -17,13 +21,11 @@ username:
       package = pkgs.zed-editor;
       installRemoteServer = true;
 
-      extensions = [
+      extensions = config.theme.zed.extensions ++ [
         "agda"
         "assembly"
         "basedpyright"
         "basher"
-        "catppuccin"
-        "catppuccin-icons"
         "clojure"
         "docker-compose"
         "dockerfile"
@@ -59,7 +61,7 @@ username:
         restore_on_startup = "last_session";
         auto_update = false;
         base_keymap = "VSCode";
-        buffer_font_size = 10;
+        buffer_font_size = config.theme.sizes.zedBuffer;
         buffer_line_height = "standard";
         scrollbar = {
           selected_text = false;
@@ -101,12 +103,12 @@ username:
         ensure_final_newline_on_save = true;
         format_on_save = "on";
         indent_guides.enabled = false;
-        ui_font_size = 12;
-        theme = "Catppuccin Latte";
-        icon_theme = "Catppuccin Latte";
+        ui_font_size = config.theme.sizes.zedUi;
+        theme = config.theme.zed.theme;
+        icon_theme = config.theme.zed.iconTheme;
         terminal = {
           blinking = "off";
-          font_size = 10;
+          font_size = config.theme.sizes.zedTerminal;
           line_height = "standard";
           option_as_meta = true;
           button = false;

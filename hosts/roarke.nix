@@ -12,6 +12,11 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     ./common.nix
+
+    # theme (swappable per host): same as the work machines for now; replace
+    # these two with a different scheme/font module to retheme this host
+    ../modules/theme/latte.nix
+    (import ../modules/home/pragmatapro.nix "autumn")
   ];
 
   # --- hardware ---

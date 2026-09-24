@@ -1,5 +1,6 @@
 username:
 {
+  config,
   lib,
   pkgs,
   inputs,
@@ -8,36 +9,36 @@ username:
 let
   mod = "Mod4";
   gaps = "8";
-  rosewater = "#dc8a78";
-  flamingo = "#dd7878";
-  pink = "#ea76cb";
-  mauve = "#8839ef";
-  red = "#d20f39";
-  maroon = "#e64553";
-  peach = "#fe640b";
-  yellow = "#df8e1d";
-  green = "#40a02b";
-  teal = "#179299";
-  sky = "#04a5e5";
-  sapphire = "#209fb5";
-  blue = "#1e66f5";
-  lavender = "#7287fd";
-  text = "#4c4f69";
-  subtext1 = "#5c5f77";
-  subtext0 = "#6c6f85";
-  overlay2 = "#7c7f93";
-  overlay1 = "#8c8fa1";
-  overlay0 = "#9ca0b0";
-  surface2 = "#acb0be";
-  surface1 = "#bcc0cc";
-  surface0 = "#ccd0da";
-  base = "#eff1f5";
-  mantle = "#e6e9ef";
-  crust = "#dce0e8";
+
+  p = config.theme.palette;
+  ui = config.theme.fonts.ui;
+  sizes = config.theme.sizes;
+  inherit (p)
+    base
+    text
+    lavender
+    peach
+    overlay0
+    ;
+
+  # "#rrggbb" -> "r, g, b" (decimal), for CSS rgb()/rgba()
+  rgbCsv =
+    hex:
+    let
+      h = lib.toLower (lib.removePrefix "#" hex);
+      digits = lib.stringToCharacters "0123456789abcdef";
+      val = c: lib.lists.findFirstIndex (d: d == c) (throw "bad hex digit '${c}'") digits;
+      byte = i: val (lib.substring i 1 h) * 16 + val (lib.substring (i + 1) 1 h);
+    in
+    lib.concatMapStringsSep ", " (i: toString (byte i)) [
+      0
+      2
+      4
+    ];
 in
 {
   imports = [
-    ../system/pragmatapro.nix
+    ../theme/options.nix
     ../system/sway.nix
   ];
 
@@ -99,63 +100,16 @@ in
         prompt = "";
         columns = 2;
       };
-      style = ''
-        @define-color	rosewater  #dc8a78;
-        @define-color	rosewater-rgb  rgb(220, 138, 120);
-        @define-color	flamingo  #dd7878;
-        @define-color	flamingo-rgb  rgb(221, 120, 120);
-        @define-color	pink  #ea76cb;
-        @define-color	pink-rgb  rgb(234, 118, 203);
-        @define-color	mauve  #8839ef;
-        @define-color	mauve-rgb  rgb(136, 57, 239);
-        @define-color	red  #d20f39;
-        @define-color	red-rgb  rgb(210, 15, 57);
-        @define-color	maroon  #e64553;
-        @define-color	maroon-rgb  rgb(230, 69, 83);
-        @define-color	peach  #fe640b;
-        @define-color	peach-rgb  rgb(254, 100, 11);
-        @define-color	yellow  #df8e1d;
-        @define-color	yellow-rgb  rgb(223, 142, 29);
-        @define-color	green  #40a02b;
-        @define-color	green-rgb  rgb(64, 160, 43);
-        @define-color	teal  #179299;
-        @define-color	teal-rgb  rgb(23, 146, 153);
-        @define-color	sky  #04a5e5;
-        @define-color	sky-rgb  rgb(4, 165, 229);
-        @define-color	sapphire  #209fb5;
-        @define-color	sapphire-rgb  rgb(32, 159, 181);
-        @define-color	blue  #1e66f5;
-        @define-color	blue-rgb  rgb(30, 102, 245);
-        @define-color	lavender  #7287fd;
-        @define-color	lavender-rgb  rgb(114, 135, 253);
-        @define-color	text  #4c4f69;
-        @define-color	text-rgb  rgb(76, 79, 105);
-        @define-color	subtext1  #5c5f77;
-        @define-color	subtext1-rgb  rgb(92, 95, 119);
-        @define-color	subtext0  #6c6f85;
-        @define-color	subtext0-rgb  rgb(108, 111, 133);
-        @define-color	overlay2  #7c7f93;
-        @define-color	overlay2-rgb  rgb(124, 127, 147);
-        @define-color	overlay1  #8c8fa1;
-        @define-color	overlay1-rgb  rgb(140, 143, 161);
-        @define-color	overlay0  #9ca0b0;
-        @define-color	overlay0-rgb  rgb(156, 160, 176);
-        @define-color	surface2  #acb0be;
-        @define-color	surface2-rgb  rgb(172, 176, 190);
-        @define-color	surface1  #bcc0cc;
-        @define-color	surface1-rgb  rgb(188, 192, 204);
-        @define-color	surface0  #ccd0da;
-        @define-color	surface0-rgb  rgb(204, 208, 218);
-        @define-color	base  #eff1f5;
-        @define-color	base-rgb  rgb(239, 241, 245);
-        @define-color	mantle  #e6e9ef;
-        @define-color	mantle-rgb  rgb(230, 233, 239);
-        @define-color	crust  #dce0e8;
-        @define-color	crust-rgb  rgb(220, 224, 232);
-
+      style = lib.concatStrings (
+        lib.mapAttrsToList (name: hex: ''
+          @define-color	${name}  ${hex};
+          @define-color	${name}-rgb  rgb(${rgbCsv hex});
+        '') p
+      )
+      + ''
         * {
-          font-family: 'PragmataPro', monospace;
-          font-size: 14px;
+          font-family: '${ui}', monospace;
+          font-size: ${toString sizes.menu}px;
         }
 
         /* Window */
@@ -166,7 +120,7 @@ in
           /* 8px instead of 6 like everywhere else because wofi has some weird scaling? */
           border-radius: 8px;
           /* @base at 99% opacity; forces wofi to enable alpha blending so border-radius works */
-          background-color: rgba(239, 241, 245, 0.99);
+          background-color: rgba(${rgbCsv base}, 0.99);
         }
 
         /* Inner Box */
@@ -248,7 +202,7 @@ in
         border-color = lavender;
         border-radius = 6;
         border-size = 3;
-        font = "PragmataPro 9";
+        font = "${ui} ${toString sizes.wm}";
         icons = true;
         layer = "top";
         markup = true;
@@ -351,8 +305,8 @@ in
       };
       style = ''
         * {
-          font-family: PragmataPro;
-          font-size: 13px;
+          font-family: ${ui};
+          font-size: ${toString sizes.bar}px;
           min-height: 0;
         }
 
@@ -439,7 +393,7 @@ in
       config = {
         modifier = mod;
         terminal = pkgs.kitty;
-        fonts = [ "PragmataPro 9" ];
+        fonts = [ "${ui} ${toString sizes.wm}" ];
 
         bars = [];
 
@@ -610,7 +564,7 @@ in
             --daemonize \
             --screenshots \
             --effect-pixelate 10 \
-            --font PragmataPro \
+            --font '${ui}' \
             --indicator \
             --clock \
             --inside-color ${fmt base} \

@@ -20,6 +20,9 @@ in
     inputs.disko.nixosModules.disko
     inputs.home-manager.nixosModules.home-manager
 
+    # theme: headless, but zsh (vivid) and kak read scheme names from it
+    ../modules/theme/latte.nix
+
     # system modules
     ../modules/system/nix-store.nix
     ../modules/system/zsh.nix
@@ -42,7 +45,10 @@ in
   # --- platform ---
 
   nixpkgs.hostPlatform = "x86_64-linux";
-  nix.settings.experimental-features = "nix-command flakes";
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
   time.timeZone = "America/Los_Angeles";
   i18n.defaultLocale = "en_US.UTF-8";
 

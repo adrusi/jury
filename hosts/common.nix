@@ -45,7 +45,6 @@
     (import ../modules/home/kitty.nix "autumn")
     (import ../modules/home/kak/module.nix "autumn")
     (import ../modules/home/mpv.nix "autumn")
-    (import ../modules/home/pragmatapro.nix "autumn")
     (import ../modules/home/sway.nix "autumn")
     (import ../modules/home/ssh.nix "autumn")
     (import ../modules/home/zathura.nix "autumn")
@@ -144,11 +143,6 @@
     enable = true;
   };
 
-  fonts.fontconfig.hinting = {
-    enable = true;
-    style = "full";
-  };
-
   # --- home-manager ---
 
   home-manager.extraSpecialArgs = { inherit inputs; };
@@ -181,13 +175,6 @@
       pkgs.inotify-tools
       pkgs.texliveFull
     ];
-
-    # TODO find a better way to manage differences in font size rendering across platforms and hosts
-    programs.zed-editor.userSettings = {
-      buffer_font_size = lib.mkForce 14;
-      terminal.font_size = lib.mkForce 14;
-      ui_font_size = lib.mkForce 16;
-    };
 
     services.kanshi.settings = [
       {
