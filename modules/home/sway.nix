@@ -8,18 +8,21 @@ username:
 }:
 let
   mod = "Mod4";
-  gaps = "8";
 
-  p = config.theme.palette;
-  ui = config.theme.fonts.ui;
-  sizes = config.theme.sizes;
-  inherit (p)
-    base
-    text
-    lavender
-    peach
-    overlay0
+  inherit (config.stylesheet)
+    colors
+    fonts
+    sizes
+    dims
     ;
+  inherit (colors)
+    bg
+    fg
+    accent
+    error
+    muted
+    ;
+  gaps = toString dims.gaps;
 
   # "#rrggbb" -> "r, g, b" (decimal), for CSS rgb()/rgba()
   rgbCsv =
@@ -38,7 +41,7 @@ let
 in
 {
   imports = [
-    ../theme/options.nix
+    ../stylesheet/options.nix
     ../system/sway.nix
   ];
 
@@ -65,7 +68,7 @@ in
       enable = true;
       name = "Adwaita";
       package = pkgs.adwaita-icon-theme;
-      size = 24;
+      size = dims.cursorSize;
       x11 = {
         enable = true;
         defaultCursor = "Adwaita";
@@ -89,8 +92,8 @@ in
       enable = true;
       settings = {
         allow_markup = true;
-        width = 640;
-        height = 480;
+        width = dims.menuWidth;
+        height = dims.menuHeight;
         always_parse_args = true;
         show_all = false;
         term = "kitty";
@@ -104,11 +107,11 @@ in
         lib.mapAttrsToList (name: hex: ''
           @define-color	${name}  ${hex};
           @define-color	${name}-rgb  rgb(${rgbCsv hex});
-        '') p
+        '') colors
       )
       + ''
         * {
-          font-family: '${ui}', monospace;
+          font-family: '${fonts.ui}', monospace;
           font-size: ${toString sizes.menu}px;
         }
 
@@ -116,11 +119,11 @@ in
         window {
           margin: 0px;
           padding: 10px;
-          border: 3px solid @lavender;
-          /* 8px instead of 6 like everywhere else because wofi has some weird scaling? */
-          border-radius: 8px;
-          /* @base at 99% opacity; forces wofi to enable alpha blending so border-radius works */
-          background-color: rgba(${rgbCsv base}, 0.99);
+          border: ${toString dims.borderWidth}px solid @accent;
+          /* +2px over the radius used everywhere else because wofi has some weird scaling? */
+          border-radius: ${toString (dims.cornerRadius + 2)}px;
+          /* @bg at 99% opacity; forces wofi to enable alpha blending so border-radius works */
+          background-color: rgba(${rgbCsv bg}, 0.99);
         }
 
         /* Inner Box */
@@ -128,7 +131,7 @@ in
           margin: 0;
           padding: 0;
           border: none;
-          background-color: @base;
+          background-color: @bg;
         }
 
         /* Outer Box */
@@ -136,7 +139,7 @@ in
           margin: 5px;
           padding: 10px;
           border: none;
-          background-color: @base;
+          background-color: @bg;
         }
 
         /* Scroll */
@@ -144,7 +147,7 @@ in
           margin: 0;
           padding: 0;
           border: none;
-          background-color: @base;
+          background-color: @bg;
         }
 
         /* Input */
@@ -152,43 +155,43 @@ in
           margin: 0 0 10px 0;
           padding: 10px;
           border: none;
-          border-radius: 8px;
-          color: @text;
-          background-color: @base;
+          border-radius: ${toString (dims.cornerRadius + 2)}px;
+          color: @fg;
+          background-color: @bg;
         }
 
         #input image {
           border: none;
-          color: @lavender;
+          color: @accent;
         }
 
         #input * {
-          outline: 4px solid @lavender!important;
+          outline: 4px solid @accent!important;
         }
 
         /* Text */
         #text {
           margin: 5px;
           border: none;
-          color: @text;
+          color: @fg;
         }
 
         #entry {
-          background-color: @base;
+          background-color: @bg;
         }
 
         #entry arrow {
           border: none;
-          color: @lavender;
+          color: @accent;
         }
 
         /* Selected Entry */
         #entry:selected {
-          outline: 1px solid @lavender;
+          outline: 1px solid @accent;
         }
 
         #entry:drop(active) {
-          background-color: @lavender!important;
+          background-color: @accent!important;
         }
       '';
     };
@@ -197,19 +200,19 @@ in
       enable = true;
       settings = {
         anchor = "top-right";
-        background-color = base;
-        text-color = text;
-        border-color = lavender;
-        border-radius = 6;
-        border-size = 3;
-        font = "${ui} ${toString sizes.wm}";
+        background-color = bg;
+        text-color = fg;
+        border-color = accent;
+        border-radius = dims.cornerRadius;
+        border-size = dims.borderWidth;
+        font = "${fonts.ui} ${toString sizes.wm}";
         icons = true;
         layer = "top";
         markup = true;
         outer-margin = 8;
         margin = 8;
         padding = 9;
-        width = 300;
+        width = dims.notificationWidth;
 
         actions = true;
         max-visible = 5;
@@ -305,14 +308,14 @@ in
       };
       style = ''
         * {
-          font-family: ${ui};
+          font-family: ${fonts.ui};
           font-size: ${toString sizes.bar}px;
           min-height: 0;
         }
 
         #waybar {
           background: transparent;
-          color: ${text};
+          color: ${fg};
           margin: 0;
         }
 
@@ -322,7 +325,7 @@ in
         #workspaces button {
           transition: 0s;
           border-radius: 0;
-          color: ${text};
+          color: ${fg};
           border: 0;
           background: transparent;
           padding-top: 8px;
@@ -337,24 +340,24 @@ in
         }
         #workspaces button.focused {
           padding-top: 4px;
-          border-top: 4px solid ${lavender};
+          border-top: 4px solid ${accent};
         }
         #workspaces button.urgent {
-          color: ${peach};
+          color: ${error};
         }
 
         #mode {
           margin-top: 4px;
           margin-left: 8px;
-          background: ${lavender};
+          background: ${accent};
           font-size: 16px;
-          color: ${base};
+          color: ${bg};
           padding-left: 4px;
           padding-right: 4px;
         }
 
         #clock {
-          color: ${text};
+          color: ${fg};
           padding-top: 8px;
         }
 
@@ -378,7 +381,7 @@ in
           margin-right: ${gaps}px;
         }
         #battery.critical {
-          color: ${peach};
+          color: ${error};
         }
       '';
     };
@@ -393,7 +396,7 @@ in
       config = {
         modifier = mod;
         terminal = pkgs.kitty;
-        fonts = [ "${ui} ${toString sizes.wm}" ];
+        fonts = [ "${fonts.ui} ${toString sizes.wm}" ];
 
         bars = [];
 
@@ -473,7 +476,7 @@ in
         focus.followMouse = false;
         workspaceAutoBackAndForth = false;
         defaultWorkspace = "workspace number 1";
-        gaps.inner = builtins.fromJSON gaps;
+        gaps.inner = dims.gaps;
         input = {
           "type:touchpad" = {
             tap = "enabled";
@@ -487,11 +490,11 @@ in
 
         for_window [app_id="firefox"] title_replace_regex "s/^\[fx:[0-9]+\] (.*)— Mozilla Firefox$/$1/"
       
-        vtab_width 180
+        vtab_width ${toString dims.vtabWidth}
         vtab_position left
         vtab_padding 11
-        corner_radius 6
-        default_border normal 3
+        corner_radius ${toString dims.cornerRadius}
+        default_border normal ${toString dims.borderWidth}
         titlebar_padding 6 4
         workspace_layout vtabbed
 
@@ -541,15 +544,15 @@ in
         }
         bindsym ${mod}+r mode "resize"
 
-        output * bg ${base} solid_color
+        output * bg ${bg} solid_color
 
         # target                 title       bg      text     indicator    border
-        client.focused           ${lavender} ${lavender} ${base}  ${lavender} ${lavender}
-        client.focused_inactive  ${overlay0} ${lavender} ${base}  ${overlay0} ${overlay0}
-        client.unfocused         ${overlay0} ${base} ${text}  ${overlay0} ${overlay0}
-        client.urgent            ${peach}    ${peach} ${base} ${peach}  ${peach}
-        client.placeholder       ${overlay0} ${base} ${text}  ${overlay0}  ${overlay0}
-        client.background        ${base}
+        client.focused           ${accent} ${accent} ${bg}  ${accent} ${accent}
+        client.focused_inactive  ${muted} ${accent} ${bg}  ${muted} ${muted}
+        client.unfocused         ${muted} ${bg} ${fg}  ${muted} ${muted}
+        client.urgent            ${error}    ${error} ${bg} ${error}  ${error}
+        client.placeholder       ${muted} ${bg} ${fg}  ${muted}  ${muted}
+        client.background        ${bg}
       '';
     };
 
@@ -564,28 +567,28 @@ in
             --daemonize \
             --screenshots \
             --effect-pixelate 10 \
-            --font '${ui}' \
+            --font '${fonts.ui}' \
             --indicator \
             --clock \
-            --inside-color ${fmt base} \
-            --text-color ${fmt text} \
-            --inside-clear-color ${fmt base} \
-            --text-clear-color ${fmt text} \
-            --inside-ver-color ${fmt lavender} \
-            --text-ver-color ${fmt base} \
-            --inside-wrong-color ${fmt peach} \
-            --text-wrong-color ${fmt base} \
-            --key-hl-color ${fmt base} \
+            --inside-color ${fmt bg} \
+            --text-color ${fmt fg} \
+            --inside-clear-color ${fmt bg} \
+            --text-clear-color ${fmt fg} \
+            --inside-ver-color ${fmt accent} \
+            --text-ver-color ${fmt bg} \
+            --inside-wrong-color ${fmt error} \
+            --text-wrong-color ${fmt bg} \
+            --key-hl-color ${fmt bg} \
             --line-uses-inside \
-            --line-color ${fmt base} \
-            --line-clear-color ${fmt base} \
-            --line-ver-color ${fmt base} \
-            --line-wrong-color ${fmt base} \
-            --separator-color ${fmt base} \
-            --ring-color ${fmt lavender} \
-            --ring-clear-color ${fmt base} \
-            --ring-ver-color ${fmt lavender} \
-            --ring-wrong-color ${fmt peach}'';
+            --line-color ${fmt bg} \
+            --line-clear-color ${fmt bg} \
+            --line-ver-color ${fmt bg} \
+            --line-wrong-color ${fmt bg} \
+            --separator-color ${fmt bg} \
+            --ring-color ${fmt accent} \
+            --ring-clear-color ${fmt bg} \
+            --ring-ver-color ${fmt accent} \
+            --ring-wrong-color ${fmt error}'';
       events.before-sleep = "${pkgs.systemd}/bin/loginctl lock-session";
       timeouts =
         let

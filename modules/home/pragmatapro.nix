@@ -1,12 +1,13 @@
 username:
 { ... }:
 {
+  # Provides the PragmataPro font files and PragmataPro-specific quirks.
+  # The family names the UI modules render with live in the stylesheet
+  # (stylesheet.fonts.ui/mono/monoLiga); a host pairs this module with a
+  # stylesheet that names these families.
   imports = [
-    ../theme/options.nix
     ../system/pragmatapro.nix
   ];
-
-  theme.fonts.ui = "PragmataPro";
 
   # PragmataPro is designed around full hinting; a different font module may
   # well want this off.
@@ -16,25 +17,14 @@ username:
   };
 
   home-manager.users.${username} = {
-    programs.ghostty.settings = {
-      font-family = "PragmataPro";
-    };
-    programs.kitty.settings = {
-      font_family = "PragmataPro Mono";
-    };
+    # ligature/feature flags specific to PragmataPro's stylistic sets
     programs.zed-editor.userSettings = {
-      buffer_font_family = "PragmataPro Mono Liga";
-      terminal.font_family = "PragmataPro Mono Liga";
       languages.haskell.buffer_font_features.calt = true;
       terminal.font_features = {
         ss13 = true;
       };
     };
-    programs.zathura.options.font = "PragmataPro normal 10";
     programs.vscode.profiles.default.userSettings = {
-      "editor.fontFamily" = "PragmataPro Mono Liga";
-      "debug.console.fontFamily" = "PragmataPro Mono Liga";
-      "terminal.integrated.fontFamily" = "PragmataPro Mono Liga";
       "terminal.integrated.fontLigatures.enabled" = true;
       "terminal.integrated.fontLigatures.featureSettings" = "'ss13'";
       "[haskell][literate haskell]" = {

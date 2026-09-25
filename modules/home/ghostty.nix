@@ -6,12 +6,12 @@ username:
   ...
 }:
 let
-  p = config.theme.palette;
+  c = config.stylesheet.colors;
   bare = lib.removePrefix "#";
 in
 {
   imports = [
-    ../theme/options.nix
+    ../stylesheet/options.nix
   ];
 
   home-manager.users.${username} = {
@@ -22,21 +22,22 @@ in
       enableBashIntegration = true;
 
       settings = {
-        font-size = config.theme.sizes.ghostty;
+        font-family = config.stylesheet.fonts.ui;
+        font-size = config.stylesheet.sizes.ghostty;
         theme = "jury";
       };
 
-      # ghostty wants a named theme; "jury" is just the palette from
-      # config.theme rendered in ghostty's format
+      # ghostty wants a named theme; "jury" is just the stylesheet colors
+      # rendered in ghostty's format
       themes = {
         jury = {
-          palette = lib.imap0 (i: c: "${toString i}=${c}") config.theme.ansi;
-          background = bare p.base;
-          foreground = bare p.text;
-          cursor-color = bare p.rosewater;
-          cursor-text = bare p.base;
-          selection-background = bare p.selectionBg;
-          selection-foreground = bare p.text;
+          palette = lib.genList (i: "${toString i}=${c."color${toString i}"}") 16;
+          background = bare c.bg;
+          foreground = bare c.fg;
+          cursor-color = bare c.cursor;
+          cursor-text = bare c.bg;
+          selection-background = bare c.selection;
+          selection-foreground = bare c.fg;
         };
       };
     };

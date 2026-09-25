@@ -1,6 +1,15 @@
 username:
-{ pkgs, lib, ... }:
 {
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+{
+  imports = [
+    ../stylesheet/options.nix
+  ];
+
   home-manager.users.${username} = {
     home.packages = [
       # needed for jupyter extension?
@@ -28,6 +37,9 @@ username:
 
           # type
           "window.zoomLevel" = -1;
+          "editor.fontFamily" = config.stylesheet.fonts.monoLiga;
+          "debug.console.fontFamily" = config.stylesheet.fonts.monoLiga;
+          "terminal.integrated.fontFamily" = config.stylesheet.fonts.monoLiga;
           "editor.fontSize" = 12;
           "debug.console.fontSize" = 12;
           "terminal.integrated.fontSize" = 12;

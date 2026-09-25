@@ -11,10 +11,10 @@ let
   scrollback_viewer = pkgs.writeShellScriptBin "kakoune-kitty-scrollback-viewer" ''
     exec ${filter_shellint_osc} | ${kak}/bin/kak "$@"
   '';
-  p = config.theme.palette;
+  c = config.stylesheet.colors;
 in {
   imports = [
-    ../theme/options.nix
+    ../stylesheet/options.nix
   ];
 
   home-manager.users.${username} = {
@@ -48,56 +48,52 @@ in {
         enable_audio_bell = false;
         visual_bell_duration = 0.05;
         allow_remote_control = true;
-        font_size = config.theme.sizes.kitty;
+        font_family = config.stylesheet.fonts.mono;
+        font_size = config.stylesheet.sizes.kitty;
         window_padding_width = 6;
 
         # The basic colors
-        foreground = p.text;
-        background = p.base;
-        selection_foreground = p.base;
-        selection_background = p.rosewater;
+        foreground = c.fg;
+        background = c.bg;
+        selection_foreground = c.bg;
+        selection_background = c.cursor;
 
         # Cursor colors
-        cursor = p.rosewater;
-        cursor_text_color = p.base;
+        cursor = c.cursor;
+        cursor_text_color = c.bg;
 
         # Scrollbar colors
-        scrollbar_handle_color = p.overlay2;
-        scrollbar_track_color = p.surface1;
+        scrollbar_handle_color = c.fgDim;
+        scrollbar_track_color = c.surface;
 
         # URL color when hovering with mouse
-        url_color = p.rosewater;
+        url_color = c.cursor;
 
         # Kitty window border colors
-        active_border_color = p.lavender;
-        inactive_border_color = p.overlay0;
-        bell_border_color = p.yellow;
+        active_border_color = c.accent;
+        inactive_border_color = c.muted;
+        bell_border_color = c.warning;
 
         # OS Window titlebar colors
         wayland_titlebar_color = "system";
 
         # Tab bar colors
-        active_tab_foreground = p.base;
-        active_tab_background = p.mauve;
-        inactive_tab_foreground = p.text;
-        inactive_tab_background = p.overlay0;
-        tab_bar_background = p.surface1;
+        active_tab_foreground = c.bg;
+        active_tab_background = c.accent2;
+        inactive_tab_foreground = c.fg;
+        inactive_tab_background = c.muted;
+        tab_bar_background = c.surface;
 
         # Colors for marks (marked text in the terminal)
-        mark1_foreground = p.base;
-        mark1_background = p.lavender;
-        mark2_foreground = p.base;
-        mark2_background = p.mauve;
-        mark3_foreground = p.base;
-        mark3_background = p.sapphire;
+        mark1_foreground = c.bg;
+        mark1_background = c.accent;
+        mark2_foreground = c.bg;
+        mark2_background = c.accent2;
+        mark3_foreground = c.bg;
+        mark3_background = c.accent3;
       }
       # The 16 terminal colors
-      // lib.listToAttrs (
-        lib.imap0 (i: c: {
-          name = "color${toString i}";
-          value = c;
-        }) config.theme.ansi
-      );
+      // lib.genAttrs (map (i: "color${toString i}") (lib.range 0 15)) (name: c.${name});
     };
   };
 }

@@ -7,7 +7,7 @@ username:
 }:
 {
   imports = [
-    ../theme/options.nix
+    ../stylesheet/options.nix
     ../system/zsh.nix
   ];
 
@@ -28,7 +28,7 @@ username:
       initExtraBeforeCompInit = "";
 
       initContent = ''
-        export LS_COLORS="$(${lib.getBin pkgs.vivid}/bin/vivid generate ${config.theme.vivid})"
+        export LS_COLORS="$(${lib.getBin pkgs.vivid}/bin/vivid generate ${config.stylesheet.vivid})"
         alias ls="ls --color=auto"
 
         zstyle ':completion:*' completer _extensions _expand _complete _ignored

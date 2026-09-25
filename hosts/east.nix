@@ -20,8 +20,8 @@ in
     inputs.disko.nixosModules.disko
     inputs.home-manager.nixosModules.home-manager
 
-    # theme: headless, but zsh (vivid) and kak read scheme names from it
-    ../modules/theme/latte.nix
+    # stylesheet: headless, but zsh (vivid) and kak read scheme names from it
+    ../modules/stylesheet/latte.nix
 
     # system modules
     ../modules/system/nix-store.nix

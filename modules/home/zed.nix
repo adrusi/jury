@@ -2,7 +2,7 @@ username:
 { pkgs, config, ... }:
 {
   imports = [
-    ../theme/options.nix
+    ../stylesheet/options.nix
   ];
 
   home-manager.users.${username} = {
@@ -21,7 +21,7 @@ username:
       package = pkgs.zed-editor;
       installRemoteServer = true;
 
-      extensions = config.theme.zed.extensions ++ [
+      extensions = config.stylesheet.zed.extensions ++ [
         "agda"
         "assembly"
         "basedpyright"
@@ -61,7 +61,8 @@ username:
         restore_on_startup = "last_session";
         auto_update = false;
         base_keymap = "VSCode";
-        buffer_font_size = config.theme.sizes.zedBuffer;
+        buffer_font_family = config.stylesheet.fonts.monoLiga;
+        buffer_font_size = config.stylesheet.sizes.zedBuffer;
         buffer_line_height = "standard";
         scrollbar = {
           selected_text = false;
@@ -103,12 +104,13 @@ username:
         ensure_final_newline_on_save = true;
         format_on_save = "on";
         indent_guides.enabled = false;
-        ui_font_size = config.theme.sizes.zedUi;
-        theme = config.theme.zed.theme;
-        icon_theme = config.theme.zed.iconTheme;
+        ui_font_size = config.stylesheet.sizes.zedUi;
+        theme = config.stylesheet.zed.theme;
+        icon_theme = config.stylesheet.zed.iconTheme;
         terminal = {
           blinking = "off";
-          font_size = config.theme.sizes.zedTerminal;
+          font_family = config.stylesheet.fonts.monoLiga;
+          font_size = config.stylesheet.sizes.zedTerminal;
           line_height = "standard";
           option_as_meta = true;
           button = false;

@@ -7,7 +7,7 @@ username:
 }:
 {
   imports = [
-    ../../theme/options.nix
+    ../../stylesheet/options.nix
   ];
 
   home-manager.users.${username} = {
@@ -72,7 +72,7 @@ username:
         })
       ];
       extraConfig = ''
-        colorscheme ${config.theme.kak.colorscheme}
+        colorscheme ${config.stylesheet.kak.colorscheme}
       ''
       + builtins.readFile ./kak.kak;
     };
