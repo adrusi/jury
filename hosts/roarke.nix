@@ -19,6 +19,13 @@
     (import ../modules/home/pragmatapro.nix "autumn")
   ];
 
+  programs.steam = {
+    enable = true;
+    extraCompatPackages = [ pkgs.proton-ge-bin ];
+  };
+
+  programs.gamemode.enable = true;
+
   # --- hardware ---
 
   boot.initrd.availableKernelModules = [
