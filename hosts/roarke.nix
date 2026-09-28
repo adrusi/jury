@@ -16,7 +16,7 @@
     # stylesheet + font module (swappable per host): same as the work machines
     # for now; to restyle this host, copy latte.nix, iterate on the copy, and
     # pair it with a font module providing the families it names
-    ../modules/stylesheet/latte.nix
+    ../modules/stylesheet/roarke.nix
     (import ../modules/home/pragmatapro.nix "autumn")
   ];
 
@@ -25,6 +25,7 @@
     extraCompatPackages = [ pkgs.proton-ge-bin ];
   };
 
+  programs.gamescope.enable = true;
   programs.gamemode.enable = true;
 
   # --- hardware ---
@@ -108,11 +109,23 @@
   networking.hostName = "roarke";
   networking.networkmanager.enable = true;
 
+  services.mullvad-vpn.enable = true;
+
   # --- desktop ---
 
   services.xserver.enable = true;
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
+
+  home-manager.users.autumn = {
+    home.packages = [ pkgs.mullvad-vpn ];
+
+    wayland.windowManager.sway.config.input."type:touchpad" = {
+      tap = "disabled";
+      dwt = "disabled";
+    };
+    programs.firefox.profiles.default.settings."layout.css.devPixelsPerPx" = 1.25;
+  };
 
   # --- state versions (fresh install on 26.05) ---
 

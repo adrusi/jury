@@ -317,6 +317,7 @@ in
           background: transparent;
           color: ${fg};
           margin: 0;
+          padding-bottom: ${toString (dims.gaps / 2)}px;
         }
 
         #workspaces {
@@ -328,9 +329,9 @@ in
           color: ${fg};
           border: 0;
           background: transparent;
-          padding-top: 8px;
-          padding-left: 4px;
-          padding-right: 4px;
+          padding-top: ${toString dims.gaps}px;
+          padding-left: ${toString (dims.gaps / 2)}px;
+          padding-right: ${toString (dims.gaps / 2)}px;
           padding-bottom: 0;
           margin-right: ${gaps}px;
         }
@@ -339,45 +340,45 @@ in
           border: 0;
         }
         #workspaces button.focused {
-          padding-top: 4px;
-          border-top: 4px solid ${accent};
+          padding-top: ${toString (dims.gaps - dims.borderWidth)}px;
+          border-top: ${toString dims.borderWidth}px solid ${accent};
         }
         #workspaces button.urgent {
           color: ${error};
         }
 
         #mode {
-          margin-top: 4px;
-          margin-left: 8px;
+          margin-top: ${toString (dims.gaps / 2)}px;
+          margin-left: ${toString dims.gaps}px;
           background: ${accent};
-          font-size: 16px;
+          font-size: ${toString sizes.bar}px;
           color: ${bg};
-          padding-left: 4px;
-          padding-right: 4px;
+          padding-left: ${toString (dims.gaps / 2)}px;
+          padding-right: ${toString (dims.gaps / 2)}px;
         }
 
         #clock {
           color: ${fg};
-          padding-top: 8px;
+          padding-top: ${toString dims.gaps}px;
         }
 
         #network {
-          padding-top: 8px;
+          padding-top: ${toString dims.gaps}px;
           margin-right: ${gaps}px;
         }
 
         #backlight {
-          padding-top: 8px;
+          padding-top: ${toString dims.gaps}px;
           margin-right: ${gaps}px;
         }
 
         #pulseaudio {
-          padding-top: 8px;
+          padding-top: ${toString dims.gaps}px;
           margin-right: ${gaps}px;
         }
 
         #battery {
-          padding-top: 8px;
+          padding-top: ${toString dims.gaps}px;
           margin-right: ${gaps}px;
         }
         #battery.critical {
@@ -479,9 +480,7 @@ in
         gaps.inner = dims.gaps;
         input = {
           "type:touchpad" = {
-            tap = "enabled";
             natural_scroll = "enabled";
-            dwt = "enabled";
           };
         };
       };
@@ -492,10 +491,10 @@ in
       
         vtab_width ${toString dims.vtabWidth}
         vtab_position left
-        vtab_padding 11
+        vtab_padding ${toString (dims.cornerRadius * 5 / 4)}
         corner_radius ${toString dims.cornerRadius}
         default_border normal ${toString dims.borderWidth}
-        titlebar_padding 6 4
+        titlebar_padding ${toString dims.titlebarPadding.horizontal} ${toString dims.titlebarPadding.vertical}
         workspace_layout vtabbed
 
         for_window [floating] shadows enable

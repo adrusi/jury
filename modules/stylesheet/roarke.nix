@@ -48,30 +48,30 @@
     };
 
     sizes = {
-      wm = 9;
-      bar = 13;
-      menu = 14;
-      kitty = 12.0;
-      ghostty = 11;
-      zathura = 10;
-      zedBuffer = 14;
-      zedUi = 16;
-      zedTerminal = 14;
+      wm = 12;
+      bar = 16;
+      menu = 20;
+      kitty = 16.0;
+      ghostty = 16;
+      zathura = 16;
+      zedBuffer = 18;
+      zedUi = 20;
+      zedTerminal = 18;
     };
 
     dims = {
-      gaps = 8;
-      borderWidth = 3;
+      gaps = 10;
+      borderWidth = 4;
       titlebarPadding = {
-        horizontal = 6;
-        vertical = 4;
+        horizontal = 9;
+        vertical = 6;
       };
-      cornerRadius = 6;
-      menuWidth = 640;
-      menuHeight = 480;
-      notificationWidth = 300;
-      vtabWidth = 180;
-      cursorSize = 24;
+      cornerRadius = 8;
+      menuWidth = 800;
+      menuHeight = 600;
+      notificationWidth = 400;
+      vtabWidth = 200;
+      cursorSize = 36;
     };
 
     vivid = "catppuccin-latte";

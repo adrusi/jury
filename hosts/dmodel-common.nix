@@ -56,6 +56,11 @@
 
     programs.git.settings.user.email = lib.mkForce "autumn@dmodel.ai";
 
+    wayland.windowManager.sway.config.input."type:touchpad" = {
+      tap = "enabled";
+      dwt = "enabled";
+    };
+
     programs.firefox.profiles.default.extensions.packages = [
       (pkgs.firefox-addons.buildFirefoxXpiAddon {
         pname = "golinks";

@@ -60,6 +60,10 @@
 
     # ui geometry (dpi-contingent)
     dims = {
+      titlebarPadding = {
+        horizontal = lib.mkOption { type = lib.types.int; };
+        vertical = lib.mkOption { type = lib.types.int; };
+      };
       gaps = lib.mkOption {
         type = lib.types.int;
         description = "Sway inner gaps; also waybar module spacing (px).";
