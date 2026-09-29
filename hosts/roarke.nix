@@ -16,6 +16,8 @@
     # stylesheet + font module (swappable per host)
     ../modules/stylesheet/roarke.nix
     (import ../modules/home/pragmatapro.nix "autumn")
+
+    ../modules/system/fprintd.nix
   ];
 
   programs.steam = {

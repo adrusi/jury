@@ -48,6 +48,9 @@ in
     ../system/sway.nix
   ];
 
+  # password auth for hyprlock (fingerprint goes to fprintd directly, not pam)
+  security.pam.services.hyprlock = { };
+
   home-manager.users.${username} = {
     home.sessionVariables = {
       MOZ_ENABLE_WAYLAND = 1;
@@ -528,6 +531,9 @@ in
 
         for_window [floating] shadows enable
 
+        # games, videos, etc. keep swayidle from firing while fullscreen and visible
+        for_window [all] inhibit_idle fullscreen
+
         output * scale 1
 
         mode "vtab" {
@@ -584,46 +590,82 @@ in
       '';
     };
 
-    services.swayidle = {
+    # hyprlock rather than swaylock: it listens for a fingerprint (via fprintd
+    # over dbus) concurrently with the password field, so a touch alone
+    # unlocks. Runs fine on sway via ext-session-lock.
+    programs.hyprlock = {
+      enable = true;
+      settings =
+        let
+          rgb = hex: "rgb(${lib.removePrefix "#" hex})";
+        in
+        {
+          general = {
+            hide_cursor = true;
+            ignore_empty_input = true;
+          };
+          animations.enabled = false;
+          auth."fingerprint:enabled" = config.services.fprintd.enable;
+
+          background = [
+            {
+              path = "screenshot";
+              blur_passes = 3;
+              blur_size = 8;
+            }
+          ];
+
+          label = [
+            {
+              text = "$TIME";
+              color = rgb fg;
+              font_family = fonts.ui;
+              font_size = sizes.menu * 4;
+              position = "0, ${toString (sizes.menu * 4)}";
+              halign = "center";
+              valign = "center";
+            }
+          ];
+
+          input-field = [
+            {
+              size = "${toString dims.notificationWidth}, ${toString (sizes.menu * 3)}";
+              outline_thickness = dims.borderWidth;
+              rounding = dims.cornerRadius;
+              outer_color = rgb accent;
+              inner_color = rgb bg;
+              font_color = rgb fg;
+              font_family = fonts.ui;
+              check_color = rgb accent;
+              fail_color = rgb error;
+              capslock_color = rgb colors.warning;
+              fade_on_empty = false;
+              placeholder_text = if config.services.fprintd.enable then "$FPRINTPROMPT" else "";
+              fail_text = "$FAIL";
+              position = "0, -${toString (sizes.menu * 2)}";
+              halign = "center";
+              valign = "center";
+            }
+          ];
+        };
+    };
+
+    services.swayidle =
+      let
+        swaymsg = "${inputs.swayfx.packages.${pkgs.stdenv.system}.default}/bin/swaymsg";
+        loginctl = "${pkgs.systemd}/bin/loginctl";
+        systemctl = "${pkgs.systemd}/bin/systemctl";
+        hyprlock = "${hmCfg.programs.hyprlock.package}/bin/hyprlock";
+      in
+      {
       enable = true;
 
-      events.lock =
-        let
-          fmt = lib.strings.removePrefix "#";
-        in
-          ''${pkgs.swaylock-effects}/bin/swaylock \
-            --daemonize \
-            --screenshots \
-            --effect-pixelate 10 \
-            --font '${fonts.ui}' \
-            --indicator \
-            --clock \
-            --inside-color ${fmt bg} \
-            --text-color ${fmt fg} \
-            --inside-clear-color ${fmt bg} \
-            --text-clear-color ${fmt fg} \
-            --inside-ver-color ${fmt accent} \
-            --text-ver-color ${fmt bg} \
-            --inside-wrong-color ${fmt error} \
-            --text-wrong-color ${fmt bg} \
-            --key-hl-color ${fmt bg} \
-            --line-uses-inside \
-            --line-color ${fmt bg} \
-            --line-clear-color ${fmt bg} \
-            --line-ver-color ${fmt bg} \
-            --line-wrong-color ${fmt bg} \
-            --separator-color ${fmt bg} \
-            --ring-color ${fmt accent} \
-            --ring-clear-color ${fmt bg} \
-            --ring-ver-color ${fmt accent} \
-            --ring-wrong-color ${fmt error}'';
-      events.before-sleep = "${pkgs.systemd}/bin/loginctl lock-session";
+      # hyprlock doesn't daemonize, so hand it to sway to run: swayidle (run
+      # with -w) doesn't block on it, and it lives outside swayidle's cgroup so
+      # restarting swayidle can't kill the locker out from under a locked session
+      events.lock = "${pkgs.procps}/bin/pidof hyprlock || ${swaymsg} exec ${hyprlock}";
+      events.before-sleep = "${loginctl} lock-session";
       timeouts =
-        let
-          swaymsg = "${inputs.swayfx.packages.${pkgs.stdenv.system}.default}/bin/swaymsg";
-          loginctl = "${pkgs.systemd}/bin/loginctl";
-          systemctl = "${pkgs.systemd}/bin/systemctl";
-        in
         [
           {
             timeout = 300;
