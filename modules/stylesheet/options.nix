@@ -26,9 +26,24 @@
         type = lib.types.str;
         description = "Family for bars, menus, notifications, window titles (also ghostty and zathura, historically).";
       };
-      mono = lib.mkOption {
+      kitty = lib.mkOption {
         type = lib.types.str;
         description = "Monospace family (kitty).";
+      };
+      kitty_bold = lib.mkOption {
+        type = lib.types.str;
+        description = "Kitty bold_font.";
+        default = "auto";
+      };
+      kitty_italic = lib.mkOption {
+        type = lib.types.str;
+        description = "Kitty italic_font.";
+        default = "auto";
+      };
+      kitty_bold_italic = lib.mkOption {
+        type = lib.types.str;
+        description = "Kitty bold_italic_font.";
+        default = "auto";
       };
       monoLiga = lib.mkOption {
         type = lib.types.str;

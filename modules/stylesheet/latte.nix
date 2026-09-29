@@ -43,7 +43,7 @@
 
     fonts = {
       ui = "PragmataPro";
-      mono = "PragmataPro Mono";
+      kitty = "PragmataPro Mono";
       monoLiga = "PragmataPro Mono Liga";
     };
 

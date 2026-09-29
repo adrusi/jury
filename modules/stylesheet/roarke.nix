@@ -1,10 +1,12 @@
-{ ... }:
+{ pkgs, ... }:
 {
   # Catppuccin Latte at kerapace-era sizes, as extracted from the
   # formerly-inline definitions. To make a new stylesheet, copy this file and
   # point the host's stylesheet import at the copy (pairing it with a font
   # module that provides the families named under `fonts`).
   imports = [ ./options.nix ];
+
+  fonts.packages = [ pkgs.noto-fonts pkgs.nerd-fonts.noto ];
 
   stylesheet = {
     colors = {
@@ -42,16 +44,19 @@
     };
 
     fonts = {
-      ui = "PragmataPro";
-      mono = "PragmataPro Mono";
-      monoLiga = "PragmataPro Mono Liga";
+      ui = "NotoSans NFP Cond";
+      kitty = "family='NotoSansM Nerd Font Mono' style='Condensed Regular'";
+      kitty_bold = "family='NotoSansM Nerd Font Mono' style='Condensed SemiBold'";
+      kitty_italic = "family='NotoSansM Nerd Font Mono' style='Condensed Regular'";
+      kitty_bold_italic = "family='NotoSansM Nerd Font Mono' style='Condensed SemiBold'";
+      monoLiga = "NotoSansM NFM ExtCond";
     };
 
     sizes = {
       wm = 12;
       bar = 16;
       menu = 20;
-      kitty = 16.0;
+      kitty = 13.0;
       ghostty = 16;
       zathura = 16;
       zedBuffer = 18;

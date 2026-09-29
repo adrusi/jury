@@ -48,7 +48,10 @@ in {
         enable_audio_bell = false;
         visual_bell_duration = 0.05;
         allow_remote_control = true;
-        font_family = config.stylesheet.fonts.mono;
+        font_family = config.stylesheet.fonts.kitty;
+        bold_font = config.stylesheet.fonts.kitty_bold;
+        italic_font = config.stylesheet.fonts.kitty_italic;
+        bold_italic_font = config.stylesheet.fonts.kitty_bold_italic;
         font_size = config.stylesheet.sizes.kitty;
         window_padding_width = 6;
 
