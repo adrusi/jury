@@ -63,6 +63,12 @@ username:
           "layers.offmainthreadcomposition.async-animations" = true;
           "layers.async-video.enabled" = true;
           "html5.offmainthread" = true;
+        }
+        // lib.optionalAttrs (config.stylesheet.toolkitScale != 1.0) {
+          "layout.css.devPixelsPerPx" = config.stylesheet.toolkitScale;
+          # firefox would otherwise stack gtk's text-scaling-factor (set to the
+          # same toolkitScale) on top of devPixelsPerPx
+          "ui.textScaleFactor" = 100;
         };
 
         extensions = {

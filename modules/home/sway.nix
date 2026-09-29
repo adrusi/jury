@@ -24,6 +24,9 @@ let
     ;
   gaps = toString dims.gaps;
 
+  hmCfg = config.home-manager.users.${username};
+  swayCfg = hmCfg.wayland.windowManager.sway;
+
   # "#rrggbb" -> "r, g, b" (decimal), for CSS rgb()/rgba()
   rgbCsv =
     hex:
@@ -51,6 +54,9 @@ in
       MOZ_USE_XINPUT2 = 1;
       MOZ_X11_EGL = 1;
       NIXOS_OZONE_WL = 1;
+    }
+    // lib.optionalAttrs (config.stylesheet.toolkitScale != 1.0) {
+      QT_SCALE_FACTOR = config.stylesheet.toolkitScale;
     };
 
     home.packages = [
@@ -75,6 +81,15 @@ in
       };
       gtk.enable = true;
     };
+
+    dconf.settings = lib.mkMerge [
+      (lib.mkIf (config.stylesheet.colorScheme != "default") {
+        "org/gnome/desktop/interface".color-scheme = config.stylesheet.colorScheme;
+      })
+      (lib.mkIf (config.stylesheet.toolkitScale != 1.0) {
+        "org/gnome/desktop/interface".text-scaling-factor = config.stylesheet.toolkitScale;
+      })
+    ];
 
     services.udiskie = {
       enable = true;
@@ -389,8 +404,22 @@ in
     
     wayland.windowManager.sway = {
       enable = true;
-      package = inputs.swayfx.packages.${pkgs.stdenv.system}.default;
+      # The swayfx flake only exports the unwrapped build, so run it through
+      # nixpkgs' sway wrapper ourselves (as nixpkgs' own swayfx does); setting
+      # `package` means home-manager no longer applies wrapperFeatures and
+      # extraSessionCommands for us.
+      package = pkgs.sway.override {
+        sway-unwrapped = inputs.swayfx.packages.${pkgs.stdenv.system}.default;
+        inherit (swayCfg) extraSessionCommands;
+        withBaseWrapper = swayCfg.wrapperFeatures.base;
+        withGtkWrapper = swayCfg.wrapperFeatures.gtk;
+      };
       wrapperFeatures.gtk = true;
+      # gdm launches sway without a login shell, so nothing else would put
+      # home.sessionVariables into the session
+      extraSessionCommands = ''
+        . "${hmCfg.home.sessionVariablesPackage}/etc/profile.d/hm-session-vars.sh"
+      '';
       checkConfig = false;
       systemd.enable = true;
 

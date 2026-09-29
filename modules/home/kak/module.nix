@@ -15,6 +15,7 @@ username:
       ".config/kak-lsp/kak-lsp.toml".source = ./kak-lsp.toml;
       ".config/kak/colors/adrusi.kak".source = ./adrusi.kak;
       ".config/kak/colors/latte.kak".source = ./latte.kak;
+      ".config/kak/colors/mocha.kak".source = ./mocha.kak;
     };
 
     home.packages = [

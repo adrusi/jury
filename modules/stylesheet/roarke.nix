@@ -1,46 +1,43 @@
 { pkgs, ... }:
 {
-  # Catppuccin Latte at kerapace-era sizes, as extracted from the
-  # formerly-inline definitions. To make a new stylesheet, copy this file and
-  # point the host's stylesheet import at the copy (pairing it with a font
-  # module that provides the families named under `fonts`).
+  # Catppuccin Mocha, sized for the Framework's 2256x1504 13.5" panel.
   imports = [ ./options.nix ];
 
   fonts.packages = [ pkgs.noto-fonts pkgs.nerd-fonts.noto ];
 
   stylesheet = {
     colors = {
-      # ---- semantic roles (old catppuccin latte name in comments) ----
-      bg = "#eff1f5"; # base
-      fg = "#4c4f69"; # text
-      accent = "#7287fd"; # lavender: focused borders, highlights, statusbars
-      accent2 = "#8839ef"; # mauve: kitty active tab, mark2
-      accent3 = "#209fb5"; # sapphire: kitty mark3
-      error = "#fe640b"; # peach: urgent workspaces, failed unlock, critical battery
-      warning = "#df8e1d"; # yellow: kitty bell border
-      muted = "#9ca0b0"; # overlay0: inactive borders and tabs
-      fgDim = "#7c7f93"; # overlay2: kitty scrollbar handle
-      surface = "#bcc0cc"; # surface1: kitty scrollbar track and tab bar
-      cursor = "#dc8a78"; # rosewater: cursor, URL hover, kitty selection
-      selection = "#d8dae1"; # ghostty selection background
+      # ---- semantic roles (catppuccin mocha name in comments) ----
+      bg = "#1e1e2e"; # base
+      fg = "#cdd6f4"; # text
+      accent = "#b4befe"; # lavender: focused borders, highlights, statusbars
+      accent2 = "#cba6f7"; # mauve: kitty active tab, mark2
+      accent3 = "#74c7ec"; # sapphire: kitty mark3
+      error = "#fab387"; # peach: urgent workspaces, failed unlock, critical battery
+      warning = "#f9e2af"; # yellow: kitty bell border
+      muted = "#6c7086"; # overlay0: inactive borders and tabs
+      fgDim = "#9399b2"; # overlay2: kitty scrollbar handle
+      surface = "#45475a"; # surface1: kitty scrollbar track and tab bar
+      cursor = "#f5e0dc"; # rosewater: cursor, URL hover, kitty selection
+      selection = "#353749"; # ghostty selection background
 
       # ---- terminal colors ----
-      color0 = "#5c5f77"; # black
-      color1 = "#d20f39"; # red
-      color2 = "#40a02b"; # green
-      color3 = "#df8e1d"; # yellow
-      color4 = "#1e66f5"; # blue
-      color5 = "#ea76cb"; # magenta (also zathura's inputbar)
-      color6 = "#179299"; # cyan
-      color7 = "#acb0be"; # white
-      color8 = "#6c6f85"; # bright black
-      color9 = "#d20f39"; # bright red
-      color10 = "#40a02b"; # bright green
-      color11 = "#df8e1d"; # bright yellow
-      color12 = "#1e66f5"; # bright blue
-      color13 = "#ea76cb"; # bright magenta
-      color14 = "#179299"; # bright cyan
-      color15 = "#bcc0cc"; # bright white
+      color0 = "#45475a"; # black
+      color1 = "#f38ba8"; # red
+      color2 = "#a6e3a1"; # green
+      color3 = "#f9e2af"; # yellow
+      color4 = "#89b4fa"; # blue
+      color5 = "#f5c2e7"; # magenta (also zathura's inputbar)
+      color6 = "#94e2d5"; # cyan
+      color7 = "#bac2de"; # white
+      color8 = "#585b70"; # bright black
+      color9 = "#f38ba8"; # bright red
+      color10 = "#a6e3a1"; # bright green
+      color11 = "#f9e2af"; # bright yellow
+      color12 = "#89b4fa"; # bright blue
+      color13 = "#f5c2e7"; # bright magenta
+      color14 = "#94e2d5"; # bright cyan
+      color15 = "#a6adc8"; # bright white
     };
 
     fonts = {
@@ -79,11 +76,13 @@
       cursorSize = 36;
     };
 
-    vivid = "catppuccin-latte";
-    kak.colorscheme = "latte";
+    toolkitScale = 1.25;
+    colorScheme = "prefer-dark";
+    vivid = "catppuccin-mocha";
+    kak.colorscheme = "mocha";
     zed = {
-      theme = "Catppuccin Latte";
-      iconTheme = "Catppuccin Latte";
+      theme = "Catppuccin Mocha";
+      iconTheme = "Catppuccin Mocha";
       extensions = [
         "catppuccin"
         "catppuccin-icons"

@@ -113,6 +113,30 @@
       };
     };
 
+    toolkitScale = lib.mkOption {
+      type = lib.types.float;
+      description = ''
+        Scale factor for apps the stylesheet doesn't size directly, applied
+        through each toolkit's own knob (GTK text-scaling-factor, Qt, Steam,
+        Firefox devPixelsPerPx). Outputs themselves stay at scale 1; the
+        stylesheet's sizes and dims are in device pixels for the host's
+        built-in display.
+      '';
+    };
+
+    colorScheme = lib.mkOption {
+      type = lib.types.enum [
+        "default"
+        "prefer-dark"
+        "prefer-light"
+      ];
+      description = ''
+        org.gnome.desktop.interface color-scheme, followed by libadwaita/GTK4
+        apps and portal-aware apps (firefox, electron, qt6). "default" leaves
+        dconf untouched.
+      '';
+    };
+
     vivid = lib.mkOption {
       type = lib.types.str;
       description = "vivid theme name used to generate LS_COLORS.";

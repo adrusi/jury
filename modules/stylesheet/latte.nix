@@ -74,6 +74,8 @@
       cursorSize = 24;
     };
 
+    toolkitScale = 1.0;
+    colorScheme = "default";
     vivid = "catppuccin-latte";
     kak.colorscheme = "latte";
     zed = {

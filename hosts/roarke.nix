@@ -13,9 +13,7 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     ./common.nix
 
-    # stylesheet + font module (swappable per host): same as the work machines
-    # for now; to restyle this host, copy latte.nix, iterate on the copy, and
-    # pair it with a font module providing the families it names
+    # stylesheet + font module (swappable per host)
     ../modules/stylesheet/roarke.nix
     (import ../modules/home/pragmatapro.nix "autumn")
   ];
@@ -123,8 +121,11 @@
     wayland.windowManager.sway.config.input."type:touchpad" = {
       tap = "disabled";
       dwt = "disabled";
+      click_method = "clickfinger";
+      clickfinger_button_map = "lrm";
+      middle_emulation = "enabled";
+      drag = "disabled";
     };
-    programs.firefox.profiles.default.settings."layout.css.devPixelsPerPx" = 1.25;
   };
 
   # --- state versions (fresh install on 26.05) ---
