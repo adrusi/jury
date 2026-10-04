@@ -3,7 +3,7 @@
   # Catppuccin Mocha, sized for the Framework's 2256x1504 13.5" panel.
   imports = [ ./options.nix ];
 
-  fonts.packages = [ pkgs.noto-fonts pkgs.nerd-fonts.noto ];
+  fonts.packages = [ pkgs.noto-fonts pkgs.nerd-fonts.noto pkgs.noto-sans-condensed-static ];
 
   stylesheet = {
     colors = {

@@ -80,6 +80,7 @@
         obsidian-catppuccin-theme = import ./packages/obsidian-catppuccin-theme.nix { pkgs = final; };
         notable-firefox-addon = import ./packages/notable.nix { pkgs = final; inherit inputs; };
         claude-desktop = import ./packages/claude-desktop.nix { pkgs = final; };
+        noto-sans-condensed-static = import ./packages/noto-condensed.nix { pkgs = final; };
       };
       remotePackagesOverlay = final: prev: {
         dmodel-issue-tracker = dmodel-issue.packages.${prev.stdenv.system}.default;
