@@ -25,7 +25,7 @@ username:
         share = false;
       };
 
-      initExtraBeforeCompInit = "";
+      # initExtraBeforeCompInit = "";
 
       initContent = ''
         export LS_COLORS="$(${lib.getBin pkgs.vivid}/bin/vivid generate ${config.stylesheet.vivid})"

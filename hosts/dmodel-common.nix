@@ -19,6 +19,7 @@
     (import ../modules/home/pragmatapro.nix "autumn")
 
     (import ../modules/home/dmodel/module.nix "autumn")
+    ../modules/system/fprintd.nix
   ];
 
   # Secret Service (org.freedesktop.secrets) provider, used by `rl` to fetch

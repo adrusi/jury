@@ -429,7 +429,7 @@ in
       config = {
         modifier = mod;
         terminal = pkgs.kitty;
-        fonts = [ "${fonts.ui} ${toString sizes.wm}" ];
+        fonts = { names = [ "${fonts.ui}"]; size = "${toString sizes.wm}"; };
 
         bars = [];
 
