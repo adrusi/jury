@@ -17,6 +17,7 @@
     ../modules/stylesheet/roarke.nix
     (import ../modules/home/pragmatapro.nix "autumn")
 
+    ../modules/system/berkeley-mono.nix
     ../modules/system/fprintd.nix
   ];
 

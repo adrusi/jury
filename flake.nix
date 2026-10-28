@@ -75,6 +75,10 @@
           pkgs = final;
           inherit inputs;
         };
+        berkeley-mono-font = import ./packages/berkeley-mono.nix {
+          pkgs = final;
+          inherit inputs;
+        };
         obsidian-git = import ./packages/obsidian-git.nix { pkgs = final; };
         obsidian-lesswrong-theme = import ./packages/obsidian-lesswrong-theme.nix { pkgs = final; };
         obsidian-catppuccin-theme = import ./packages/obsidian-catppuccin-theme.nix { pkgs = final; };
