@@ -5,7 +5,7 @@ pkgs.stdenvNoCC.mkDerivation {
   # one zip per width (Normal, SemiCondensed, Condensed, ExtraCondensed,
   # UltraCondensed); each nests its .otf files under random ticket dirs
   srcs = map (width: "${inputs.pragmatapro}/BerkeleyMono${width}.zip") [
-    "Normal"
+    ""
     "SemiCondensed"
     "Condensed"
     "ExtraCondensed"
@@ -22,7 +22,7 @@ pkgs.stdenvNoCC.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    find . -name '*.otf' -exec install -Dm644 {} -t $out/share/fonts/opentype \;
+    find . -name '*.ttf' -exec install -Dm644 {} -t $out/share/fonts/truetype \;
     runHook postInstall
   '';
 }
