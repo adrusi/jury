@@ -54,6 +54,7 @@
       pkgs.slack
       pkgs.ripcord
       pkgs.awscli2
+      pkgs.python314Packages.modal
     ];
 
     programs.git.settings.user.email = lib.mkForce "autumn@dmodel.ai";
