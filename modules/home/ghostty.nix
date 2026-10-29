@@ -21,8 +21,34 @@ in
       enableZshIntegration = true;
       enableBashIntegration = true;
 
+      # sway does all window management, so drop every default (tabs, splits,
+      # alt+digit goto_tab, ...) and bind only what we actually want back
+      clearDefaultKeybinds = true;
+
       settings = {
-        font-family = config.stylesheet.fonts.ui;
+        keybind = [
+          "ctrl+shift+c=copy_to_clipboard"
+          "ctrl+shift+v=paste_from_clipboard"
+          "ctrl+shift+equal=increase_font_size:1"
+          "ctrl+shift+minus=decrease_font_size:1"
+          "ctrl+shift+digit_0=reset_font_size"
+          "ctrl+shift+page_up=scroll_page_up"
+          "ctrl+shift+page_down=scroll_page_down"
+          "ctrl+shift+n=new_window"
+          "ctrl+shift+f=start_search"
+          # performable: so escape still reaches the program outside of search
+          "performable:escape=end_search"
+          "ctrl+shift+comma=reload_config"
+        ];
+        right-click-action = "ignore"; # context menu offers tabs and splits
+        window-show-tab-bar = "never";
+
+        scrollback-limit-lines = 100000;
+        confirm-close-surface = false;
+        window-padding-x = 6;
+        window-padding-y = 6;
+
+        font-family = config.stylesheet.fonts.monoLiga;
         font-size = config.stylesheet.sizes.ghostty;
         theme = "jury";
       };

@@ -1,7 +1,7 @@
 { lib, ... }:
 {
   # Declarations for the stylesheet interface consumed by the UI modules
-  # (sway, kitty, ghostty, zathura, zed, zsh, kak, vscode). A stylesheet
+  # (sway, ghostty, zathura, zed, zsh, kak, vscode). A stylesheet
   # module (latte.nix and future siblings) defines *all* of these values —
   # there are no hidden defaults — so copying an existing stylesheet gives a
   # complete starting point. Each host imports exactly one stylesheet, plus a
@@ -24,30 +24,11 @@
     fonts = {
       ui = lib.mkOption {
         type = lib.types.str;
-        description = "Family for bars, menus, notifications, window titles (also ghostty and zathura, historically).";
-      };
-      kitty = lib.mkOption {
-        type = lib.types.str;
-        description = "Monospace family (kitty).";
-      };
-      kitty_bold = lib.mkOption {
-        type = lib.types.str;
-        description = "Kitty bold_font.";
-        default = "auto";
-      };
-      kitty_italic = lib.mkOption {
-        type = lib.types.str;
-        description = "Kitty italic_font.";
-        default = "auto";
-      };
-      kitty_bold_italic = lib.mkOption {
-        type = lib.types.str;
-        description = "Kitty bold_italic_font.";
-        default = "auto";
+        description = "Family for bars, menus, notifications, window titles (also zathura, historically).";
       };
       monoLiga = lib.mkOption {
         type = lib.types.str;
-        description = "Monospace family with ligatures (zed, vscode).";
+        description = "Monospace family with ligatures (ghostty, zed, vscode).";
       };
     };
 
@@ -65,7 +46,6 @@
         type = lib.types.int;
         description = "Pixel size for wofi.";
       };
-      kitty = lib.mkOption { type = lib.types.float; };
       ghostty = lib.mkOption { type = lib.types.int; };
       zathura = lib.mkOption { type = lib.types.int; };
       zedBuffer = lib.mkOption { type = lib.types.int; };
@@ -106,6 +86,10 @@
       vtabWidth = lib.mkOption {
         type = lib.types.int;
         description = "swayfx vertical tab sidebar width (px).";
+      };
+      vtabPadding = lib.mkOption {
+        type = lib.types.int;
+        description = "swayfx vertical tab top/bottom padding (px).";
       };
       cursorSize = lib.mkOption {
         type = lib.types.int;

@@ -3,7 +3,7 @@
   # Catppuccin Mocha, sized for the Framework's 2256x1504 13.5" panel.
   imports = [ ./options.nix ];
 
-  fonts.packages = [ pkgs.noto-fonts pkgs.nerd-fonts.noto pkgs.noto-sans-condensed-static ];
+  fonts.packages = [ pkgs.noto-fonts pkgs.nerd-fonts.noto pkgs.noto-sans-condensed-static pkgs.berkeley-mono-font pkgs.corefonts ];
 
   stylesheet = {
     colors = {
@@ -41,20 +41,16 @@
     };
 
     fonts = {
-      ui = "NotoSans NFP Cond";
-      kitty = "family='NotoSansM Nerd Font Mono' style='Condensed Regular'";
-      kitty_bold = "family='NotoSansM Nerd Font Mono' style='Condensed SemiBold'";
-      kitty_italic = "family='NotoSansM Nerd Font Mono' style='Condensed Regular'";
-      kitty_bold_italic = "family='NotoSansM Nerd Font Mono' style='Condensed SemiBold'";
-      monoLiga = "NotoSansM NFM ExtCond";
+      # ui = "NotoSans NFP Cond";
+      ui = "Arial";
+      monoLiga = "Berkeley Mono Condensed";
     };
 
     sizes = {
-      wm = 12;
-      bar = 16;
+      wm = 13;
+      bar = 17;
       menu = 20;
-      kitty = 13.0;
-      ghostty = 16;
+      ghostty = 12;
       zathura = 16;
       zedBuffer = 18;
       zedUi = 20;
@@ -68,7 +64,8 @@
         horizontal = 9;
         vertical = 6;
       };
-      cornerRadius = 8;
+      cornerRadius = 4;
+      vtabPadding = 12;
       menuWidth = 800;
       menuHeight = 600;
       notificationWidth = 400;

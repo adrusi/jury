@@ -461,15 +461,12 @@ map -docstring 'evaluate toplevel form in the REPL' global my-rep e ': rep-evalu
 map -docstring 'evaluate the selection in the REPL' global my-rep s ': rep-evaluate-selection<ret>'
 map -docstring 'evaluate this file in the REPL'     global my-rep f ': rep-evaluate-file<ret>'
 
-# kitty
-# define-command -params 1.. -shell-completion -override kitty-os-terminal %{
-#     evaluate-commands %sh{
-#         kitty @ launch --type=os-window --env DIRENV_DISABLE=1 --cwd="$PWD" -- "$@" >/dev/null || echo 'fail %{kitty-os-terminal: failure running `kitty @`, see `:buffer *debug*`}'
-#     }
-# }
-require-module kitty
-set-option global kitty_window_type os-window
-alias global terminal kitty-terminal-window
+# new clients: the stock windowing detection picks the sway (or plain wayland)
+# module, which spawns a detached `termcmd` per window. `ghostty -e` always
+# starts its own process, so nothing has to talk back to the parent terminal.
+hook global ModuleLoaded wayland %{
+    set-option global termcmd 'ghostty -e sh -c'
+}
 map global normal <c-n> ": terminal kak -c %val{session}<ret>"
 
 # project-specific config loading

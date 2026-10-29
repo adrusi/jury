@@ -114,7 +114,7 @@ in
         height = dims.menuHeight;
         always_parse_args = true;
         show_all = false;
-        term = "kitty";
+        term = "ghostty";
         hide_scroll = true;
         print_command = true;
         insensitive = true;
@@ -428,7 +428,7 @@ in
 
       config = {
         modifier = mod;
-        terminal = pkgs.kitty;
+        terminal = "${pkgs.ghostty}/bin/ghostty";
         fonts = { names = [ "${fonts.ui}"]; size = "${toString sizes.wm}"; };
 
         bars = [];
@@ -479,7 +479,7 @@ in
           "${mod}+Space" = "focus mode_toggle";
           "${mod}+Shift+Space" = "floating toggle";
 
-          "${mod}+Return" = "exec --no-startup-id ${pkgs.kitty}/bin/kitty --single-instance --instance-group=sway";
+          "${mod}+Return" = "exec --no-startup-id ${pkgs.ghostty}/bin/ghostty";
           "${mod}+Tab" = "exec --no-startup-id wofi --show drun,run";
           "${mod}+t" = "exec --no-startup-id ${pkgs.firefox}/bin/firefox --new-window";
 
@@ -523,7 +523,7 @@ in
       
         vtab_width ${toString dims.vtabWidth}
         vtab_position left
-        vtab_padding ${toString (dims.cornerRadius * 5 / 4)}
+        vtab_padding ${toString (dims.vtabPadding)}
         corner_radius ${toString dims.cornerRadius}
         default_border normal ${toString dims.borderWidth}
         titlebar_padding ${toString dims.titlebarPadding.horizontal} ${toString dims.titlebarPadding.vertical}

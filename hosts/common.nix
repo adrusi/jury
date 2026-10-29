@@ -42,7 +42,6 @@
     (import ../modules/home/firefox.nix "autumn")
     (import ../modules/home/ghostty.nix "autumn")
     (import ../modules/home/git.nix "autumn")
-    (import ../modules/home/kitty.nix "autumn")
     (import ../modules/home/kak/module.nix "autumn")
     (import ../modules/home/mpv.nix "autumn")
     (import ../modules/home/sway.nix "autumn")
@@ -107,7 +106,7 @@
 
   environment.systemPackages = [
     pkgs.wget
-    pkgs.kitty
+    pkgs.ghostty.terminfo # system-wide so root and sudo get it too
   ];
   environment.variables.EDITOR = "kak";
 

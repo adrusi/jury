@@ -165,7 +165,7 @@ in
 
   environment.systemPackages = [
     pkgs.wget
-    pkgs.kitty # need terminfo entry
+    pkgs.ghostty.terminfo # need terminfo entry
   ];
   environment.variables.EDITOR = "kak";
 

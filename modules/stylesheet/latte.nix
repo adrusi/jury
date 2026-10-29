@@ -43,7 +43,6 @@
 
     fonts = {
       ui = "PragmataPro";
-      kitty = "PragmataPro Mono";
       monoLiga = "PragmataPro Mono Liga";
     };
 
@@ -51,7 +50,6 @@
       wm = 9;
       bar = 13;
       menu = 14;
-      kitty = 12.0;
       ghostty = 11;
       zathura = 10;
       zedBuffer = 14;
@@ -67,6 +65,7 @@
         vertical = 4;
       };
       cornerRadius = 6;
+      vtabPadding = 4;
       menuWidth = 640;
       menuHeight = 480;
       notificationWidth = 300;

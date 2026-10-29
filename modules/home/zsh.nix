@@ -78,7 +78,7 @@ username:
           elif [ -n "$VSCODE_INTEFRATED_TERMINAL" ]; then
          	  printf %s\\n "$reset\''${vcs_info_msg_0_}$reset$italic$magenta/\$(realpath --relative-to=\"\$VSCODE_WORKSPACE_ROOT\" \"\$PWD\" | sed 's/^\.\$//') $reset"
           else
-           	printf %s\\n "$reset$cyan%D{%d}$reset$italic%D{%h}$reset$cyan%D{%-H:%M}$reset $([ "$IN_KAKOUNE_CONNECT" ] && printf '[kak %s] ' "$KAKOUNE_SESSION")$italic$cyan%n$reset@$italic''${magenta}%m$reset:$italic$cyan%1~\''${vcs_info_msg_0_} $reset%(#.#.\$) "
+           	printf %s\\n "$reset$cyan%n$reset@''${magenta}%m$reset:$italic$cyan%1~\''${vcs_info_msg_0_} $reset%(#.#.\$) "
           fi
 
           printf %s\\n ""
