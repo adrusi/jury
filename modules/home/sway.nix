@@ -328,7 +328,7 @@ in
       };
       style = ''
         * {
-          font-family: ${fonts.uiDisplay}, NotoSans NFP Cond;
+          font-family: ${fonts.ui}, NotoSans NFP Cond;
           font-size: ${toString sizes.bar}px;
           min-height: 0;
         }
