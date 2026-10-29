@@ -46,7 +46,7 @@ grooves, or recessed wells.
 4. **Signal follows the mode.** Amber on dark, blue on light. Each mode's
    second terminal hue is the other mode's signal, so both machines use the
    same two hues in swapped roles.
-5. **Focus is the frame.** 4px gaps, a 1px `rule` frame on every window, and a
+5. **Focus is the frame.** 6px gaps, a 1px `rule` frame on every window, and a
    1px `signal` frame on the focused one. No surface lights up as a whole to
    show focus.
 6. **Selection is tint plus rule, always both.** A selected item gets a tinted
@@ -185,7 +185,7 @@ dimensions, not in this spec.
 | Element                         | Value                                     |
 |---------------------------------|-------------------------------------------|
 | Corner radius                   | 0 everywhere                              |
-| Window gaps (inner and outer)   | 4px, including between the bar and windows |
+| Window gaps (inner and outer)   | 6px, including between the bar and windows |
 | Window frame                    | 1px `rule`; 1px `signal` when focused     |
 | Selection rule, horizontal strip| 2px, top edge                             |
 | Selection rule, vertical strip  | 3px, left edge                            |
@@ -216,7 +216,7 @@ Hover and pressed states aren't specified yet.
 
 ### 7.1 swayfx
 
-- `gaps inner 4`, `gaps outer 0` (outer spacing comes from the inner gap at
+- `gaps inner 6`, `gaps outer 0` (outer spacing comes from the inner gap at
   the screen edges; verify against the bar).
 - `default_border pixel 1`. Effects (`blur`, `shadows`, `corner_radius`,
   `default_dim_inactive`) are off.
@@ -239,6 +239,10 @@ Hover and pressed states aren't specified yet.
 ### 7.2 waybar
 
 - Background `panel`, no bottom rule.
+- Height matches a sway titlebar, so workspace buttons line up with tab rows.
+- Binding modes (resize, vtab) are a keyboard state, not a selection: the
+  mode name as an inverted legend (`ink` field, `panel` text), never the
+  selection tint.
 - Workspaces: `button.focused` gets `seltint` background, `signal` text, and
   `box-shadow: inset 0 2px <signal>`. Visible-but-unfocused workspaces on
   other outputs get the off-path treatment. `button.urgent` gets `alarm` text

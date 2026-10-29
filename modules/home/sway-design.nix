@@ -116,6 +116,11 @@ in
     # ---- waybar (section 7.2) ----
     programs.waybar = {
       settings.mainBar = {
+        # as tall as a sway titlebar, so the bar and the tab rows line up
+        height = dims.barHeight;
+        # a binding mode is a state of the keyboard, not a selection: an
+        # inverted legend, distinct from the workspace buttons
+        "sway/mode".format = legend "{}";
         # Where a module's tooltip defaults to its format, waybar shows the
         # markup literally, so every marked-up module gets a plain tooltip.
         clock.format = value "{:%Y-%m-%d %H:%M}";
@@ -197,9 +202,10 @@ in
         }
 
         #mode {
-          color: ${p.signal};
-          background: ${p.seltint};
-          border-top-color: ${p.signal};
+          color: ${p.panel};
+          background: ${p.ink};
+          border-top-width: 0;
+          margin: 0 ${px dims.gaps};
         }
 
         #battery {

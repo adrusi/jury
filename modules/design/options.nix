@@ -40,6 +40,7 @@
       dims = {
         titleSize = int "Point size for sway titles and mako notifications.";
         barSize = int "Pixel size for waybar text.";
+        barHeight = int "Waybar height; match sway's titlebar height (title font height + 2 x titlebarPadding.vertical).";
         menuSize = int "Pixel size for wofi text; also scales the lock screen.";
         gaps = int "Sway inner gaps, and the gap between the bar and windows.";
         frame = int "Window frame width; also wofi, mako and lock input borders.";

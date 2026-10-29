@@ -144,8 +144,9 @@
     dims = {
       titleSize = 14;
       barSize = 18;
+      barHeight = 37; # measured sway titlebar height at titleSize 14
       menuSize = 20;
-      gaps = 4;
+      gaps = 6;
       frame = 1;
       selectionRule = {
         horizontal = 2;
