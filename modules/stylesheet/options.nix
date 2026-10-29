@@ -24,7 +24,11 @@
     fonts = {
       ui = lib.mkOption {
         type = lib.types.str;
-        description = "Family for bars, menus, notifications, window titles (also zathura, historically).";
+        description = "Copy family for bars, menus, notifications, window titles (also zathura, historically).";
+      };
+      uiDisplay = lib.mkOption {
+        type = lib.types.str;
+        description = "Display family for bars, menus, notifications, window titles (also zathura, historically).";
       };
       monoLiga = lib.mkOption {
         type = lib.types.str;

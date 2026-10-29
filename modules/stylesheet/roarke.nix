@@ -3,7 +3,7 @@
   # Catppuccin Mocha, sized for the Framework's 2256x1504 13.5" panel.
   imports = [ ./options.nix ];
 
-  fonts.packages = [ pkgs.noto-fonts pkgs.nerd-fonts.noto pkgs.noto-sans-condensed-static pkgs.berkeley-mono-font pkgs.corefonts ];
+  fonts.packages = [ pkgs.noto-fonts pkgs.nerd-fonts.noto pkgs.noto-sans-condensed-static pkgs.berkeley-mono-font pkgs.corefonts pkgs.classic-fonts pkgs.ff-din-font];
 
   stylesheet = {
     colors = {
@@ -42,13 +42,14 @@
 
     fonts = {
       # ui = "NotoSans NFP Cond";
-      ui = "Arial";
+      uiDisplay = "DIN Pro";
+      ui = "DIN Pro";
       monoLiga = "Berkeley Mono Condensed";
     };
 
     sizes = {
-      wm = 13;
-      bar = 17;
+      wm = 14;
+      bar = 18;
       menu = 20;
       ghostty = 12;
       zathura = 16;

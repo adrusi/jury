@@ -42,6 +42,7 @@
     };
 
     fonts = {
+      uiDisplay = "PragmataPro";
       ui = "PragmataPro";
       monoLiga = "PragmataPro Mono Liga";
     };

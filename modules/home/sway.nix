@@ -51,6 +51,8 @@ in
   # password auth for hyprlock (fingerprint goes to fprintd directly, not pam)
   security.pam.services.hyprlock = { };
 
+  fonts.packages = [ pkgs.nerd-fonts.noto ];
+
   home-manager.users.${username} = {
     home.sessionVariables = {
       MOZ_ENABLE_WAYLAND = 1;
@@ -326,7 +328,7 @@ in
       };
       style = ''
         * {
-          font-family: ${fonts.ui};
+          font-family: ${fonts.uiDisplay}, NotoSans NFP Cond;
           font-size: ${toString sizes.bar}px;
           min-height: 0;
         }
@@ -619,7 +621,7 @@ in
             {
               text = "$TIME";
               color = rgb fg;
-              font_family = fonts.ui;
+              font_family = fonts.uiDisplay;
               font_size = sizes.menu * 4;
               position = "0, ${toString (sizes.menu * 4)}";
               halign = "center";

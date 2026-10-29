@@ -79,6 +79,18 @@
           pkgs = final;
           inherit inputs;
         };
+        classic-fonts = import ./packages/classic-fonts.nix {
+          pkgs = final;
+          inherit inputs;
+        };
+        d-din-font = import ./packages/d-din-font.nix {
+          pkgs = final;
+          inherit inputs;
+        };
+        ff-din-font = import ./packages/ff-din-font.nix {
+          pkgs = final;
+          inherit inputs;
+        };
         obsidian-git = import ./packages/obsidian-git.nix { pkgs = final; };
         obsidian-lesswrong-theme = import ./packages/obsidian-lesswrong-theme.nix { pkgs = final; };
         obsidian-catppuccin-theme = import ./packages/obsidian-catppuccin-theme.nix { pkgs = final; };
