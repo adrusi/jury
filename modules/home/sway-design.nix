@@ -111,21 +111,29 @@ in
     # ---- waybar (section 7.2) ----
     programs.waybar = {
       settings.mainBar = {
+        # Where a module's tooltip defaults to its format, waybar shows the
+        # markup literally, so every marked-up module gets a plain tooltip.
         clock.format = value "{:%Y-%m-%d %H:%M}";
         network = {
           format-wifi = field "Net" (value "{signalStrength}%");
           format-ethernet = field "Eth" (value "{ifname}");
           format-disconnected = field "Net" (quiet "off");
+          tooltip-format-disconnected = "Disconnected";
         };
-        backlight.format = field "Brt" (value "{percent}%");
+        backlight = {
+          format = field "Brt" (value "{percent}%");
+          tooltip-format = "Brightness {percent}%";
+        };
         battery = {
           format = field "Bat" (value "{capacity}%");
           format-charging = field "Chg" (value "{capacity}%");
           format-plugged = field "AC" (value "{capacity}%");
+          tooltip-format = "{capacity}% · {timeTo}";
         };
         pulseaudio = {
           format = field "Vol" (value "{volume}%");
           format-muted = field "Vol" (quiet "mute");
+          tooltip-format = "{desc} · {volume}%";
         };
       };
       style = ''
