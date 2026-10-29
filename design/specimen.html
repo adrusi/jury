@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roarke Design Language</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a technical document. Ruled section heads, specimens set as numbered figures,
+   rendered live from one token table. Fig. 1 is interactive: click a window to focus it.
+   Faces resolve to the locally installed DIN Pro and Berkeley Mono; Barlow/Plex are fallbacks only. */
+:root {
+  color-scheme: dark;
+  --bg: #0f0f0e;
+  --fg: #e3e0d7;
+  --dim: #8b887f;
+  --rule: #2b2a27;
+  --rule2: #4a4843;
+  --sans: "DIN Pro", "DIN Offc Pro", "DIN OT", "Barlow", sans-serif;
+  --mono: "Berkeley Mono", "IBM Plex Mono", ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg);
+  font: 15px/1.55 var(--sans);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 72px;
+  font-variant-numeric: tabular-nums;
+}
+.page { max-width: 1160px; margin: 0 auto; display: flex; flex-direction: column; gap: 56px; }
+.eyebrow, th { font-family: var(--sans); text-transform: uppercase; letter-spacing: .09em; font-weight: 500; }
+.mono { font-family: var(--mono); font-size: .92em; }
+h1, h2 { font-weight: 500; margin: 0; text-wrap: balance; }
+p { margin: 0; max-width: 66ch; }
+
+.dochead { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end;
+  border-bottom: 3px solid var(--fg); padding-bottom: 14px; }
+.dochead h1 { font-size: clamp(30px, 5vw, 46px); line-height: 1.05; }
+.dochead .eyebrow { font-size: 11px; color: var(--dim); margin-bottom: 10px; }
+.revtable { font-family: var(--mono); font-size: 12px; border-collapse: collapse; }
+.revtable td { padding: 2px 0 2px 16px; border-bottom: 1px solid var(--rule); }
+.revtable td:first-child { padding-left: 0; color: var(--dim); font-family: var(--sans);
+  text-transform: uppercase; letter-spacing: .09em; font-size: 10.5px; }
+.lede { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; }
+.lede p + p { color: var(--dim); }
+
+.sechead { display: grid; grid-template-columns: 64px 1fr; gap: 0 18px; border-top: 1px solid var(--rule2); padding-top: 14px; }
+.sechead .num { font-size: 48px; line-height: .9; font-weight: 500; }
+.sechead h2 { font-size: 26px; line-height: 1.15; }
+.sechead .refs { font-family: var(--mono); font-size: 12px; color: var(--dim); margin-top: 4px; }
+
+.consts { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 0 32px; margin-top: 20px; }
+.const { display: grid; grid-template-columns: 34px 1fr; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--rule); }
+.const .k { font-family: var(--mono); font-size: 12px; color: var(--dim); padding-top: 2px; }
+.const b { font-weight: 500; display: block; }
+.const span { color: var(--dim); font-size: 14px; }
+.const .new { font: 500 9.5px var(--sans); font-style: normal; letter-spacing: .1em; text-transform: uppercase; color: var(--bg); background: var(--fg); padding: 1px 4px; margin-left: 6px; vertical-align: 2px; }
+
+table.chg { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 18px; min-width: 620px; }
+.chg th { text-align: left; font-size: 10.5px; color: var(--dim); padding: 6px 16px 6px 0; border-bottom: 1px solid var(--rule2); }
+.chg td { padding: 9px 16px 9px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.chg td:first-child { color: var(--dim); width: 38%; }
+.scroll { overflow-x: auto; }
+
+.stagebar { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; margin-top: 18px;
+  border-top: 1px solid var(--rule); padding-top: 12px; }
+.ctl { display: inline-flex; align-items: center; gap: 8px; }
+.ctl .tl { font: 500 10.5px var(--sans); text-transform: uppercase; letter-spacing: .09em; color: var(--dim); }
+.toggle { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--rule2); }
+.toggle button { font: 500 11px var(--sans); text-transform: uppercase; letter-spacing: .09em;
+  background: transparent; color: var(--dim); border: 0; padding: 7px 11px; cursor: pointer; }
+.toggle button + button { border-left: 1px solid var(--rule2); }
+.toggle button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.toggle button:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+.note { font-size: 12.5px; color: var(--dim); }
+
+.variant { border-left: 2px solid var(--rule2); padding: 2px 0 2px 12px; display: flex; flex-direction: column; gap: 2px; }
+.variant b { font-weight: 500; }
+.variant p { font-size: 14px; color: var(--dim); }
+
+.swgroup { display: flex; flex-direction: column; gap: 6px; }
+.swgroup > .tl { font: 500 10.5px var(--sans); text-transform: uppercase; letter-spacing: .09em; color: var(--dim); }
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
+.sw { display: grid; grid-template-rows: 30px auto; border: 1px solid var(--rule); font-size: 11px; }
+.sw i { display: block; border-bottom: 1px solid var(--rule); }
+.sw div { padding: 5px 7px; display: flex; justify-content: space-between; gap: 6px; }
+.sw .n { text-transform: uppercase; letter-spacing: .08em; color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sw .h { font-family: var(--mono); }
+
+.figs { display: flex; flex-direction: column; gap: 18px; }
+.figrow { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; align-items: start; }
+figure { margin: 0; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+figcaption { font-size: 12px; color: var(--dim); max-width: 92ch; }
+figcaption b { text-transform: uppercase; letter-spacing: .09em; font-weight: 500; color: var(--fg); margin-right: 8px; font-size: 11px; }
+
+table.feas { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 18px; }
+.feas th { text-align: left; font-size: 10.5px; color: var(--dim); padding: 6px 12px 6px 0; border-bottom: 1px solid var(--rule2); }
+.feas td { padding: 8px 12px 8px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.feas td:first-child { white-space: nowrap; font-family: var(--mono); font-size: 12.5px; }
+.feas td:last-child { color: var(--dim); }
+
+.next { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; margin-top: 18px; }
+.next ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 10px; font-size: 14.5px; }
+.next ol li::marker { font-family: var(--mono); color: var(--dim); }
+
+@media (max-width: 720px) {
+  .dochead, .lede, .next { grid-template-columns: 1fr; }
+  .sechead { grid-template-columns: 44px 1fr; }
+  .sechead .num { font-size: 36px; }
+}
+
+/* =================================================================
+   MOCKS. Every color comes from the stage tokens, filled by the script.
+   --panel: desktop field, bar, tab strips. --paper: client surfaces.
+   Selection = tint + rule on the strip's outer edge, always together.
+   Gaps and borders at real pixel sizes; type scaled down.
+   ================================================================= */
+.stage { --paper:#000; --panel:#000; --rule:#000; --rule2:#000; --heavy:#fff; --ink:#fff; --ink2:#ccc; --dim:#888;
+  --sig:#fa0; --seltint:#000; --selgrey:#000; --alarm:#f00; --gap: 4px; --hy: 2px; --vx: 3px;
+  --addbg:#000; --addemph:#000; --delbg:#000; --delemph:#000;
+  --c0:#000; --c1:#f00; --c2:#0f0; --c3:#ff0; --c4:#00f; --c5:#f0f; --c6:#0ff; --c7:#fff;
+  --c8:#888; --c9:#f00; --c10:#0f0; --c11:#ff0; --c12:#00f; --c13:#f0f; --c14:#0ff; --c15:#fff;
+  display: flex; flex-direction: column; gap: 18px; }
+.mock { background: var(--paper); color: var(--ink); font-family: var(--mono); font-size: 12px; line-height: 1.45; }
+.mock .lgd { font-family: "DIN Pro", "Barlow Condensed", sans-serif; font-stretch: condensed; text-transform: uppercase;
+  letter-spacing: .07em; font-size: 10.5px; font-weight: 500; color: var(--ink); }
+.mock .cur { background: var(--ink); color: var(--paper); }
+.fav { width: 13px; height: 13px; flex: none; margin-right: 7px; display: block; }
+
+/* desktop */
+.desk { min-width: 940px; background: var(--panel); }
+.wbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 0 var(--gap);
+  background: var(--panel); font-size: 11px; height: 24px; }
+.wss { display: flex; align-self: stretch; }
+.ws { padding: 0 9px; font-family: var(--sans); font-weight: 500; font-size: 12px; color: var(--ink2); display: flex; align-items: center; }
+.ws.on { color: var(--sig); background: var(--seltint); box-shadow: inset 0 var(--hy) var(--sig); }
+.ws.urg { color: var(--alarm); }
+.stats { display: flex; gap: 16px; }
+.st { display: inline-flex; gap: 6px; align-items: baseline; }
+.tiles { display: grid; grid-template-columns: 1.05fr 1fr; grid-template-rows: 1fr 168px; gap: var(--gap);
+  padding: var(--gap); height: 470px; }
+.win { position: relative; min-width: 0; min-height: 0; display: grid; grid-template-columns: 136px minmax(0, 1fr);
+  background: var(--paper); border: 1px solid var(--rule); cursor: pointer; }
+.win.focus { border-color: var(--sig); }
+.win.left { grid-row: 1 / 3; }
+.win > .body { min-width: 0; min-height: 0; overflow: hidden; }
+.vtabs { background: var(--panel); border-right: 1px solid var(--rule); display: flex; flex-direction: column;
+  padding: 4px 0; font-family: var(--sans); font-size: 12px; min-width: 0; }
+.vtab { display: flex; align-items: center; padding: 5px 9px 5px 10px; color: var(--ink2); white-space: nowrap; overflow: hidden; }
+.vtab span { overflow: hidden; text-overflow: ellipsis; }
+.vtab.sel { color: var(--ink); background: var(--selgrey); box-shadow: inset var(--vx) 0 var(--rule2); }
+.win.focus .vtab.sel { color: var(--sig); background: var(--seltint); box-shadow: inset var(--vx) 0 var(--sig); }
+.vtab.urg { color: var(--alarm); }
+
+/* nested: horizontal tabs inside a vtab */
+.nest { display: grid; grid-template-rows: auto minmax(0, 1fr); min-height: 0; height: 100%; }
+.htabs { display: flex; background: var(--panel); border-bottom: 1px solid var(--rule); font-family: var(--sans); font-size: 12px; }
+.htab { flex: 1 1 0; padding: 4px 10px; color: var(--ink2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.htab + .htab { border-left: 1px solid var(--rule); }
+.htab.sel { color: var(--ink); background: var(--selgrey); box-shadow: inset 0 var(--hy) var(--rule2); }
+.win.focus .htab.sel { color: var(--sig); background: var(--seltint); box-shadow: inset 0 var(--hy) var(--sig); }
+
+/* terminal */
+.term pre { margin: 0; padding: 8px 12px; font: 11.5px/1.55 var(--mono); white-space: pre; overflow: hidden; }
+.term i { font-style: italic; }
+.c1{color:var(--c1)} .c2{color:var(--c2)} .c3{color:var(--c3)} .c4{color:var(--c4)} .c5{color:var(--c5)} .c6{color:var(--c6)} .c7{color:var(--c7)}
+.c8{color:var(--c8)} .b{font-weight:600}
+.del { background: var(--delbg); display: inline-block; width: 100%; }
+.add { background: var(--addbg); display: inline-block; width: 100%; }
+.del em { font-style: normal; background: var(--delemph); }
+.add em { font-style: normal; background: var(--addemph); }
+.termfig { border: 1px solid var(--rule); }
+.dfile { display: inline-block; width: 100%; border-bottom: 1px solid var(--rule); color: var(--ink); font-weight: 600; }
+
+/* web page under a userstyle */
+.web { font-family: var(--sans); font-size: 13px; }
+.wtop { display: flex; gap: 14px; align-items: baseline; padding: 8px 14px 6px; border-bottom: 2px solid var(--heavy); }
+.site { font-weight: 700; }
+.crumb { font-family: var(--mono); font-size: 12px; color: var(--ink2); }
+.wtabs { display: flex; padding: 0 6px; border-bottom: 1px solid var(--rule); }
+.wt { padding: 6px 8px; color: var(--ink2); display: inline-flex; align-items: baseline; gap: 5px; font-weight: 500;
+  font-family: "DIN Pro", "Barlow Condensed", sans-serif; font-stretch: condensed; text-transform: uppercase; letter-spacing: .07em; font-size: 11px; }
+.wt.on { color: var(--sig); background: var(--seltint); box-shadow: inset 0 var(--hy) var(--sig); }
+.wt .ct { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0; }
+.wrow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; padding: 7px 14px; border-bottom: 1px solid var(--rule); }
+.wrow.head { align-items: center; color: var(--ink2); padding-block: 6px; }
+.wrow a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule2); text-underline-offset: 3px; }
+.wrow .tags { grid-column: 1; display: flex; gap: 10px; }
+.wrow .meta { grid-column: 2; grid-row: 1; font-family: var(--mono); font-size: 11px; color: var(--dim); }
+.tag { color: var(--ink2) !important; display: inline-flex; align-items: center; gap: 5px; }
+.tag.bad { color: var(--alarm) !important; }
+.tag.bad::before { content: ""; width: 6px; height: 6px; background: var(--alarm); }
+.btn { font: 500 10.5px var(--sans); text-transform: uppercase; letter-spacing: .09em; padding: 4px 10px;
+  border: 1px solid var(--ink2); color: var(--ink); background: var(--panel); }
+
+/* launcher, notifications */
+.menu { border: 1px solid var(--rule); }
+.mq { display: flex; gap: 10px; align-items: baseline; padding: 8px 12px; font-size: 13px; background: var(--panel); border-bottom: 2px solid var(--heavy); }
+.mi { padding: 5px 12px; display: flex; align-items: baseline; font-family: var(--sans); font-size: 13px; color: var(--ink2); }
+.mi.on { color: var(--sig); background: var(--seltint); box-shadow: inset var(--vx) 0 var(--sig); }
+.mi .mk2 { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--dim); }
+.menu .list { padding: 4px 0 6px; }
+.notes { display: flex; flex-direction: column; gap: 8px; background: transparent; }
+.nt { background: var(--panel); border: 1px solid var(--rule); padding: 7px 10px 8px; }
+.nt.crit { border-color: var(--alarm); }
+.nh { display: flex; align-items: baseline; }
+.nh .tm { margin-left: auto; color: var(--dim); font-size: 11px; }
+.nt.crit .lgd { color: var(--alarm); }
+.nb { font-family: var(--sans); font-size: 13.5px; margin-top: 1px; }
+.nb small { display: block; font-family: var(--mono); font-size: 11px; color: var(--ink2); }
+
+/* ANSI table */
+.ansi16 { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); border: 1px solid var(--rule); }
+.ansi16 div { display: flex; flex-direction: column; font-size: 10px; min-width: 0; }
+.ansi16 i { height: 22px; display: block; }
+.ansi16 span { padding: 3px 5px; font-family: var(--mono); color: var(--ink2); border-top: 1px solid var(--rule); white-space: nowrap; overflow: hidden; }
+.ansi16 em { font-style: normal; font-family: var(--sans); text-transform: uppercase; letter-spacing: .09em; font-size: 9px; padding: 0 5px 4px; color: var(--dim); }
+.ansi16 em.bud { color: var(--ink); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .stage .mock, .stage .sw i, .win, .vtab, .htab { transition: background-color .18s, color .18s, border-color .18s, box-shadow .12s; }
+}
+</style>
+
+</head>
+<body>
+<div class="page">
+
+  <header class="dochead">
+    <div>
+      <div class="eyebrow">Desktop styling · Specimens</div>
+      <h1>Roarke Design Language</h1>
+    </div>
+    <table class="revtable" aria-label="Document data">
+      <tr><td>Host</td><td>roarke</td></tr>
+      <tr><td>Spec</td><td>design/language.md</td></tr>
+      <tr><td>Date</td><td>2026-10-29</td></tr>
+      <tr><td>Faces</td><td>DIN Pro / Berkeley Mono</td></tr>
+    </table>
+  </header>
+
+  <section class="lede">
+    <p>Live specimens of the design language in <span class="mono">design/language.md</span>, using its final tokens and rules. Open it in a browser with DIN Pro and Berkeley Mono installed. Click a window in fig. 1 to move focus.</p>
+    <p>The spec is the source of truth. This page shows the intent, but it is a mockup: type is scaled down, gaps and borders are drawn at real pixel sizes, and the web page in fig. 1 is a generic example of a userstyle, not a real site.</p>
+  </section>
+  <section>
+    <div class="sechead">
+      <div class="num">2</div>
+      <div>
+        <h2>Specimens</h2>
+        <div class="refs">Click a window in fig. 1 to focus it. Gaps and borders are drawn at real pixel sizes, and type is scaled down.</div>
+      </div>
+    </div>
+    <div class="stage" id="stage"></div>
+  </section>
+</div>
+
+<script>
+const BASE = {
+  dark: { panel:"#1c1b18", paper:"#141311", rule:"#34312b", rule2:"#5a564d", heavy:"#8a8478", ink:"#e4dfd3", ink2:"#aaa497", dim:"#76716a",
+          sig:"#eea53a", seltint:"#33291a", selgrey:"#2a2823", alarm:"#ee5a42",
+          addbg:"#1c2a19", addemph:"#2d4625", delbg:"#2e1a16", delemph:"#4d241b",
+          c0:"#2a2824", c1:"#ee5a42", c2:"#a2ab84", c3:"#eea53a", c4:"#6ea6e6", c5:"#b49aa8", c6:"#94afa9", c7:"#c9c3b5",
+          c8:"#5f5a51", c9:"#ff7a5f", c10:"#b7bf98", c11:"#ffbd5c", c12:"#90bdf0", c13:"#c6adba", c14:"#a9c2bc", c15:"#e4dfd3" },
+  light:{ panel:"#e4dfd2", paper:"#f3efe6", rule:"#c6bfaf", rule2:"#948d7e", heavy:"#3a3731", ink:"#1a1916", ink2:"#4d4943", dim:"#857f73",
+          sig:"#1a66cc", seltint:"#d3e0f2", selgrey:"#d6d0c2", alarm:"#c02e18",
+          addbg:"#dcead0", addemph:"#bcd9a6", delbg:"#f4dad3", delemph:"#ebb8aa",
+          c0:"#1a1916", c1:"#c02e18", c2:"#5f6b3c", c3:"#a35a00", c4:"#1a66cc", c5:"#7a5569", c6:"#476e66", c7:"#c6bfaf",
+          c8:"#857f73", c9:"#d6402a", c10:"#707d4a", c11:"#b86d0c", c12:"#3b82dc", c13:"#8c667b", c14:"#588075", c15:"#f3efe6" }
+};
+const ROLES = [["panel","panel"],["paper","paper"],["rule","rule"],["rule2","rule 2"],["heavy","heavy rule"],["dim","dim"],["ink2","ink 2"],["ink","ink"]];
+const SIGROLES = [["sig","signal"],["seltint","selected tint"],["selgrey","selected, off path"],["alarm","alarm"]];
+const DIFFROLES = [["addbg","diff add"],["addemph","add emphasis"],["delbg","diff delete"],["delemph","delete emphasis"]];
+const NOTE = { dark: "Dark: roarke. Signal amber, second hue blue.", light: "Light: the work machine. Signal blue, second hue amber." };
+const BUDGET = { dark: { 1: "alarm", 3: "signal", 4: "second", 9: "alarm", 11: "signal", 12: "second" },
+                 light: { 1: "alarm", 3: "second", 4: "signal", 9: "alarm", 11: "second", 12: "signal" } };
+const FAV = {
+  forge: `<svg class="fav" viewBox="0 0 16 16"><rect width="16" height="16" rx="3" fill="#2d3748"/><circle cx="5" cy="5" r="1.8" fill="#fff"/><circle cx="5" cy="11" r="1.8" fill="#fff"/><circle cx="11" cy="7" r="1.8" fill="#fff"/><path d="M5 6.5v3M6.5 10c3 0 4.5-1 4.5-1.5" stroke="#fff" stroke-width="1.3" fill="none"/></svg>`,
+  pdf:   `<svg class="fav" viewBox="0 0 16 16"><path d="M3 1h7l3 3v11H3z" fill="#e8e8e8"/><path d="M10 1v3h3" fill="#bdbdbd"/><rect x="2" y="8" width="12" height="5" fill="#d93025"/></svg>`,
+  wiki:  `<svg class="fav" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7.5" fill="#f6f6f6"/><path d="M3.5 5l2 6 2.5-5 2.5 5 2-6" stroke="#222" stroke-width="1.3" fill="none"/></svg>`,
+  mail:  `<svg class="fav" viewBox="0 0 16 16"><rect width="16" height="16" rx="8" fill="#3b82c4"/><path d="M4 5.5h8v5H4z" fill="#fff"/><path d="M4 5.5l4 3 4-3" stroke="#3b82c4" stroke-width="1" fill="none"/></svg>`
+};
+const P = `<span class="c8">autumn@roarke</span> <i class="c4">jury</i> <span class="c3">$</span> `;
+
+function mocks() {
+  return `
+  <figure><div class="scroll"><div class="mock desk" id="desk">
+    <div class="wbar">
+      <div class="wss"><span class="ws on">1</span><span class="ws">2</span><span class="ws urg">3</span><span class="ws">4</span></div>
+      <div class="st"><span class="lgd">Thu</span>2026-10-29 01:49</div>
+      <div class="stats"><span class="st"><span class="lgd">Net</span>93%</span><span class="st"><span class="lgd">Brt</span>100%</span><span class="st"><span class="lgd">Vol</span>100%</span><span class="st"><span class="lgd">Bat</span>100%</span></div>
+    </div>
+    <div class="tiles">
+      <div class="win left focus" tabindex="0" aria-label="Terminal window">
+        <div class="vtabs">
+          <div class="vtab sel"><span>✳ modernist</span></div>
+          <div class="vtab"><span>kak roarke.nix</span></div>
+          <div class="vtab urg"><span>nix build .#roarke</span></div>
+          <div class="vtab"><span>zsh ~/jury</span></div>
+        </div>
+        <div class="body term"><pre>${P}git log --oneline -3
+<span class="c3">114bfc2</span> roark styling
+<span class="c3">834a6bd</span> roarke typography
+<span class="c3">d2a2266</span> kitty-&gt;ghostty and roarke styling
+${P}git status -s
+ <span class="c3">M</span> modules/stylesheet/roarke.nix
+ <span class="c3">M</span> modules/stylesheet/options.nix
+<span class="c8">??</span> modules/stylesheet/datasheet.nix
+${P}git diff options.nix
+<span class="c8">@@ -10,6 +10,7 @@</span> options.stylesheet = {
+<span class="del">-      <em>bg</em> = "<em>#1e1e2e</em>";</span>
+<span class="add">+      <em>paper</em> = "<em>#141311</em>";</span>
+<span class="add">+      panel = "#1c1b18";</span>
+       ink = "#e4dfd3";
+${P}ls -l modules
+drwxr-xr-x <span class="c8">autumn  4.0k</span> <span class="b c4">home</span>
+drwxr-xr-x <span class="c8">autumn  4.0k</span> <span class="b c4">stylesheet</span>
+-rwxr-xr-x <span class="c8">autumn  1.2k</span> <span class="c3">build.sh</span>
+-rw-r--r-- <span class="c8">autumn   311</span> flake.nix
+${P}nix build path:.#roarke
+<span class="b c1">error:</span> builder for '/nix/store/x9k2…-swayfx.drv' failed
+${P}<span class="cur"> </span></pre></div>
+      </div>
+      <div class="win" tabindex="0" aria-label="Firefox window">
+        <div class="vtabs">
+          <div class="vtab sel">${FAV.forge}<span>Issues · adrusi/jury</span></div>
+          <div class="vtab">${FAV.pdf}<span>LM317 datasheet</span></div>
+          <div class="vtab">${FAV.wiki}<span>DIN 1451 – Wiki</span></div>
+          <div class="vtab">${FAV.mail}<span>Inbox (3)</span></div>
+        </div>
+        <div class="body web">
+          <div class="wtop"><span class="site">forge</span><span class="crumb">adrusi / jury</span></div>
+          <div class="wtabs"><span class="wt">Code</span><span class="wt on">Issues <span class="ct">12</span></span><span class="wt">Pulls <span class="ct">3</span></span></div>
+          <div class="wrow head"><span class="tag lgd">12 open · 31 closed</span><span class="btn">New issue</span></div>
+          <div class="wrow"><a href="#">draw the selected-tab edge rule in the vtab render</a><span class="meta">#41 · 2d</span><div class="tags"><span class="tag lgd">sway</span><span class="tag lgd">patch</span></div></div>
+          <div class="wrow"><a href="#">flake check fails on aarch64</a><span class="meta">#35 · 1w</span><div class="tags"><span class="tag lgd">ci</span><span class="tag lgd bad">failing</span></div></div>
+          <div class="wrow"><a href="#">delta: truecolor diff tokens from the stylesheet</a><span class="meta">#33 · 2w</span><div class="tags"><span class="tag lgd">terminal</span></div></div>
+        </div>
+      </div>
+      <div class="win" tabindex="0" aria-label="Nested container window">
+        <div class="vtabs">
+          <div class="vtab sel"><span>logs</span></div>
+          <div class="vtab"><span>btop</span></div>
+        </div>
+        <div class="body nest">
+          <div class="htabs"><span class="htab sel">journalctl -f</span><span class="htab">dmesg -w</span></div>
+          <div class="term"><pre><span class="c8">01:49:02</span> systemd[1]: Started swayidle.service.
+<span class="c8">01:49:10</span> kernel: wlan0: associated
+<span class="c8">01:49:31</span> <span class="c3">nix-daemon: warning: download buffer is full</span>
+<span class="c8">01:49:44</span> <span class="b c1">swayfx: failed to load config line 531</span>
+<span class="c8">01:49:58</span> systemd[1]: Reached target timers.</pre></div>
+        </div>
+      </div>
+    </div>
+  </div></div><figcaption><b>Fig. 1</b><span id="figcap1"></span></figcaption></figure>
+
+
+  <div class="figrow">
+    <figure><div class="mock termfig term"><pre>${P}git log --graph --oneline -3
+* <span class="c3">114bfc2</span> <span class="c3">(HEAD -&gt; main)</span> roark styling
+* <span class="c3">834a6bd</span> <span class="c4">(origin/main)</span> roarke typography
+* <span class="c3">d2a2266</span> kitty-&gt;ghostty
+${P}ls
+<span class="b c4">home</span>  <span class="b c4">stylesheet</span>  <span class="c3">build.sh</span>  flake.nix
+lockscreen.png  <span class="c8">result -&gt; /nix/store/…</span>
+${P}cc -Wall main.c
+main.c:12:5: <span class="b c3">warning:</span> unused variable 'n'
+main.c:19:1: <span class="b c1">error:</span> expected ';'</pre></div><figcaption><b>Fig. 4a</b>Programs configured to the budget.</figcaption></figure>
+    <figure><div class="mock termfig term"><pre>${P}git log --graph --oneline -3
+<span class="c1">*</span> <span class="c3">114bfc2</span> <span class="c3">(</span><span class="b c6">HEAD -&gt; </span><span class="b c2">main</span><span class="c3">)</span> roark styling
+<span class="c1">*</span> <span class="c3">834a6bd</span> <span class="c3">(</span><span class="b c1">origin/main</span><span class="c3">)</span> roarke typography
+<span class="c1">*</span> <span class="c3">d2a2266</span> kitty-&gt;ghostty
+${P}ls
+<span class="b c4">home</span>  <span class="b c4">stylesheet</span>  <span class="b c2">build.sh</span>  flake.nix
+<span class="b c5">lockscreen.png</span>  <span class="b c6">result</span> -&gt; /nix/store/…
+${P}cc -Wall main.c
+main.c:12:5: <span class="b c5">warning:</span> unused variable 'n'
+main.c:19:1: <span class="b c1">error:</span> expected ';'</pre></div><figcaption><b>Fig. 4b</b>Program defaults on the same palette. Unbudgeted hues recede.</figcaption></figure>
+  </div>
+
+  <figure><div class="mock termfig term"><pre><span class="dfile">modules/stylesheet/options.nix</span>
+<span class="c8">@@ -10,6 +10,9 @@</span> options.stylesheet = {
+     colors = {
+<span class="del">-      <em>bg</em> = "<em>#1e1e2e</em>"; # <em>base</em></span>
+<span class="add">+      <em>paper</em> = "<em>#141311</em>"; # <em>client surfaces</em></span>
+<span class="add">+      panel = "#1c1b18"; # desktop field, bar, tab strips</span>
+<span class="add">+      seltint = "#33291a"; # selected item on the focus path</span>
+       ink = "#e4dfd3";
+<span class="del">-      accent = "#b4befe";</span>
+<span class="add">+      signal = "#eea53a";</span></pre></div><figcaption><b>Fig. 4c</b>A diff through delta, using the truecolor diff tokens, with word-level emphasis.</figcaption></figure>
+
+  <figure><div class="ansi16" id="ansi16"></div><figcaption><b>Fig. 5</b>ANSI 0–15. Budgeted slots are full chroma, and the rest are muted fallbacks.</figcaption></figure>
+
+  <div class="figrow">
+    <figure><div class="mock menu">
+      <div class="mq"><span class="lgd">Run</span><span>fire<span class="cur"> </span></span></div>
+      <div class="list">
+        <div class="mi on">Firefox<span class="mk2">web</span></div>
+        <div class="mi">Firefox private window<span class="mk2">web</span></div>
+        <div class="mi">Firefox profile manager<span class="mk2">web</span></div>
+      </div>
+    </div><figcaption><b>Fig. 2</b>Launcher. Same tint plus rule as the tabs.</figcaption></figure>
+    <figure><div class="mock notes">
+      <div class="nt"><div class="nh"><span class="lgd">Claude Code</span><span class="tm">01:49</span></div>
+        <div class="nb">modernist is waiting for input<small>~/jury</small></div></div>
+      <div class="nt crit"><div class="nh"><span class="lgd">Battery</span><span class="tm">01:52</span></div>
+        <div class="nb">Battery low<small>7% · 0:11 remaining</small></div></div>
+    </div><figcaption><b>Fig. 3</b>Notifications, normal and critical.</figcaption></figure>
+  </div>`;
+}
+
+const stage = document.getElementById("stage");
+const btns = (k, opts, label) => `<span class="ctl"><span class="tl">${label}</span><div class="toggle" role="group" aria-label="${label}">${
+  opts.map(([v, t]) => `<button type="button" id="${k}-${v}" data-k="${k}" data-v="${v}">${t}</button>`).join("")}</div></span>`;
+stage.innerHTML = `
+  <div class="stagebar">
+    ${btns("mode", [["dark","Dark"],["light","Light"]], "Mode")}
+  </div>
+  <span class="note" id="note"></span>
+  <div class="swwrap"></div>
+  <div class="figs">${mocks()}</div>`;
+stage.querySelectorAll('a[href="#"]').forEach(a => a.addEventListener("click", e => e.preventDefault()));
+
+const desk = document.getElementById("desk");
+desk.querySelectorAll(".win").forEach(w => {
+  const focus = () => { desk.querySelectorAll(".win").forEach(x => x.classList.toggle("focus", x === w)); };
+  w.addEventListener("click", focus);
+  w.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); focus(); } });
+});
+
+const state = { mode: "dark" };
+try { Object.assign(state, JSON.parse(localStorage.getItem("rdl-specimen") || "{}")); } catch (e) {}
+if (!BASE[state.mode]) state.mode = "dark";
+
+const swrow = (p, roles) => `<div class="swatches">${roles.map(([k, n]) =>
+  `<div class="sw"><i style="background:${p[k]}"></i><div><span class="n">${n}</span><span class="h">${p[k]}</span></div></div>`).join("")}</div>`;
+
+function apply() {
+  const p = BASE[state.mode];
+  for (const k in p) stage.style.setProperty("--" + k, p[k]);
+  stage.style.setProperty("--gap", "4px");
+  document.getElementById("figcap1").textContent =
+    `Three tiled containers with 4px gaps. Focus is the 1px signal frame. Workspace 3 and the "nix build" tab are urgent. Bottom right: htabs nested in a vtab; focus it to see both selected tabs on the focus path turn signal.`;
+  stage.querySelector(".swwrap").innerHTML =
+    `<div class="swgroup"><span class="tl">Neutrals</span>${swrow(p, ROLES)}</div>
+     <div class="swgroup"><span class="tl">Signal and state</span>${swrow(p, SIGROLES)}</div>
+     <div class="swgroup"><span class="tl">Diff, truecolor</span>${swrow(p, DIFFROLES)}</div>`;
+  const names = ["black","red","green","yellow","blue","magenta","cyan","white"];
+  const bud = BUDGET[state.mode];
+  document.getElementById("ansi16").innerHTML = [...Array(16).keys()].map(i =>
+    `<div><i style="background:${p["c" + i]}"></i><span>${i} ${i < 8 ? names[i] : "br " + names[i - 8]}</span><span>${p["c" + i]}</span>${
+      bud[i] ? `<em class="bud">${bud[i]}</em>` : [0,7,8,15].includes(i) ? `<em>ink</em>` : `<em>muted</em>`}</div>`).join("");
+  document.getElementById("note").textContent = NOTE[state.mode];
+  stage.querySelectorAll(".toggle button").forEach(b => b.setAttribute("aria-pressed", String(state[b.dataset.k] === b.dataset.v)));
+  try { localStorage.setItem("rdl-specimen", JSON.stringify(state)); } catch (e) {}
+}
+stage.querySelectorAll(".toggle button").forEach(b => b.addEventListener("click", () => { state[b.dataset.k] = b.dataset.v; apply(); }));
+apply();
+</script>
+</body>
+</html>
