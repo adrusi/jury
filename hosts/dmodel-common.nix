@@ -14,10 +14,10 @@
   imports = [
     ./common.nix
 
-    # stylesheet + font module (swappable per host)
-    ../modules/stylesheet/latte.nix
     (import ../modules/home/pragmatapro.nix "autumn")
-    (import ../modules/home/sway-stylesheet.nix "autumn")
+
+    # desktop shell per design/language.md; dimensions set below
+    (import ../modules/home/sway-design.nix "autumn")
 
     (import ../modules/home/dmodel/module.nix "autumn")
     ../modules/system/fprintd.nix
@@ -98,6 +98,47 @@
         ];
       }
     ];
+  };
+
+  # --- design language (design/language.md) ---
+
+  # Light mode for work. Sizes carry over from the stylesheet era's values for
+  # these displays (a 2256x1504 panel and a 1920x1080 external, both at
+  # scale 1); gaps, frame and rules follow roarke. barHeight is estimated
+  # from the title size: measure the sway titlebar and correct it.
+  design = {
+    mode = "light";
+    dims = {
+      toolkitScale = 1.0;
+      titleSize = 9;
+      barSize = 13;
+      barHeight = 24;
+      menuSize = 14;
+      terminalSize = 11;
+      readerSize = 10;
+      editor = {
+        buffer = 14;
+        ui = 16;
+        terminal = 14;
+      };
+      gaps = 6;
+      frame = 1;
+      selectionRule = {
+        horizontal = 2;
+        vertical = 3;
+      };
+      heavyRule = 2;
+      titlebarPadding = {
+        horizontal = 6;
+        vertical = 4;
+      };
+      vtabWidth = 180;
+      vtabPadding = 4;
+      menuWidth = 640;
+      menuHeight = 480;
+      notificationWidth = 300;
+      cursorSize = 24;
+    };
   };
 
   system.stateVersion = "25.11";

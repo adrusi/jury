@@ -13,8 +13,6 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     ./common.nix
 
-    # stylesheet + font module (swappable per host)
-    ../modules/stylesheet/roarke.nix
     (import ../modules/home/pragmatapro.nix "autumn")
 
     # desktop shell per design/language.md; dimensions set below
@@ -135,17 +133,35 @@
     };
   };
 
+  # general-purpose fonts: fallback glyphs, web core fonts, and the rest of
+  # the library (the design's own faces come with sway-design.nix)
+  fonts.packages = [
+    pkgs.noto-fonts
+    pkgs.nerd-fonts.noto
+    pkgs.noto-sans-condensed-static
+    pkgs.corefonts
+    pkgs.classic-fonts
+    pkgs.jost
+  ];
+
   # --- design language (design/language.md) ---
 
   # Dimensions in device pixels for the Framework's 2880x1920 13.5" panel.
   design = {
-    enable = true;
     mode = "dark";
     dims = {
+      toolkitScale = 1.25;
       titleSize = 14;
       barSize = 18;
       barHeight = 37; # measured sway titlebar height at titleSize 14
       menuSize = 20;
+      terminalSize = 12;
+      readerSize = 16;
+      editor = {
+        buffer = 18;
+        ui = 20;
+        terminal = 18;
+      };
       gaps = 6;
       frame = 1;
       selectionRule = {

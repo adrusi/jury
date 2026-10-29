@@ -59,7 +59,7 @@ in
         "scrollbar.track.background" = "#00000000";
         "scrollbar.track.border" = "#00000000";
         "scrollbar.thumb.background" = alpha p.rule2 "80";
-        "scrollbar.thumb.hover_background" = p.rule2;
+        "scrollbar.thumb.hover_background" = alpha p.rule2 "80";
         "scrollbar.thumb.border" = "#00000000";
 
         # elements
@@ -69,7 +69,7 @@ in
         "element.selected" = p.seltint;
         "element.disabled" = p.panel;
         "ghost_element.background" = "#00000000";
-        "ghost_element.hover" = p.selgrey;
+        "ghost_element.hover" = "#00000000"; # no hover states (spec section 6)
         "ghost_element.active" = p.seltint;
         "ghost_element.selected" = p.seltint;
         "ghost_element.disabled" = "#00000000";

@@ -1,7 +1,6 @@
 username:
 { pkgs, lib, config, ... }:
 let
-  design = config.design.enable;
   themeJson = import ./zed-theme.nix {
     inherit (config.design) mode;
     p = config.design.palette;
@@ -9,7 +8,6 @@ let
 in
 {
   imports = [
-    ../stylesheet/options.nix
     ../design/options.nix
   ];
 
@@ -29,9 +27,9 @@ in
       package = pkgs.zed-editor;
       installRemoteServer = true;
 
-      themes = lib.optionalAttrs design { datasheet = themeJson; };
+      themes.datasheet = themeJson;
 
-      extensions = lib.optionals (!design) config.stylesheet.zed.extensions ++ [
+      extensions = [
         "agda"
         "assembly"
         "basedpyright"
@@ -71,8 +69,8 @@ in
         restore_on_startup = "last_session";
         auto_update = false;
         base_keymap = "VSCode";
-        buffer_font_family = config.stylesheet.fonts.monoLiga;
-        buffer_font_size = config.stylesheet.sizes.zedBuffer;
+        buffer_font_family = config.design.fonts.code;
+        buffer_font_size = config.design.dims.editor.buffer;
         buffer_line_height = "standard";
         scrollbar = {
           selected_text = false;
@@ -114,14 +112,14 @@ in
         ensure_final_newline_on_save = true;
         format_on_save = "on";
         indent_guides.enabled = false;
-        ui_font_size = config.stylesheet.sizes.zedUi;
-        theme = if design then themeJson.name else config.stylesheet.zed.theme;
+        ui_font_size = config.design.dims.editor.ui;
+        theme = themeJson.name;
         # zed's default icons are monochrome, which suits the hue budget
-        icon_theme = if design then "Zed (Default)" else config.stylesheet.zed.iconTheme;
+        icon_theme = "Zed (Default)";
         terminal = {
           blinking = "off";
-          font_family = config.stylesheet.fonts.monoLiga;
-          font_size = config.stylesheet.sizes.zedTerminal;
+          font_family = config.design.fonts.code;
+          font_size = config.design.dims.editor.terminal;
           line_height = "standard";
           option_as_meta = true;
           button = false;

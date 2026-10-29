@@ -50,7 +50,7 @@ in
       # design/language.md 7.7: hashes and modified files in signal, refs in the
       # second hue, errors in alarm; diffs use the truecolor diff tokens with
       # ink text
-      programs.git.settings = lib.mkIf config.design.enable {
+      programs.git.settings = {
         color = {
           diff = {
             meta = p.ink;

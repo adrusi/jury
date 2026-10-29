@@ -158,7 +158,8 @@ Terminal background is `paper` and foreground is `ink`. The cursor is `ink`.
 - **Faces.** DIN Pro for names, labels, titles, and UI text. Berkeley Mono for
   values, paths, numbers, times, terminal and editor content, and anything the
   user typed. No other faces. Futura is retired; the lock clock is a readout
-  and is set in Berkeley Mono. Fonts are fixed by the design, not
+  and is set in Berkeley Mono. Terminal and editor buffers use its Condensed
+  width, which fits more columns. Fonts are fixed by the design, not
   configurable per host.
 - **Legends** (bar labels like `NET` and `BAT`, notification sources, launcher
   prompt, web tab labels): DIN Pro Condensed, uppercase, medium weight, tracked
@@ -210,7 +211,10 @@ dimensions; the proportions above are the design.
 it. With horizontal tabs nested in a vtab, both the vtab and the htab on the
 path take signal colors.
 
-Hover and pressed states aren't specified yet.
+There are no hover or pressed states: nothing changes under the pointer or
+while a button is held. Menus and lists that track the pointer are the
+exception in form only: their highlighted item is the selection, moved by the
+pointer as well as the keyboard, and takes the selection treatment.
 
 ## 7. Surfaces
 
@@ -321,7 +325,7 @@ These configure programs to the hue budget:
   tall as a sway titlebar, so the field's hairline never meets the window
   frame. Chrome text is DIN at sway's title size, the URL included: an
   address reads as a name. Toolbar icons are square-cap line drawings in
-  `ink2`, `ink` on hover and `signal` when open; selected items follow
+  `ink2`, and `signal` when open; selected items follow
   section 6. Third-party color (favicons, search engine logos) stays.
 - **Userstyles:** a userstyle may change only color, faces, borders, rules,
   and corners. It may not restructure the page. Within that:
@@ -343,16 +347,12 @@ These configure programs to the hue budget:
 
 - **Required patch:** the swayfx selection-rule patch (section 7.1). Nothing
   else in the language needs a patch.
-- **Nix structure.** The current `modules/stylesheet` system mixes DPI
-  compensation, color variants, and font choices. Under this language:
-  - per-host dimensions (sizes, gaps, cursor size, toolkit scale) stay as a
-    small per-host module, since DPI really does vary by host;
-  - colors become one fixed palette with a light/dark switch, generated from
-    the token tables in section 3;
-  - fonts are fixed by the design and stop being options.
-
-  The token names in section 3 are the intended interface for that
-  reorganization.
+- **Nix structure.** `modules/design/palette.nix` holds the token tables
+  from section 3, one set per mode. `modules/design/options.nix` declares
+  `design.mode`, the fixed faces (`design.fonts`), and the DPI-dependent
+  `design.dims`, which each host sets with no defaults. A headless host sets
+  only the mode. Every themed module reads `config.design`; there is no other
+  color or font configuration.
 
 ## 9. Rejected alternatives
 
@@ -384,10 +384,10 @@ Recorded so they don't get reproposed without new reasons.
 
 ## 10. Open items
 
-- Hover and pressed states.
-- The swayfx selection-rule patch.
+- Measure the work machine's sway titlebar and correct its `barHeight`,
+  which is estimated.
+- More terminal applications configured to the hue budget.
+- A GTK theme beyond `@define-color`, and Electron apps (Discord).
+- Firefox's `about:` pages, through `userContent.css` (low priority).
 - Whether ghostty's bell should set urgency (it then takes the alarm text
   treatment like any urgent window).
-- The nix reorganization described in section 8.
-- A machine-readable token file (likely JSON, read with `builtins.fromJSON`)
-  generated from or replacing the tables in section 3.

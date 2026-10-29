@@ -6,13 +6,11 @@ username:
   ...
 }:
 let
-  c = config.stylesheet.colors;
   p = config.design.palette;
   bare = lib.removePrefix "#";
 in
 {
   imports = [
-    ../stylesheet/options.nix
     ../design/options.nix
   ];
 
@@ -50,35 +48,23 @@ in
         window-padding-x = 6;
         window-padding-y = 6;
 
-        font-family = config.stylesheet.fonts.monoLiga;
-        font-size = config.stylesheet.sizes.ghostty;
+        font-family = config.design.fonts.code;
+        font-size = config.design.dims.terminalSize;
         theme = "jury";
       };
 
-      # ghostty wants a named theme; "jury" is just the design (or stylesheet)
-      # colors rendered in ghostty's format
+      # ghostty wants a named theme; "jury" is just the design palette rendered
+      # in ghostty's format
       themes = {
-        jury =
-          if config.design.enable then
-            {
-              palette = lib.imap0 (i: hex: "${toString i}=${hex}") p.ansi;
-              background = bare p.paper;
-              foreground = bare p.ink;
-              cursor-color = bare p.ink;
-              cursor-text = bare p.paper;
-              selection-background = bare p.seltint;
-              selection-foreground = bare p.ink;
-            }
-          else
-            {
-              palette = lib.genList (i: "${toString i}=${c."color${toString i}"}") 16;
-              background = bare c.bg;
-              foreground = bare c.fg;
-              cursor-color = bare c.cursor;
-              cursor-text = bare c.bg;
-              selection-background = bare c.selection;
-              selection-foreground = bare c.fg;
-            };
+        jury = {
+          palette = lib.imap0 (i: hex: "${toString i}=${hex}") p.ansi;
+          background = bare p.paper;
+          foreground = bare p.ink;
+          cursor-color = bare p.ink;
+          cursor-text = bare p.paper;
+          selection-background = bare p.seltint;
+          selection-foreground = bare p.ink;
+        };
       };
     };
   };

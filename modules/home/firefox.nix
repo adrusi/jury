@@ -1,8 +1,7 @@
 username:
 { pkgs, lib, inputs, config, ... }:
 let
-  design = config.design.enable;
-  scale = config.stylesheet.toolkitScale;
+  scale = config.design.dims.toolkitScale;
   chromeCss = import ./firefox-chrome.nix {
     inherit lib;
     inherit (config.design) fonts;
@@ -80,12 +79,12 @@ in
           "layers.async-video.enabled" = true;
           "html5.offmainthread" = true;
         }
-        // lib.optionalAttrs design {
+        // {
           # the chrome is styled by userChrome.css; an addon theme would fight it
           "extensions.activeThemeID" = "default-theme@mozilla.org";
         }
-        // lib.optionalAttrs (config.stylesheet.toolkitScale != 1.0) {
-          "layout.css.devPixelsPerPx" = config.stylesheet.toolkitScale;
+        // lib.optionalAttrs (scale != 1.0) {
+          "layout.css.devPixelsPerPx" = scale;
           # firefox would otherwise stack gtk's text-scaling-factor (set to the
           # same toolkitScale) on top of devPixelsPerPx
           "ui.textScaleFactor" = 100;
@@ -171,7 +170,7 @@ in
           };
         };
 
-        userChrome = lib.mkIf design chromeCss;
+        userChrome = chromeCss;
         userContent = "";
       };
     };

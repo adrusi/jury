@@ -63,15 +63,13 @@ let
     star = "<path d='M8 2.25 9.48 6.5h4.5l-3.64 2.64 1.39 4.28L8 10.78l-3.73 2.64 1.39-4.28L2.02 6.5h4.5z'/>";
   };
 
-  # toolbar buttons: ink2 at rest, ink on hover, signal when open or checked
+  # toolbar buttons: ink2, or signal when open or checked. There are no hover
+  # or pressed states (design/language.md section 6).
   buttonIcons = lib.concatStrings (
     lib.mapAttrsToList
       (id: glyph: ''
         #${id} {
           list-style-image: ${line p.ink2 glyph} !important;
-        }
-        #${id}:not([disabled]):hover {
-          list-style-image: ${line p.ink glyph} !important;
         }
         #${id}:is([open], [checked]) {
           list-style-image: ${line p.signal glyph} !important;
@@ -113,12 +111,12 @@ let
 
     --toolbarbutton-border-radius: 0 !important;
     --toolbarbutton-icon-fill: ${p.ink2} !important;
-    --toolbarbutton-icon-fill-hover: ${p.ink} !important;
+    --toolbarbutton-icon-fill-hover: ${p.ink2} !important;
     --toolbarbutton-icon-fill-active: ${p.signal} !important;
     --toolbarbutton-icon-fill-attention: ${p.signal} !important;
     --toolbarbutton-icon-fill-attention-text: ${p.paper} !important;
     --toolbarbutton-background-color: transparent !important;
-    --toolbarbutton-background-color-hover: ${p.selgrey} !important;
+    --toolbarbutton-background-color-hover: transparent !important;
     --toolbarbutton-background-color-active: ${p.seltint} !important;
     --toolbarbutton-outline-color: transparent !important;
     --toolbarbutton-outline-color-hover: transparent !important;
@@ -132,7 +130,7 @@ let
     --color-accent-primary-selected: ${p.signal} !important;
     --color-accent-attention: ${p.signal} !important;
     --link-color: ${p.ink} !important;
-    --link-color-hover: ${p.signal} !important;
+    --link-color-hover: ${p.ink} !important;
     --link-color-active: ${p.signal} !important;
 
     --text-color: ${p.ink} !important;
@@ -145,7 +143,7 @@ let
     --border-color: ${p.rule} !important;
     --border-color-deemphasized: ${p.rule} !important;
     --border-color-interactive: ${p.rule2} !important;
-    --border-color-interactive-hover: ${p.ink2} !important;
+    --border-color-interactive-hover: ${p.rule2} !important;
     --border-color-selected: ${p.signal} !important;
 
     --border-radius-xsmall: 0 !important;
@@ -155,14 +153,14 @@ let
     --border-radius-xlarge: 0 !important;
     --button-border-radius: 0 !important;
     --button-background-color: ${p.panel} !important;
-    --button-background-color-hover: ${p.selgrey} !important;
+    --button-background-color-hover: ${p.panel} !important;
     --button-background-color-active: ${p.seltint} !important;
     --button-border-color: ${p.rule2} !important;
     --button-text-color: ${p.ink} !important;
     --button-text-color-hover: ${p.ink} !important;
     --button-text-color-active: ${p.signal} !important;
     --button-background-color-primary: ${p.panel} !important;
-    --button-background-color-primary-hover: ${p.selgrey} !important;
+    --button-background-color-primary-hover: ${p.panel} !important;
     --button-background-color-primary-active: ${p.seltint} !important;
     --button-border-color-primary: ${p.signal} !important;
     --button-text-color-primary: ${p.signal} !important;
@@ -171,7 +169,7 @@ let
     --button-background-color-menu-hover: ${p.selgrey} !important;
     --button-background-color-menu-active: ${p.seltint} !important;
     --button-text-color-menu-hover: ${p.ink} !important;
-    --button-background-color-toolbar-hover: ${p.selgrey} !important;
+    --button-background-color-toolbar-hover: transparent !important;
     --button-background-color-toolbar-active: ${p.seltint} !important;
 
     --panel-background-color: ${p.panel} !important;
@@ -189,15 +187,15 @@ let
     --urlbar-inner-border-radius: 0 !important;
     --urlbar-background-border-radius: 0 !important;
     --urlbar-box-background-color: transparent !important;
-    --urlbar-box-background-color-hover: ${p.selgrey} !important;
+    --urlbar-box-background-color-hover: transparent !important;
     --urlbar-box-background-color-active: ${p.seltint} !important;
     --urlbar-box-text-color: ${p.ink2} !important;
-    --urlbar-box-text-color-hover: ${p.ink} !important;
+    --urlbar-box-text-color-hover: ${p.ink2} !important;
     --urlbar-box-text-color-active: ${p.signal} !important;
     --urlbarview-border-radius: 0 !important;
     --urlbarview-row-border-radius: 0 !important;
     --urlbarview-icon-border-radius: 0 !important;
-    --urlbarview-background-color-hover: ${p.selgrey} !important;
+    --urlbarview-background-color-hover: transparent !important;
     --urlbarview-background-color-selected: ${p.seltint} !important;
     --urlbarview-text-color-hover: ${p.ink} !important;
     --urlbarview-text-color-selected: ${p.signal} !important;
@@ -206,8 +204,8 @@ let
     --urlbarview-separator-color: ${p.rule} !important;
     --urlbarview-result-button-selected-background-color: ${p.seltint} !important;
     --urlbarview-result-button-selected-color: ${p.signal} !important;
-    --urlbarview-result-button-hover-background-color: ${p.selgrey} !important;
-    --urlbarview-result-button-hover-color: ${p.ink} !important;
+    --urlbarview-result-button-hover-background-color: transparent !important;
+    --urlbarview-result-button-hover-color: ${p.ink2} !important;
     /* the URL field: paper inside a hairline, signal hairline when focused
        or open (Nova draws it from these on #urlbar itself) */
     --urlbar-background-color: ${p.paper} !important;
@@ -363,9 +361,6 @@ ${buttonIcons}
   #star-button-box > #star-button {
     list-style-image: ${line p.ink2 glyphs.star} !important;
   }
-  #star-button-box:hover > #star-button {
-    list-style-image: ${line p.ink glyphs.star} !important;
-  }
   #star-button-box > #star-button[starred] {
     list-style-image: ${solid p.signal glyphs.star} !important;
   }
@@ -435,6 +430,8 @@ ${buttonIcons}
   .toolbaritem-combined-buttons > .subviewbutton {
     border-radius: 0 !important;
   }
+  /* menus track the pointer: the highlighted item is the menu's selection,
+     not a hover state */
   menupopup > :is(menuitem, menu):is([_moz-menuactive], :hover):not([disabled]),
   .subviewbutton:not([disabled]):hover {
     background: ${p.selgrey} !important;

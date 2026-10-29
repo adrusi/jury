@@ -20,8 +20,8 @@ in
     inputs.disko.nixosModules.disko
     inputs.home-manager.nixosModules.home-manager
 
-    # stylesheet: headless, but zsh (vivid) and kak read scheme names from it
-    ../modules/stylesheet/latte.nix
+    # headless: only the palette is used (zsh, git and kak colors)
+    ../modules/design/options.nix
 
     # system modules
     ../modules/system/nix-store.nix
@@ -168,6 +168,10 @@ in
     pkgs.ghostty.terminfo # need terminfo entry
   ];
   environment.variables.EDITOR = "kak";
+
+  # terminal colors (zsh prompt, LS_COLORS, git, kak) for the light mode the
+  # work machine renders in
+  design.mode = "light";
 
   system.stateVersion = "25.11";
 }

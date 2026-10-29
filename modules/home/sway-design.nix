@@ -28,8 +28,6 @@ in
   # design.mode and design.dims.
   imports = [
     ../design/options.nix
-    # toolkitScale still lives in the stylesheet, which firefox reads too
-    ../stylesheet/options.nix
   ];
 
   fonts.packages = [
@@ -38,8 +36,8 @@ in
   ];
 
   home-manager.users.${username} = {
-    home.sessionVariables = lib.optionalAttrs (config.stylesheet.toolkitScale != 1.0) {
-      QT_SCALE_FACTOR = config.stylesheet.toolkitScale;
+    home.sessionVariables = lib.optionalAttrs (dims.toolkitScale != 1.0) {
+      QT_SCALE_FACTOR = dims.toolkitScale;
     };
 
     home.pointerCursor = {
@@ -59,8 +57,8 @@ in
         "org/gnome/desktop/interface".color-scheme =
           if config.design.mode == "dark" then "prefer-dark" else "prefer-light";
       }
-      (lib.mkIf (config.stylesheet.toolkitScale != 1.0) {
-        "org/gnome/desktop/interface".text-scaling-factor = config.stylesheet.toolkitScale;
+      (lib.mkIf (dims.toolkitScale != 1.0) {
+        "org/gnome/desktop/interface".text-scaling-factor = dims.toolkitScale;
       })
     ];
 

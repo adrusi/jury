@@ -15,9 +15,7 @@ in
 {
   # Behavior only: keybinds, services, which programs run and how they act.
   # Everything visual (colors, fonts, borders, sizes, waybar formats) comes
-  # from a theme module imported by the host: sway-design.nix implements
-  # design/language.md; sway-stylesheet.nix is the older stylesheet-driven
-  # look.
+  # from sway-design.nix, which implements design/language.md.
   imports = [
     ../system/sway.nix
   ];

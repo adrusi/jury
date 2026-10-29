@@ -91,4 +91,9 @@ in
   face global SnippetsOtherPlaceholders default,${selgrey}
   face global SnippetsNextPlaceholders  default,${seltint}
   face global documentation             default
+
+  # peneira (fuzzy finder): the selected candidate is a selection
+  face global PeneiraSelected  ${signal},${seltint}
+  face global PeneiraFlag      ${signal},default+b
+  face global PeneiraMatches   ${signal},default+u
 ''

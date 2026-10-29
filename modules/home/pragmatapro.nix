@@ -1,10 +1,9 @@
 username:
 { ... }:
 {
-  # Provides the PragmataPro font files and PragmataPro-specific quirks.
-  # The family names the UI modules render with live in the stylesheet
-  # (stylesheet.fonts.ui/mono/monoLiga); a host pairs this module with a
-  # stylesheet that names these families.
+  # Provides the PragmataPro font files and PragmataPro-specific quirks. The
+  # desktop's own faces are fixed by the design (modules/design); this keeps
+  # PragmataPro installed and its feature flags set for wherever it's chosen.
   imports = [
     ../system/pragmatapro.nix
   ];

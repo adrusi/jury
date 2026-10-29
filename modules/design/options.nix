@@ -2,17 +2,14 @@
 {
   # Interface for the design language (design/language.md). Colors and faces
   # are fixed by the design: a host picks only the mode and the DPI-dependent
-  # dimensions. Every dimension must be set by the host; there are no hidden
-  # defaults, since none of them are right across displays.
+  # dimensions. Every dimension must be set by a host that uses it; there are
+  # no hidden defaults, since none of them are right across displays. A
+  # headless host sets only the mode.
   options.design =
     let
       int = description: lib.mkOption { type = lib.types.int; inherit description; };
     in
     {
-      enable = lib.mkEnableOption ''
-        the design language for shared modules (ghostty, zathura, zsh, git,
-        kak, zed). Hosts without it keep reading modules/stylesheet'';
-
       mode = lib.mkOption {
         type = lib.types.enum [ "dark" "light" ];
         description = "Which token set to use (dark for personal machines, light for work).";
@@ -32,16 +29,33 @@
         default = {
           sans = "DIN Pro";
           mono = "Berkeley Mono";
+          # content set in a terminal or editor buffer
+          code = "Berkeley Mono Condensed";
         };
         description = "Font families. DIN names things; Berkeley Mono carries values and content.";
       };
 
       # dpi-contingent; device pixels on the host's built-in display unless noted
       dims = {
-        titleSize = int "Point size for sway titles and mako notifications.";
+        toolkitScale = lib.mkOption {
+          type = lib.types.float;
+          description = ''
+            Scale factor for apps the design doesn't size directly, applied
+            through each toolkit's own knob (GTK text-scaling-factor, Qt,
+            Firefox devPixelsPerPx). Outputs stay at scale 1.
+          '';
+        };
+        titleSize = int "Point size for sway titles and mako notifications; Firefox chrome text derives from it.";
         barSize = int "Pixel size for waybar text.";
         barHeight = int "Waybar height; match sway's titlebar height (title font height + 2 x titlebarPadding.vertical).";
         menuSize = int "Pixel size for wofi text; also scales the lock screen.";
+        terminalSize = int "Point size for ghostty.";
+        readerSize = int "Point size for zathura's chrome.";
+        editor = {
+          buffer = int "Zed buffer font size.";
+          ui = int "Zed UI font size.";
+          terminal = int "Zed terminal font size.";
+        };
         gaps = int "Sway inner gaps, and the gap between the bar and windows.";
         frame = int "Window frame width; also wofi, mako and lock input borders.";
         selectionRule = {

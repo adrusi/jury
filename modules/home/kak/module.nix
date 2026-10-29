@@ -7,7 +7,6 @@ username:
 }:
 {
   imports = [
-    ../../stylesheet/options.nix
     ../../design/options.nix
   ];
 
@@ -15,10 +14,6 @@ username:
     home.file = {
       ".config/kak-lsp/kak-lsp.toml".source = ./kak-lsp.toml;
       ".config/kak/colors/adrusi.kak".source = ./adrusi.kak;
-      ".config/kak/colors/latte.kak".source = ./latte.kak;
-      ".config/kak/colors/mocha.kak".source = ./mocha.kak;
-    }
-    // lib.optionalAttrs config.design.enable {
       ".config/kak/colors/datasheet.kak".text = import ./datasheet.nix config.design.palette;
     };
 
@@ -77,21 +72,9 @@ username:
         })
       ];
       extraConfig = ''
-        colorscheme ${if config.design.enable then "datasheet" else config.stylesheet.kak.colorscheme}
+        colorscheme datasheet
       ''
-      + builtins.readFile ./kak.kak
-      # kak.kak sets the peneira faces for the stylesheet look; restyle them after
-      + lib.optionalString config.design.enable (
-        let
-          c = hex: "rgb:${builtins.substring 1 6 hex}";
-          p = config.design.palette;
-        in
-        ''
-          set-face global PeneiraSelected ${c p.signal},${c p.seltint}
-          set-face global PeneiraFlag ${c p.signal},default+b
-          set-face global PeneiraMatches ${c p.signal},default+u
-        ''
-      );
+      + builtins.readFile ./kak.kak;
     };
   };
 }

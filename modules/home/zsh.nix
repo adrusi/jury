@@ -31,35 +31,20 @@ let
     "or=${sgrFg p.alarm}"
     "mi=${sgrFg p.alarm}"
   ];
-  lsColors =
-    if config.design.enable then
-      "'${designLsColors}'"
-    else
-      ''"$(${lib.getBin pkgs.vivid}/bin/vivid generate ${config.stylesheet.vivid})"'';
+  lsColors = "'${designLsColors}'";
 
   # prompt: user@host dim, directory and refs in the second hue, prompt
   # character in signal (design/language.md 7.7)
-  promptColors =
-    if config.design.enable then
-      {
-        cyan = "%F{${p.second}}";
-        magenta = "%F{${p.dim}}";
-        name = "%F{${p.dim}}";
-        sep = "%F{${p.dim}}";
-        char = "%F{${p.signal}}";
-      }
-    else
-      {
-        cyan = "%{$fg[cyan]%}";
-        magenta = "%{$fg[magenta]%}";
-        name = "%{$fg[cyan]%}";
-        sep = "";
-        char = "";
-      };
+  promptColors = {
+    cyan = "%F{${p.second}}";
+    magenta = "%F{${p.dim}}";
+    name = "%F{${p.dim}}";
+    sep = "%F{${p.dim}}";
+    char = "%F{${p.signal}}";
+  };
 in
 {
   imports = [
-    ../stylesheet/options.nix
     ../design/options.nix
     ../system/zsh.nix
   ];

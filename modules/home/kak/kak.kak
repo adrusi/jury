@@ -18,9 +18,6 @@ hook global WinSetOption filetype=(python|clojure|haskell|rust|typescript|javasc
 require-module peneira
 map global normal <c-p> ": peneira-files<ret>"
 set-option global peneira_files_command 'fd --follow'
-set-face global PeneiraSelected bright-white,rgb:7287fd+f
-set-face global PeneiraFlag magenta,default+b
-set-face global PeneiraMatches default,default,magenta+u
 set-face global PeneiraFileName +b
 
 # wrap
