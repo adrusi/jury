@@ -17,6 +17,7 @@
     # stylesheet + font module (swappable per host)
     ../modules/stylesheet/latte.nix
     (import ../modules/home/pragmatapro.nix "autumn")
+    (import ../modules/home/sway-stylesheet.nix "autumn")
 
     (import ../modules/home/dmodel/module.nix "autumn")
     ../modules/system/fprintd.nix

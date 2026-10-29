@@ -17,6 +17,9 @@
     ../modules/stylesheet/roarke.nix
     (import ../modules/home/pragmatapro.nix "autumn")
 
+    # desktop shell per design/language.md; dimensions set below
+    (import ../modules/home/sway-design.nix "autumn")
+
     ../modules/system/berkeley-mono.nix
     ../modules/system/fprintd.nix
   ];
@@ -129,6 +132,35 @@
       clickfinger_button_map = "lrm";
       middle_emulation = "enabled";
       drag = "disabled";
+    };
+  };
+
+  # --- design language (design/language.md) ---
+
+  # Dimensions in device pixels for the Framework's 2256x1504 13.5" panel.
+  design = {
+    mode = "dark";
+    dims = {
+      titleSize = 14;
+      barSize = 18;
+      menuSize = 20;
+      gaps = 4;
+      frame = 1;
+      selectionRule = {
+        horizontal = 2;
+        vertical = 3;
+      };
+      heavyRule = 2;
+      titlebarPadding = {
+        horizontal = 9;
+        vertical = 6;
+      };
+      vtabWidth = 250;
+      vtabPadding = 12;
+      menuWidth = 800;
+      menuHeight = 600;
+      notificationWidth = 400;
+      cursorSize = 36;
     };
   };
 
