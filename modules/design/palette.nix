@@ -14,6 +14,7 @@
 
     # signal and state
     signal = "#eea53a";
+    second = "#6ea6e6"; # the other mode's signal: second terminal hue
     seltint = "#33291a";
     selgrey = "#2a2823";
     alarm = "#ee5a42";
@@ -58,6 +59,7 @@
 
     # signal and state
     signal = "#1a66cc";
+    second = "#a35a00";
     seltint = "#d3e0f2";
     selgrey = "#d6d0c2";
     alarm = "#c02e18";

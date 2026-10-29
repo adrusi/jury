@@ -5,9 +5,62 @@ username:
   config,
   ...
 }:
+let
+  p = config.design.palette;
+  inherit (import ../design/lib.nix { inherit lib; }) sgrFg;
+
+  # design/language.md 7.7: directories bold second hue, executables signal,
+  # links and special files dim, broken links alarm, everything else ink
+  designLsColors = lib.concatStringsSep ":" [
+    "rs=0"
+    "no=0"
+    "fi=0"
+    "di=1;${sgrFg p.second}"
+    "tw=1;${sgrFg p.second}"
+    "ow=1;${sgrFg p.second}"
+    "st=1;${sgrFg p.second}"
+    "ex=${sgrFg p.signal}"
+    "su=${sgrFg p.signal}"
+    "sg=${sgrFg p.signal}"
+    "ln=${sgrFg p.dim}"
+    "pi=${sgrFg p.dim}"
+    "so=${sgrFg p.dim}"
+    "do=${sgrFg p.dim}"
+    "bd=${sgrFg p.dim}"
+    "cd=${sgrFg p.dim}"
+    "or=${sgrFg p.alarm}"
+    "mi=${sgrFg p.alarm}"
+  ];
+  lsColors =
+    if config.design.enable then
+      "'${designLsColors}'"
+    else
+      ''"$(${lib.getBin pkgs.vivid}/bin/vivid generate ${config.stylesheet.vivid})"'';
+
+  # prompt: user@host dim, directory and refs in the second hue, prompt
+  # character in signal (design/language.md 7.7)
+  promptColors =
+    if config.design.enable then
+      {
+        cyan = "%F{${p.second}}";
+        magenta = "%F{${p.dim}}";
+        name = "%F{${p.dim}}";
+        sep = "%F{${p.dim}}";
+        char = "%F{${p.signal}}";
+      }
+    else
+      {
+        cyan = "%{$fg[cyan]%}";
+        magenta = "%{$fg[magenta]%}";
+        name = "%{$fg[cyan]%}";
+        sep = "";
+        char = "";
+      };
+in
 {
   imports = [
     ../stylesheet/options.nix
+    ../design/options.nix
     ../system/zsh.nix
   ];
 
@@ -28,7 +81,7 @@ username:
       # initExtraBeforeCompInit = "";
 
       initContent = ''
-        export LS_COLORS="$(${lib.getBin pkgs.vivid}/bin/vivid generate ${config.stylesheet.vivid})"
+        export LS_COLORS=${lsColors}
         alias ls="ls --color=auto"
 
         zstyle ':completion:*' completer _extensions _expand _complete _ignored
@@ -67,8 +120,11 @@ username:
         } < <({
          	bold="%B"
          	italic="%{$(echo -e "\e[3m")%}"
-         	cyan="%{$fg[cyan]%}"
-         	magenta="%{$fg[magenta]%}"
+         	cyan="${promptColors.cyan}"
+         	magenta="${promptColors.magenta}"
+         	namec="${promptColors.name}"
+         	sepc="${promptColors.sep}"
+         	charc="${promptColors.char}"
          	dim="%F{#555}"
           reset="%{$reset_color%}"
           branch_sep=""
@@ -78,7 +134,7 @@ username:
           elif [ -n "$VSCODE_INTEFRATED_TERMINAL" ]; then
          	  printf %s\\n "$reset\''${vcs_info_msg_0_}$reset$italic$magenta/\$(realpath --relative-to=\"\$VSCODE_WORKSPACE_ROOT\" \"\$PWD\" | sed 's/^\.\$//') $reset"
           else
-           	printf %s\\n "$reset$cyan%n$reset@''${magenta}%m$reset:$italic$cyan%1~\''${vcs_info_msg_0_} $reset%(#.#.\$) "
+           	printf %s\\n "$reset$namec%n$reset$sepc@''${magenta}%m$reset$sepc:$italic$cyan%1~\''${vcs_info_msg_0_} $reset$charc%(#.#.\$)$reset "
           fi
 
           printf %s\\n ""

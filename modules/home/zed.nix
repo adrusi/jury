@@ -1,8 +1,16 @@
 username:
-{ pkgs, config, ... }:
+{ pkgs, lib, config, ... }:
+let
+  design = config.design.enable;
+  themeJson = import ./zed-theme.nix {
+    inherit (config.design) mode;
+    p = config.design.palette;
+  };
+in
 {
   imports = [
     ../stylesheet/options.nix
+    ../design/options.nix
   ];
 
   home-manager.users.${username} = {
@@ -21,7 +29,9 @@ username:
       package = pkgs.zed-editor;
       installRemoteServer = true;
 
-      extensions = config.stylesheet.zed.extensions ++ [
+      themes = lib.optionalAttrs design { datasheet = themeJson; };
+
+      extensions = lib.optionals (!design) config.stylesheet.zed.extensions ++ [
         "agda"
         "assembly"
         "basedpyright"
@@ -105,8 +115,9 @@ username:
         format_on_save = "on";
         indent_guides.enabled = false;
         ui_font_size = config.stylesheet.sizes.zedUi;
-        theme = config.stylesheet.zed.theme;
-        icon_theme = config.stylesheet.zed.iconTheme;
+        theme = if design then themeJson.name else config.stylesheet.zed.theme;
+        # zed's default icons are monochrome, which suits the hue budget
+        icon_theme = if design then "Zed (Default)" else config.stylesheet.zed.iconTheme;
         terminal = {
           blinking = "off";
           font_family = config.stylesheet.fonts.monoLiga;

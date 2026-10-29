@@ -106,6 +106,7 @@ variants.
 | Token     | Role                                         | Dark      | Light     |
 |-----------|----------------------------------------------|-----------|-----------|
 | `signal`  | Focus frame, on-path selection rule and text | `#eea53a` | `#1a66cc` |
+| `second`  | Second terminal hue (the other mode's signal) | `#6ea6e6` | `#a35a00` |
 | `seltint` | On-path selected background                  | `#33291a` | `#d3e0f2` |
 | `selgrey` | Off-path selected background                 | `#2a2823` | `#d6d0c2` |
 | `alarm`   | Urgent text, critical notification frame     | `#ee5a42` | `#c02e18` |

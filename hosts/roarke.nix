@@ -137,8 +137,9 @@
 
   # --- design language (design/language.md) ---
 
-  # Dimensions in device pixels for the Framework's 2256x1504 13.5" panel.
+  # Dimensions in device pixels for the Framework's 2880x1920 13.5" panel.
   design = {
+    enable = true;
     mode = "dark";
     dims = {
       titleSize = 14;

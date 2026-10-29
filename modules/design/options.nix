@@ -9,6 +9,10 @@
       int = description: lib.mkOption { type = lib.types.int; inherit description; };
     in
     {
+      enable = lib.mkEnableOption ''
+        the design language for shared modules (ghostty, zathura, zsh, git,
+        kak, zed). Hosts without it keep reading modules/stylesheet'';
+
       mode = lib.mkOption {
         type = lib.types.enum [ "dark" "light" ];
         description = "Which token set to use (dark for personal machines, light for work).";
