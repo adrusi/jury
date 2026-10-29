@@ -47,7 +47,7 @@
     };
 
     swayfx = {
-      url = "github:adrusi/swayfx";
+      url = "github:adrusi/swayfx/design-language";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

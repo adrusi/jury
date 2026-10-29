@@ -86,8 +86,12 @@ in
         vtab_width ${toString dims.vtabWidth}
         vtab_padding ${toString dims.vtabPadding}
         titlebar_padding ${toString dims.titlebarPadding.horizontal} ${toString dims.titlebarPadding.vertical}
-        # tabs are marked by tint (and, once patched, an edge rule), not boxed
+        # tabs are not boxed: the selected one gets a tint and an edge rule
+        # (titlebar_indicator), and tab_frame draws one frame around tabs and
+        # content together, with a neutral divider between them
         titlebar_border_thickness 0
+        titlebar_indicator ${toString dims.selectionRule.vertical} ${toString dims.selectionRule.horizontal}
+        tab_frame enable
 
         # flat, square, still
         corner_radius 0
@@ -98,9 +102,10 @@ in
         output * bg ${p.panel} solid_color
 
         # target                   border       background   text       indicator    child_border
+        # border colors the selection rule; child_border the frame
         client.focused             ${p.signal}  ${p.seltint} ${p.signal} ${p.signal} ${p.signal}
         client.focused_tab_title   ${p.signal}  ${p.seltint} ${p.signal}
-        client.focused_inactive    ${p.rule}    ${p.selgrey} ${p.ink}    ${p.rule}   ${p.rule}
+        client.focused_inactive    ${p.rule2}   ${p.selgrey} ${p.ink}    ${p.rule}   ${p.rule}
         client.unfocused           ${p.rule}    ${p.panel}   ${p.ink2}   ${p.rule}   ${p.rule}
         client.urgent              ${p.rule}    ${p.panel}   ${p.alarm}  ${p.rule}   ${p.rule}
         client.placeholder         ${p.rule}    ${p.panel}   ${p.ink2}   ${p.rule}   ${p.rule}

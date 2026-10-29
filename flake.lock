@@ -442,15 +442,16 @@
         "systems": "systems_3"
       },
       "locked": {
-        "lastModified": 1790674107,
-        "narHash": "sha256-d/tHflGOUtNIjQ7f/GrGvHKT/UoJ1m6QmBmRMxaJ/iE=",
+        "lastModified": 1793302241,
+        "narHash": "sha256-JomF5UkeTsdgRblRpisCnm7nNLNa3anhPeVpT1Tm2Fw=",
         "owner": "adrusi",
         "repo": "swayfx",
-        "rev": "a5bd8a4222e9f43f758edf7a38fa165d0f77ce8c",
+        "rev": "0843cdb0b9c0c392243d6330bbd6156c5eb9e88a",
         "type": "github"
       },
       "original": {
         "owner": "adrusi",
+        "ref": "design-language",
         "repo": "swayfx",
         "type": "github"
       }
