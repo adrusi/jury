@@ -1,8 +1,22 @@
 username:
 { pkgs, lib, inputs, config, ... }:
+let
+  design = config.design.enable;
+  scale = config.stylesheet.toolkitScale;
+  chromeCss = import ./firefox-chrome.nix {
+    inherit lib;
+    inherit (config.design) fonts;
+    p = config.design.palette;
+    toolbarHeight = config.design.dims.barHeight / scale;
+    devPx = 1 / scale;
+    ruleVertical = config.design.dims.selectionRule.vertical;
+    ruleHorizontal = config.design.dims.selectionRule.horizontal;
+  };
+in
 {
   imports = [
     ../system/firefox.nix
+    ../design/options.nix
   ];
 
   home-manager.users.${username} = {
@@ -63,6 +77,10 @@ username:
           "layers.offmainthreadcomposition.async-animations" = true;
           "layers.async-video.enabled" = true;
           "html5.offmainthread" = true;
+        }
+        // lib.optionalAttrs design {
+          # the chrome is styled by userChrome.css; an addon theme would fight it
+          "extensions.activeThemeID" = "default-theme@mozilla.org";
         }
         // lib.optionalAttrs (config.stylesheet.toolkitScale != 1.0) {
           "layout.css.devPixelsPerPx" = config.stylesheet.toolkitScale;
@@ -151,7 +169,7 @@ username:
           };
         };
 
-        userChrome = "";
+        userChrome = lib.mkIf design chromeCss;
         userContent = "";
       };
     };

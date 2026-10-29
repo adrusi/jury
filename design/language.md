@@ -244,7 +244,9 @@ Hover and pressed states aren't specified yet.
   mode name as an inverted legend (`ink` field, `panel` text), never the
   selection tint.
 - Workspaces: `button.focused` gets `seltint` background, `signal` text, and
-  `box-shadow: inset 0 2px <signal>`. Visible-but-unfocused workspaces on
+  a top rule. The rule is one frame width heavier than a horizontal tab's
+  (3px against 2px), because a tab's rule sits against the same-colored
+  container frame and reads thicker. Visible-but-unfocused workspaces on
   other outputs get the off-path treatment. `button.urgent` gets `alarm` text
   only.
 - Modules use the field pattern: condensed legend span plus Berkeley Mono

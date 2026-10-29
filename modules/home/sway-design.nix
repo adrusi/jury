@@ -164,7 +164,9 @@ in
 
         /* Every module carries a transparent top rule the width of the
            selection rule, so text sits centered below it whether or not the
-           rule is lit (edge-rule compensation, section 4). */
+           rule is lit (edge-rule compensation, section 4). The bar's rule is
+           a frame width heavier than a tab's: a tab rule sits against the
+           same-colored container frame and reads that much thicker. */
         #workspaces button,
         #mode,
         #clock,
@@ -172,7 +174,7 @@ in
         #backlight,
         #pulseaudio,
         #battery {
-          border-top: ${px dims.selectionRule.horizontal} solid transparent;
+          border-top: ${px (dims.selectionRule.horizontal + dims.frame)} solid transparent;
           padding: 0 ${px (dims.gaps * 2)};
         }
 
