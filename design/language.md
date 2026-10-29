@@ -315,9 +315,14 @@ These configure programs to the hue budget:
 
 ### 7.10 Firefox and the web
 
-- **Chrome (userChrome):** follows the desktop. The tab strip is `panel` (or
-  hidden, since sway's vtabs carry tabs), the URL bar is `paper` with a
-  hairline, and selected items follow section 6.
+- **Chrome (userChrome):** follows the desktop. The tab strip is hidden
+  (sway's vtabs carry tabs). The toolbar is a `panel` strip padded by the
+  desktop gap, holding button cells and a `paper` URL field that are each as
+  tall as a sway titlebar, so the field's hairline never meets the window
+  frame. Chrome text is DIN at sway's title size, the URL included: an
+  address reads as a name. Toolbar icons are square-cap line drawings in
+  `ink2`, `ink` on hover and `signal` when open; selected items follow
+  section 6. Third-party color (favicons, search engine logos) stays.
 - **Userstyles:** a userstyle may change only color, faces, borders, rules,
   and corners. It may not restructure the page. Within that:
   - Recolor to the tokens: `paper` for page backgrounds, `panel` for site

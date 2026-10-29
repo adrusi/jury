@@ -3,14 +3,19 @@
 # the default since ~150): it overrides Nova's design tokens where they're
 # declared and restyles the few structures tokens don't reach. The tab strip
 # and sidebar are hidden elsewhere (sway draws tabs), so the chrome is one
-# toolbar: buttons as square cells either side of a full-height URL field.
+# toolbar: a panel strip, padded by the desktop gap, holding button cells and
+# a URL field that are each as tall as a sway titlebar.
 {
   lib,
   p,
   fonts,
-  # toolbar height in CSS px: the sway titlebar height over Firefox's
-  # devPixelsPerPx, so the toolbar lines up with the vtab rows beside it
-  toolbarHeight,
+  # cell height in CSS px: the sway titlebar height over Firefox's
+  # devPixelsPerPx, so fields and buttons match the vtab rows beside them
+  cellHeight,
+  # padding around the cells in CSS px (the sway gap)
+  gap,
+  # chrome text size in CSS pt (sway's title size over devPixelsPerPx)
+  fontSize,
   # one device pixel in CSS px
   devPx,
   # selection rules, device px
@@ -19,33 +24,71 @@
 }:
 let
   css = n: "${toString n}px";
-  h = css toolbarHeight;
+  h = css cellHeight;
+  g = css gap;
+  # the toolbar: one cell plus the gap above and below
+  barH = css (cellHeight + 2 * gap);
+  pt = "${toString fontSize}pt";
   hair = css devPx;
   vrule = css (ruleVertical * devPx);
   hrule = css (ruleHorizontal * devPx);
 
-  # 16x16 line icons on a 1.5px stroke with square caps and mitred joins.
-  # Firefox only resolves context-fill in fill, so the strokes are a mask over
-  # a context-fill rect: the icons take the toolbar's icon color in every state.
-  icon =
-    body:
-    let
-      svg = "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'><mask id='m'><g fill='none' stroke='white' stroke-width='1.5' stroke-linecap='square' stroke-linejoin='miter'>${body}</g></mask><rect width='16' height='16' fill='context-fill' mask='url(#m)'/></svg>";
-    in
+  # 16x16 line icons on a 1.5px stroke with square caps and mitred joins. Each
+  # is rendered once per color it appears in rather than through context-fill,
+  # which Firefox doesn't resolve reliably for userChrome images.
+  svgUrl =
+    svg:
     ''url("data:image/svg+xml,${
       builtins.replaceStrings [ "#" "<" ">" "\"" ] [ "%23" "%3C" "%3E" "'" ] svg
     }")'';
-  icons = {
-    back = icon "<path d='M3.5 8h9.5'/><path d='M7.5 4 3.5 8l4 4'/>";
-    forward = icon "<path d='M2.5 8h10'/><path d='M8.5 4l4 4-4 4'/>";
-    reload = icon "<path d='M12.5 8a4.5 4.5 0 1 1-1.32-3.18'/><path d='M11.5 2v3h-3'/>";
-    stop = icon "<path d='M4 4l8 8M12 4l-8 8'/>";
-    menu = icon "<path d='M2.5 4h11M2.5 8h11M2.5 12h11'/>";
-    extensions = icon "<path d='M2.5 2.5h4v4h-4zM9.5 2.5h4v4h-4zM2.5 9.5h4v4h-4zM9.5 9.5h4v4h-4z'/>";
-    downloads = icon "<path d='M8 2.5v8'/><path d='M4.5 7 8 10.5 11.5 7'/><path d='M2.5 13.5h11'/>";
-    account = icon "<path d='M5.5 5.5a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0-5 0'/><path d='M3 13.5c.5-2.5 2.5-4 5-4s4.5 1.5 5 4'/>";
-    sidebar = icon "<path d='M2.5 3.5h11v9h-11zM6 3.5v9'/>";
+  line =
+    color: body:
+    svgUrl "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none' stroke='${color}' stroke-width='1.5' stroke-linecap='square' stroke-linejoin='miter'>${body}</svg>";
+  # a filled variant, for on states (the starred bookmark)
+  solid =
+    color: body:
+    svgUrl "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='${color}' stroke='${color}' stroke-width='1.5' stroke-linejoin='miter'>${body}</svg>";
+
+  glyphs = {
+    back = "<path d='M3.5 8h9.5'/><path d='M7.5 4 3.5 8l4 4'/>";
+    forward = "<path d='M2.5 8h10'/><path d='M8.5 4l4 4-4 4'/>";
+    # the arc ends at 45deg past twelve; the head's point sits exactly there
+    reload = "<path d='M12.5 8a4.5 4.5 0 1 1-1.32-3.18'/><path stroke-linecap='butt' d='M8.18 4.82h3v-3'/>";
+    stop = "<path d='M4 4l8 8M12 4l-8 8'/>";
+    menu = "<path d='M2.5 4h11M2.5 8h11M2.5 12h11'/>";
+    extensions = "<path d='M2.5 2.5h4v4h-4zM9.5 2.5h4v4h-4zM2.5 9.5h4v4h-4zM9.5 9.5h4v4h-4z'/>";
+    downloads = "<path d='M8 2.5v8'/><path d='M4.5 7 8 10.5 11.5 7'/><path d='M2.5 13.5h11'/>";
+    account = "<path d='M5.5 5.5a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0-5 0'/><path d='M3 13.5c.5-2.5 2.5-4 5-4s4.5 1.5 5 4'/>";
+    sidebar = "<path d='M2.5 3.5h11v9h-11zM6 3.5v9'/>";
+    star = "<path d='M8 2.25 9.48 6.5h4.5l-3.64 2.64 1.39 4.28L8 10.78l-3.73 2.64 1.39-4.28L2.02 6.5h4.5z'/>";
   };
+
+  # toolbar buttons: ink2 at rest, ink on hover, signal when open or checked
+  buttonIcons = lib.concatStrings (
+    lib.mapAttrsToList
+      (id: glyph: ''
+        #${id} {
+          list-style-image: ${line p.ink2 glyph} !important;
+        }
+        #${id}:not([disabled]):hover {
+          list-style-image: ${line p.ink glyph} !important;
+        }
+        #${id}:is([open], [checked]) {
+          list-style-image: ${line p.signal glyph} !important;
+        }
+      '')
+      {
+        back-button = glyphs.back;
+        forward-button = glyphs.forward;
+        reload-button = glyphs.reload;
+        stop-button = glyphs.stop;
+        PanelUI-menu-button = glyphs.menu;
+        unified-extensions-button = glyphs.extensions;
+        downloads-button = glyphs.downloads;
+        fxa-toolbar-menu-button = glyphs.account;
+        sidebar-button = glyphs.sidebar;
+      }
+  );
 
   # token overrides; applied to the elements that redeclare them as well as
   # :root, since a declaration on a descendant beats one inherited from :root
@@ -197,31 +240,30 @@ in
   ${tokens}
   }
 
-  /* faces: DIN names things, Berkeley Mono carries values */
+  /* DIN throughout, at sway's title size; the URL bar included, since an
+     address is read as a name more than as a value */
   :root,
   panel,
   menupopup,
-  tooltip {
-    font-family: "${fonts.sans}", sans-serif !important;
-  }
+  tooltip,
   #urlbar-input,
-  .urlbarView-url,
-  #urlbar-scheme,
-  #identity-icon-label {
-    font-family: "${fonts.mono}", monospace !important;
+  .urlbarView,
+  findbar {
+    font-family: "${fonts.sans}", sans-serif !important;
+    font-size: ${pt} !important;
   }
 
-  /* ---- toolbar: one row as tall as a sway titlebar, divided from the page
-     by a hairline ---- */
+  /* ---- toolbar: a panel strip padded by the desktop gap, holding cells as
+     tall as a sway titlebar, divided from the page by a hairline ---- */
   #navigator-toolbox {
     border-bottom: ${hair} solid ${p.rule} !important;
     background: ${p.panel} !important;
   }
   #nav-bar {
-    height: ${h} !important;
-    min-height: ${h} !important;
-    max-height: ${h} !important;
-    padding: 0 !important;
+    height: ${barH} !important;
+    min-height: ${barH} !important;
+    max-height: ${barH} !important;
+    padding: ${g} !important;
     margin: 0 !important;
     border: none !important;
     box-shadow: none !important;
@@ -229,7 +271,7 @@ in
   }
   #nav-bar-customization-target {
     height: ${h} !important;
-    align-items: stretch !important;
+    align-items: center !important;
   }
   #nav-bar-customization-target > * {
     margin: 0 !important;
@@ -272,24 +314,17 @@ in
     font-family: "${fonts.mono}", monospace !important;
   }
 
-  #back-button { list-style-image: ${icons.back} !important; }
-  #forward-button { list-style-image: ${icons.forward} !important; }
-  #reload-button { list-style-image: ${icons.reload} !important; }
-  #stop-button { list-style-image: ${icons.stop} !important; }
-  #PanelUI-menu-button { list-style-image: ${icons.menu} !important; }
-  #unified-extensions-button { list-style-image: ${icons.extensions} !important; }
-  #downloads-button { list-style-image: ${icons.downloads} !important; }
-  #fxa-toolbar-menu-button { list-style-image: ${icons.account} !important; }
-  #sidebar-button { list-style-image: ${icons.sidebar} !important; }
+${buttonIcons}
   #downloads-button .toolbarbutton-animatable-box,
   #downloads-indicator-progress-outer {
     display: none !important;
   }
 
-  /* ---- URL bar: a full-height paper field between rules ---- */
+  /* ---- URL bar: a paper field one cell tall, set off from the buttons by
+     the gap ---- */
   #urlbar-container {
     padding: 0 !important;
-    margin: 0 !important;
+    margin: 0 ${g} !important;
     --urlbar-container-height: ${h} !important;
     --urlbar-height: ${h} !important;
     --urlbar-toolbar-height: ${h} !important;
@@ -301,7 +336,6 @@ in
     top: 0 !important;
   }
   #urlbar-input {
-    font-size: 13px !important;
     color: ${p.ink} !important;
   }
   #urlbar-input::placeholder,
@@ -326,8 +360,14 @@ in
   #permissions-granted-icon {
     fill: ${p.ink2} !important;
   }
-  #star-button[starred] {
-    fill: ${p.signal} !important;
+  #star-button-box > #star-button {
+    list-style-image: ${line p.ink2 glyphs.star} !important;
+  }
+  #star-button-box:hover > #star-button {
+    list-style-image: ${line p.ink glyphs.star} !important;
+  }
+  #star-button-box > #star-button[starred] {
+    list-style-image: ${solid p.signal glyphs.star} !important;
   }
 
   /* results: paper, rows divided by hairlines; the selected row gets the
@@ -416,7 +456,7 @@ in
     color: ${p.ink} !important;
     border: ${hair} solid ${p.rule} !important;
     border-radius: 0 !important;
-    font-family: "${fonts.mono}", monospace !important;
+    font-family: "${fonts.sans}", sans-serif !important;
   }
   .findbar-textbox:focus {
     outline: ${hair} solid ${p.signal} !important;

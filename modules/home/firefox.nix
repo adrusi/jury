@@ -7,7 +7,9 @@ let
     inherit lib;
     inherit (config.design) fonts;
     p = config.design.palette;
-    toolbarHeight = config.design.dims.barHeight / scale;
+    cellHeight = config.design.dims.barHeight / scale;
+    gap = config.design.dims.gaps / scale;
+    fontSize = config.design.dims.titleSize / scale;
     devPx = 1 / scale;
     ruleVertical = config.design.dims.selectionRule.vertical;
     ruleHorizontal = config.design.dims.selectionRule.horizontal;
