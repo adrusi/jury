@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "atelier": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1793489957,
+        "narHash": "sha256-vupwiKz+OuSTdyufI4vu4GsIi7iAKR/kUzzg6TNBjvg=",
+        "owner": "adrusi",
+        "repo": "atelier",
+        "rev": "4b401b25b8dc69e2980043f77461f4ae98a34ba9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "adrusi",
+        "repo": "atelier",
+        "type": "github"
+      }
+    },
     "disko": {
       "inputs": {
         "nixpkgs": [
@@ -391,6 +411,7 @@
     },
     "root": {
       "inputs": {
+        "atelier": "atelier",
         "disko": "disko",
         "dmodel-issue": "dmodel-issue",
         "firefox-addons": "firefox-addons",

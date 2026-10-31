@@ -21,8 +21,12 @@ in
   ];
 
   home-manager.users.${username} = {
+    # atelier's CLI (atelier status, atelier mcp for agent harnesses, …)
+    home.packages = [ inputs.atelier.packages.${pkgs.stdenv.system}.atelier ];
+
     programs.firefox = {
       enable = true;
+      nativeMessagingHosts = [ inputs.atelier.packages.${pkgs.stdenv.system}.native-host ];
       # home-manager's Firefox module calls package.override(...) to inject
       # extraPolicies/pkcs11Modules. lib.makeOverridable re-exposes that hook while
       # forwarding the args to pkgs.firefox.override so wrapFirefox still receives them.
@@ -113,6 +117,7 @@ in
               addons.shinigami-eyes
               addons.darkreader
               addons.stylus
+              inputs.atelier.packages.${pkgs.stdenv.system}.extension
             ];
 
           settings = {

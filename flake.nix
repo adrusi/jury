@@ -56,6 +56,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # agent-authored userstyles: the signed extension, its native host, the CLI
+    atelier = {
+      url = "github:adrusi/atelier";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     dmodel-issue = {
       url = ./vendor/dmodel-issue;
       inputs.nixpkgs.follows = "nixpkgs";
