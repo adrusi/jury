@@ -20,4 +20,14 @@ rec {
 
   # "#rrggbb" -> "rrggbb" (kakoune's rgb:, ghostty)
   bare = lib.removePrefix "#";
+
+  # [ r g b ] -> "#rrggbb"
+  hex =
+    rgbs:
+    "#" + lib.concatMapStrings (c: lib.toLower (lib.fixedWidthString 2 "0" (lib.toHexString c))) rgbs;
+
+  # a colour t of the way from a to b (t in [0, 1]), e.g. a tint over paper
+  mix =
+    a: b: t:
+    hex (lib.zipListsWith (x: y: builtins.floor (x + (y - x) * t + 0.5)) (rgb a) (rgb b));
 }
