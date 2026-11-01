@@ -18,6 +18,10 @@
     # desktop shell per design/language.md; dimensions set below
     (import ../modules/home/sway-design.nix "autumn")
 
+    # agent-authored userstyles (personal machine only: styles can't be
+    # synced to work machines)
+    (import ../modules/home/atelier.nix "autumn")
+
     ../modules/system/berkeley-mono.nix
     ../modules/system/fprintd.nix
   ];

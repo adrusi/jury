@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793489957,
-        "narHash": "sha256-vupwiKz+OuSTdyufI4vu4GsIi7iAKR/kUzzg6TNBjvg=",
+        "lastModified": 1793492611,
+        "narHash": "sha256-Zu40P6hxHrjNjeHfRo0s3J5Ie8OuJPXgpVVFRy97gN8=",
         "owner": "adrusi",
         "repo": "atelier",
-        "rev": "4b401b25b8dc69e2980043f77461f4ae98a34ba9",
+        "rev": "032f109667bbf7c20bd66826c8462269f9f6fd67",
         "type": "github"
       },
       "original": {
