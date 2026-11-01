@@ -463,11 +463,11 @@
         "systems": "systems_3"
       },
       "locked": {
-        "lastModified": 1793303238,
-        "narHash": "sha256-ye41ch36Y/QLojwVCZPjqp8D3MNV3pw9wHKcwQPWaXQ=",
+        "lastModified": 1793515751,
+        "narHash": "sha256-Z7yRoBxRgyx94WnvYRqoKk3Tz4jYgz0gTHuDWASHtYw=",
         "owner": "adrusi",
         "repo": "swayfx",
-        "rev": "685e574d04b594b03af29cd3e808629eb6577d91",
+        "rev": "06c205d9639164803bc4102f64e17ac967601c37",
         "type": "github"
       },
       "original": {
