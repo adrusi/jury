@@ -433,6 +433,8 @@ desk.querySelectorAll(".win").forEach(w => {
 
 const state = { mode: "dark" };
 try { Object.assign(state, JSON.parse(localStorage.getItem("rdl-specimen") || "{}")); } catch (e) {}
+// #light or #dark in the URL picks the mode (for screenshots and links)
+if (BASE[location.hash.slice(1)]) state.mode = location.hash.slice(1);
 if (!BASE[state.mode]) state.mode = "dark";
 
 const swrow = (p, roles) => `<div class="swatches">${roles.map(([k, n]) =>
