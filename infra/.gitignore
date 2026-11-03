@@ -1,4 +1,0 @@
-# generated from infra/*.nix by `nix run .#infra`
-config.tf.json
-.terraform/
-*.tfstate.backup

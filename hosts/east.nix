@@ -9,13 +9,24 @@ let
   sshKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIHcGBFNeXDBqJ0o3/SX+YfkCLTugtfyGeSR7rpmu7+o autumn@dmodel.ai";
 in
 {
-  # east: GCE devbox (n2d-standard-16: 16 vCPU, 64 GiB RAM, no GPU — accelerator
-  # workloads belong on ephemeral compute workers).
-  # Provisioned and converged by OpenTofu via `nix run .#infra` (see
-  # infra/east.nix): the first apply installs NixOS over the stock Debian image
-  # with nixos-anywhere (kexec + disko), later applies nixos-rebuild it in
-  # place. Headless server; deliberately does not import dmodel-common.nix
-  # (that file is desktop-shaped: bluetooth, pipewire, sway, firefox, ...).
+  # east: always-on GCE devbox (n2d-standard-8: 8 vCPU, 32 GiB RAM, 300 GB
+  # pd-balanced, no GPU — accelerator workloads belong on ephemeral compute
+  # workers). A pet: deploy changes in place with
+  #   nixos-rebuild switch --flake .#east --target-host root@east
+  # Headless server; deliberately does not import dmodel-common.nix (that file
+  # is desktop-shaped: bluetooth, pipewire, sway, firefox, ...).
+  #
+  # The VM lives in the shared dmodel project gen-lang-client-0029335129,
+  # us-west1-b. If it ever has to be rebuilt from scratch:
+  #   gcloud compute instances create east --zone us-west1-b \
+  #     --machine-type n2d-standard-8 --boot-disk-size 300 \
+  #     --boot-disk-type pd-balanced --image-project debian-cloud \
+  #     --image-family debian-12 \
+  #     --metadata enable-oslogin=FALSE,ssh-keys="autumn:<sshKey>"
+  #   # (needs a network allowing tcp:22, e.g. the existing "devbox" one)
+  #   nix run github:nix-community/nixos-anywhere -- \
+  #     --flake .#east --target-host autumn@<ip>
+  # then `sudo tailscale up` on the box.
   imports = [
     inputs.disko.nixosModules.disko
     inputs.home-manager.nixosModules.home-manager
@@ -85,6 +96,11 @@ in
     };
   };
 
+  # Growing the persistent disk (`gcloud compute disks resize east`) then
+  # rebooting expands the root partition and filesystem to match.
+  boot.growPartition = true;
+  fileSystems."/".autoResize = true;
+
   # --- boot ---
 
   # GCE instances boot UEFI (Shielded VM, secure boot off by default). Skip
@@ -132,7 +148,7 @@ in
 
   users.users.root = {
     shell = pkgs.zsh;
-    # tofu converges the system as root@east
+    # `nixos-rebuild --target-host root@east` deploys as root
     openssh.authorizedKeys.keys = [ sshKey ];
   };
 
