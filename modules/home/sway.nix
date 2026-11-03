@@ -158,6 +158,19 @@ in
       };
     };
 
+    # When sway restarts, the old waybar dies with it and systemd restarts it
+    # right away, often after the new sway has exported WAYLAND_DISPLAY but
+    # before SWAYSOCK. waybar then comes up drawing but without IPC, and
+    # permanently disables sway/workspaces and sway/mode. Refuse to start until
+    # the exported socket exists, and back off so the retry sees the new one.
+    systemd.user.services.waybar = {
+      Unit.StartLimitIntervalSec = 30;
+      Service = {
+        ExecStartPre = "${pkgs.bash}/bin/sh -c 'test -S \"$SWAYSOCK\"'";
+        RestartSec = 2;
+      };
+    };
+
     wayland.windowManager.sway = {
       enable = true;
       # The swayfx flake only exports the unwrapped build, so run it through

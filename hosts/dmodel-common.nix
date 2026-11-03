@@ -101,26 +101,29 @@
     ];
   };
 
+  # The design faces (DIN, Berkeley Mono) render better with light hinting
+  # than with the full hinting pragmatapro.nix asks for.
+  fonts.fontconfig.hinting.style = lib.mkForce "slight";
+
   # --- design language (design/language.md) ---
 
-  # Light mode for work. Sizes carry over from the stylesheet era's values for
-  # these displays (a 2256x1504 panel and a 1920x1080 external, both at
-  # scale 1); gaps, frame and rules follow roarke. barHeight is estimated
-  # from the title size: measure the sway titlebar and correct it.
+  # Light mode for work. Sizes are for the built-in 2256x1504 panel (~200 dpi)
+  # at scale 1; the 1920x1080 external renders them larger. Gaps, frame and
+  # rules follow roarke.
   design = {
     mode = "light";
     dims = {
       toolkitScale = 1.0;
-      titleSize = 9;
-      barSize = 13;
-      barHeight = 24;
-      menuSize = 14;
-      terminalSize = 11;
-      readerSize = 10;
+      titleSize = 11;
+      barSize = 15;
+      barHeight = 28; # measured sway titlebar height at titleSize 11
+      menuSize = 16;
+      terminalSize = 12;
+      readerSize = 12;
       editor = {
-        buffer = 14;
-        ui = 16;
-        terminal = 14;
+        buffer = 15;
+        ui = 17;
+        terminal = 15;
       };
       gaps = 6;
       frame = 1;
