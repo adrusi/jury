@@ -199,6 +199,8 @@ in
     })
     pkgs.bws
     pkgs.awscli2
+    pkgs.tmux
+    pkgs.unzip
   ];
   environment.variables.EDITOR = "kak";
 
