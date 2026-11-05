@@ -16,7 +16,14 @@ in
   home-manager.users.${username} = {
     programs.claude-code = {
       enable = true;
-      settings.theme = "custom:datasheet";
+      settings = {
+        theme = "custom:datasheet";
+        autoCompactEnabled = false;
+        idleCompaction = false;
+        showThinkingSummaries = true;
+        skipDangerousModePermissionPromp = true;
+        skipAutoPermissionPrompt = true;
+      };
     };
 
     # the design language's palette for this host's mode (see claude-theme.nix)
