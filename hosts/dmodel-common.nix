@@ -21,6 +21,8 @@
 
     (import ../modules/home/dmodel/module.nix "autumn")
     ../modules/system/fprintd.nix
+
+    (import ../modules/home/atelier.nix "autumn")
   ];
 
   # Secret Service (org.freedesktop.secrets) provider, used by `rl` to fetch
@@ -115,17 +117,17 @@
     dims = {
       toolkitScale = 1.0;
       titleSize = 11;
-      barSize = 15;
+      barSize = 14;
       barHeight = 28; # measured sway titlebar height at titleSize 11
       menuSize = 16;
-      terminalSize = 12;
+      terminalSize = 11;
       readerSize = 12;
       editor = {
         buffer = 15;
         ui = 17;
         terminal = 15;
       };
-      gaps = 6;
+      gaps = 4;
       frame = 1;
       selectionRule = {
         horizontal = 2;
