@@ -1,9 +1,9 @@
 { pkgs }:
 let
   inherit (pkgs) lib;
-  electron = pkgs.electron_42; # closest nixpkgs major to the bundled 42.5.1
+  electron = pkgs.electron_45; # closest nixpkgs major to the bundled 45.3.3
   pname = "claude-desktop";
-  version = "1.17377.0";
+  version = "6.28899.6";
 
   # Anthropic ships a real native-Linux Electron build (.deb) for the beta,
   # so unlike the old community Windows-repackaging flakes there's no need
@@ -15,7 +15,7 @@ let
   # libs. See https://code.claude.com/docs/en/desktop-linux
   src = pkgs.fetchurl {
     url = "https://downloads.claude.ai/claude-desktop/apt/stable/pool/main/c/claude-desktop/claude-desktop_${version}_amd64.deb";
-    hash = "sha256-VjyN+O47lXyiNBFZgDhulgAH7Yz8jMBMd9WKjUP2wBg=";
+    hash = "sha256-fjgWAdhlcBSWQ9Uum4nCZXWrEvp4iqQf/dTMpbBjjPg=";
   };
 in
 pkgs.stdenv.mkDerivation {
@@ -32,6 +32,7 @@ pkgs.stdenv.mkDerivation {
     pkgs.stdenv.cc.cc.lib # libstdc++/libgcc_s, for node-pty's pty.node
     pkgs.libseccomp # virtiofsd
     pkgs.libcap_ng # virtiofsd
+    pkgs.pipewire # claude-native-binding.node
   ];
 
   unpackPhase = ''
@@ -77,7 +78,7 @@ pkgs.stdenv.mkDerivation {
       icon = "claude-desktop";
       exec = "claude-desktop %U";
       startupNotify = true;
-      startupWMClass = "claude-desktop";
+      startupWMClass = "com.anthropic.Claude"; # matches the app_id/WM_CLASS upstream derives from package.json
       categories = [
         "Utility"
         "Development"
@@ -90,7 +91,11 @@ pkgs.stdenv.mkDerivation {
         "Code"
         "LLM"
       ];
-      mimeTypes = [ "x-scheme-handler/claude" ];
+      mimeTypes = [
+        "x-scheme-handler/claude"
+        "application/vnd.anthropic.mcpb"
+        "application/vnd.anthropic.skill"
+      ];
       actions = {
         NewChat = {
           name = "New chat";
