@@ -186,7 +186,6 @@ in
     pkgs.wget
     pkgs.ghostty.terminfo # need terminfo entry
     pkgs.python314Packages.modal
-    pkgs.dmodel-issue-tracker
     pkgs.google-cloud-sdk
     pkgs.libsecret
     (pkgs.writeShellApplication {

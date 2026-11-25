@@ -53,18 +53,12 @@
       url = "github:adrusi/atelier";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    dmodel-issue = {
-      url = ./vendor/dmodel-issue;
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
   outputs =
     inputs@{
       nixpkgs,
       flake-utils,
       vscode-extensions,
-      dmodel-issue,
       ...
     }:
     let
@@ -96,10 +90,7 @@
         claude-desktop = import ./packages/claude-desktop.nix { pkgs = final; };
         noto-sans-condensed-static = import ./packages/noto-condensed.nix { pkgs = final; };
       };
-      remotePackagesOverlay = final: prev: {
-        dmodel-issue-tracker = dmodel-issue.packages.${prev.stdenv.system}.default;
-      };
-      overlays = [ localPackagesOverlay remotePackagesOverlay inputs.firefox-addons.overlays.default ];
+      overlays = [ localPackagesOverlay inputs.firefox-addons.overlays.default ];
 
       mkNixos = hostModule: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";

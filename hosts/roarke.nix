@@ -24,7 +24,21 @@
 
     ../modules/system/berkeley-mono.nix
     ../modules/system/fprintd.nix
+    ../modules/system/rdr2.nix
   ];
+
+  # -- temporary --
+  security.sudo = {
+    enable = true;
+    extraRules = [{
+      users = [ "autumn" ];
+      commands = [
+        { command = "ALL"; options = [ "NOPASSWD" ]; }
+      ];
+    }];
+  };
+
+  # -- gaming --
 
   programs.steam = {
     enable = true;
@@ -33,6 +47,9 @@
 
   programs.gamescope.enable = true;
   programs.gamemode.enable = true;
+
+  # input injection for agents driving games (wtype's keymaps confuse wine)
+  programs.ydotool.enable = true;
 
   # --- hardware ---
 
@@ -185,6 +202,13 @@
       cursorSize = 36;
     };
   };
+
+  # --- rpi pico development ---
+  services.udev.extraRules = ''
+    # Raspberry Pi Debug Probe (CMSIS-DAP)
+    ATTRS{idVendor}=="2e8a", ATTRS{idProduct}=="000c", MODE="0660", GROUP="dialout", TAG+="uaccess"
+  '';
+  users.users.autumn.extraGroups = [ "dialout" ];
 
   # --- state versions (fresh install on 26.05) ---
 

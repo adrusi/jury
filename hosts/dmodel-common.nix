@@ -42,7 +42,6 @@
   home-manager.users.autumn = {
     home.packages = [
       pkgs.libsecret # secret-tool, for managing the keyring used by `rl`
-      pkgs.dmodel-issue-tracker
       pkgs.google-cloud-sdk # this is needed so docker can authenticate to registries!
       (pkgs.writeShellApplication {
         name = "rl";

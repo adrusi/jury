@@ -4,14 +4,13 @@ personal nix configuration (NixOS + home-manager). public repo
 
 ## private submodules
 
-two flake inputs come from private repos, pulled in as git submodules so the
+one flake input comes from a private repo, pulled in as a git submodule so the
 config repo itself can stay public:
 
 - `assets/pragmatapro` — proprietary PragmataPro font files (license-restricted,
   kept in a private repo so it's distributed only to me)
-- `vendor/dmodel-issue` — an employer-internal CLI tool
 
-both are declared as relative-path flake inputs (`url = ./assets/pragmatapro`)
+it's declared as a relative-path flake input (`url = ./assets/pragmatapro`)
 plus `self.submodules = true` in `flake.nix`. relative `git+file://` inputs are
 deprecated (resolve against PWD, not the flake root —
 <https://github.com/NixOS/nix/issues/12281>), which is why it's a plain path

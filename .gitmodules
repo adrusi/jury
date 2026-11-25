@@ -2,6 +2,3 @@
 	path = assets/pragmatapro
 	url = git@github.com:adrusi/pragmatapro-files.git
 	branch = main
-[submodule "dmodel-issue"]
-	path = vendor/dmodel-issue
-	url = git@github.com:dmodel-ai/issue-tracker
